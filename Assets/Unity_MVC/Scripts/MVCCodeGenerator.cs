@@ -123,7 +123,7 @@ namespace UnityMVC
                 return $"{assets}/Scripts/Controllers";
             }
 
-            return $"{assets}/Controllers";
+            return $"{assets}/{data.ScriptsFolder}/Controllers";
         }
         
         private static string GetViewsPath()
@@ -136,7 +136,7 @@ namespace UnityMVC
                 return $"{assets}/Scripts/Views";
             }
 
-            return $"{assets}/Views";
+            return $"{assets}/{data.ScriptsFolder}/Views";
         }
         
         private static string GetComponentsPath()
@@ -149,7 +149,7 @@ namespace UnityMVC
                 return $"{assets}/Scripts/Components";
             }
 
-            return $"{assets}/Components";
+            return $"{assets}/{data.ScriptsFolder}/Components";
         }
         
         private static string GetServicesPath()
@@ -162,7 +162,7 @@ namespace UnityMVC
                 return $"{assets}/Scripts/Services";
             }
 
-            return $"{assets}/Services";
+            return $"{assets}/{data.ScriptsFolder}/Services";
         }
         
         private static string GetRepositoriesPath()
@@ -175,7 +175,7 @@ namespace UnityMVC
                 return $"{assets}/Scripts/Repositories";
             }
 
-            return $"{assets}/Repositories";
+            return $"{assets}/{data.ScriptsFolder}/Repositories";
         }
     }
 }
