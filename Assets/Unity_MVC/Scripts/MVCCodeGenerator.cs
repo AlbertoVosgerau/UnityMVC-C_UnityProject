@@ -15,49 +15,20 @@ namespace UnityMVC
         
         public static void CreateViewAndController(string name)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return;
-            }
-
-            name = name.Replace(" ", "");
-            
-            string controllerStr = GetControllerTemplate();
-            controllerStr = controllerStr.Replace("ControllerTemplate", $"{name}Controller");
-            controllerStr =controllerStr.Replace("ViewTemplate", $"{name}View");
-
-            string viewStr = GetViewTemplate();
-            viewStr = viewStr.Replace("ControllerTemplate", $"{name}Controller");
-            viewStr = viewStr.Replace("ViewTemplate", $"{name}View");
-
-            string controllersPath = GetControllersPath();
-             string controllerFilePath = $"{controllersPath}/{name}Controller.cs";
-             
-             string viewsPath = GetViewsPath();
-             string viewFilePath = $"{viewsPath}/{name}View.cs";
-
-             if (!Directory.Exists(controllersPath))
-             {
-                 Directory.CreateDirectory(controllersPath);
-             }
-
-             if (!File.Exists(controllerFilePath))
-             {
-                 WriteFile(controllerFilePath, controllerStr);
-                 Debug.Log($"Controller {controllerFilePath} created!");
-             }
-             
-             if (!Directory.Exists(viewsPath))
-             {
-                 Directory.CreateDirectory(viewsPath);
-             }
-             
-             if (!File.Exists(viewFilePath))
-             {
-                 WriteFile(viewFilePath, viewStr);
-                 Debug.Log($"View {viewFilePath} created!");
-             }
-             AssetDatabase.Refresh();
+            CreateScript(name, GetViewTemplate(), GetViewsPath(), "View");
+            CreateScript(name, GetControllerTemplate(), GetControllersPath(), "Controller");
+        }
+        public static void CreateComponent(string name)
+        {
+            CreateScript(name, GetComponentTemplate(), GetComponentsPath(), "Component");
+        }
+        public static void CreateRepository(string name)
+        {
+            CreateScript(name, GetRepositoryTemplate(), GetRepositoriesPath(), "Repository");
+        }
+        public static void CreateService(string name)
+        {
+            CreateScript(name, GetServiceTemplate(), GetServicesPath(), "Service");
         }
 
         private static void CreateScript(string name, string template, string path, string templateType)
@@ -88,97 +59,9 @@ namespace UnityMVC
             AssetDatabase.Refresh();
         }
 
-        public static void CreateComponent(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return;
-            }
-
-            name = name.Replace(" ", "");
-            string templateType = "Repository";
-            
-            string templateStr = GetComponentTemplate();
-            templateStr = templateStr.Replace($"{templateType}Template", $"{name}{templateType}");
-
-            string directoryPath = GetComponentsPath();
-            string filePath = $"{directoryPath}/{name}{templateType}.cs";
-
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
-
-            if (!File.Exists(filePath))
-            {
-                WriteFile(filePath, templateStr);
-                Debug.Log($"{templateType} {filePath} created!");
-            }
-            AssetDatabase.Refresh();
-        }
-
-        public static void CreateRepository(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return;
-            }
-
-            name = name.Replace(" ", "");
-            string templateType = "Repository";
-            
-            string templateStr = GetRepositoryTemplate();
-            templateStr = templateStr.Replace($"{templateType}Template", $"{name}{templateType}");
-
-            string directoryPath = GetRepositoriesPath();
-            string filePath = $"{directoryPath}/{name}{templateType}.cs";
-
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
-
-            if (!File.Exists(filePath))
-            {
-                WriteFile(filePath, templateStr);
-                Debug.Log($"{templateType} {filePath} created!");
-            }
-            AssetDatabase.Refresh();
-        }
-
-        public static void CreateService(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return;
-            }
-
-            name = name.Replace(" ", "");
-            string templateType = "Service";
-            
-            string templateStr = GetServiceTemplate();
-            templateStr = templateStr.Replace($"{templateType}Template", $"{name}{templateType}");
-
-            string directoryPath = GetServicesPath();
-            string filePath = $"{directoryPath}/{name}{templateType}.cs";
-
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
-
-            if (!File.Exists(filePath))
-            {
-                WriteFile(filePath, templateStr);
-                Debug.Log($"{templateType} {filePath} created!");
-            }
-            AssetDatabase.Refresh();
-        }
-
         private static void WriteFile(string path, string str)
         {
             StreamWriter file = File.CreateText(path);
-            Debug.Log($"Will write string: {str}");
             file.Write(str);
             file.Close();
         }
