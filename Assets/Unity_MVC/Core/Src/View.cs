@@ -8,7 +8,17 @@ namespace UnityMVC
 
         protected virtual void Awake()
         {
-            controller.SetView(this);
+            
+        }
+
+        protected virtual void RegisterControllerEvents()
+        {
+            
+        }
+
+        protected virtual void UnregisterControllerEvents()
+        {
+            
         }
 
         protected virtual void Start()
