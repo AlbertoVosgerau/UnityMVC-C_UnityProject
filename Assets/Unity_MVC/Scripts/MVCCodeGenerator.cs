@@ -8,7 +8,7 @@ using UnityEngine.Windows.WebCam;
 
 namespace UnityMVC
 {
-    public class MVCDataSettings
+    public class MVCCodeGenerator
     {
         [MenuItem("Unity MVC/Open MVC Settings")]
         public static void OpenMVCSettings()
@@ -23,12 +23,16 @@ namespace UnityMVC
             string name = "Dummy";
             
             string controllerStr = GetControllerTemplate();
-            controllerStr.Replace("Controller", $"{name}Controller");
-            controllerStr.Replace("View", $"{name}View");
+            controllerStr = controllerStr.Replace("UnityController", $"{name}Controller");
+            controllerStr =controllerStr.Replace("UnityView", $"{name}View");
+            controllerStr = controllerStr.Replace($"class {name}Controller", $"class {name}Controller : UnityController");
+            controllerStr = controllerStr.Replace("virtual", "override");
             
             string viewStr = GetViewTemplate();
-            viewStr.Replace("Controller", $"{name}Controller");
-            viewStr.Replace("View", $"{name}View");
+            viewStr = viewStr.Replace("UnityController", $"{name}Controller");
+            viewStr = viewStr.Replace("UnityView", $"{name}View");
+            viewStr = viewStr.Replace($"MonoBehaviour", $"UnityView");
+            viewStr = viewStr.Replace("virtual", "override");
             
              string controllersPath = GetControllersPath();
              string controllerFilePath = $"{controllersPath}/{name}Controller.cs";
@@ -46,19 +50,24 @@ namespace UnityMVC
                  WriteFile(controllerFilePath, controllerStr);
              }
              
+             if (!Directory.Exists(viewsPath))
+             {
+                 Directory.CreateDirectory(viewsPath);
+             }
+             
              if (!File.Exists(viewFilePath))
              {
                  WriteFile(viewFilePath, viewStr);
              }
+             AssetDatabase.Refresh();
         }
 
         private static void WriteFile(string path, string str)
         {
-            // File.Create(path);
-            // FileStream stream = new FileStream(path, FileMode.Open);
-            // byte[] bytes = Encoding.UTF8.GetBytes(str);
-            // stream.Write(bytes, 0, bytes.Length);
-            // stream.Close();
+            StreamWriter file = File.CreateText(path);
+            Debug.Log($"Will write string: {str}");
+            file.Write(str);
+            file.Close();
         }
 
         private static UnityMVCData GetMVCData()
@@ -71,7 +80,7 @@ namespace UnityMVC
 
         private static string GetControllerTemplate()
         {
-            string[] asset = AssetDatabase.FindAssets("Controller");
+            string[] asset = AssetDatabase.FindAssets("UnityController");
             string path = AssetDatabase.GUIDToAssetPath(asset[0]);
             string str = File.ReadAllText(path);
             return str;
@@ -79,7 +88,7 @@ namespace UnityMVC
         
         private static string GetViewTemplate()
         {
-            string[] asset = AssetDatabase.FindAssets("View");
+            string[] asset = AssetDatabase.FindAssets("UnityView");
             string path = AssetDatabase.GUIDToAssetPath(asset[0]);
             string str = File.ReadAllText(path);
             return str;
@@ -87,7 +96,7 @@ namespace UnityMVC
         
         private static string GetRepositoryTemplate()
         {
-            string[] asset = AssetDatabase.FindAssets("Repository");
+            string[] asset = AssetDatabase.FindAssets("UnityRepository");
             string path = AssetDatabase.GUIDToAssetPath(asset[0]);
             string str = File.ReadAllText(path);
             return str;
@@ -95,7 +104,7 @@ namespace UnityMVC
         
         private static string GetServiceTemplate()
         {
-            string[] asset = AssetDatabase.FindAssets("Service");
+            string[] asset = AssetDatabase.FindAssets("UnityService");
             string path = AssetDatabase.GUIDToAssetPath(asset[0]);
             string str = File.ReadAllText(path);
             return str;

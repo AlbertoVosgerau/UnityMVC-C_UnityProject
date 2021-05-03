@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UnityMVC
 {
-    public class RepositoryLocator : Locator<Repository>
+    public class RepositoryLocator : Locator<UnityRepository>
     {
     }
 }

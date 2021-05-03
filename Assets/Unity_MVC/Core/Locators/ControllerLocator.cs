@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace UnityMVC
 {
-    public class ControllerLocator : Locator<Controller>
+    public class ControllerLocator : Locator<UnityController>
     {
         
     }

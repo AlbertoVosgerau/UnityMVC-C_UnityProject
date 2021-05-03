@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace UnityMVC
 {
-    public class Controller
+    public class UnityController
     {
-        private View _view;
+        private UnityView _view;
 
-        public void SetView(View view)
+        public void SetView(UnityView view)
         {
             _view = view;
         }

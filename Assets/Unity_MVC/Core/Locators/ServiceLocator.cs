@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UnityMVC
 {
-    public class ServiceLocator : Locator<Service>
+    public class ServiceLocator : Locator<UnityService>
     {
         
     }
