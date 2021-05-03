@@ -17,10 +17,14 @@ namespace UnityMVC
             AssetDatabase.OpenAsset(data);
         }
         
-        [MenuItem("Unity MVC/CreateController")]
-        public static void CreateViewAndController()
+        public static void CreateViewAndController(string name)
         {
-            string name = "Dummy";
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return;
+            }
+
+            name = name.Replace(" ", "");
             
             string controllerStr = GetControllerTemplate();
             controllerStr = controllerStr.Replace("UnityController", $"{name}Controller");
@@ -48,6 +52,7 @@ namespace UnityMVC
              if (!File.Exists(controllerFilePath))
              {
                  WriteFile(controllerFilePath, controllerStr);
+                 Debug.Log($"Controller {controllerFilePath} created!");
              }
              
              if (!Directory.Exists(viewsPath))
@@ -58,8 +63,24 @@ namespace UnityMVC
              if (!File.Exists(viewFilePath))
              {
                  WriteFile(viewFilePath, viewStr);
+                 Debug.Log($"View {viewFilePath} created!");
              }
              AssetDatabase.Refresh();
+        }
+
+        public static void CreateComponent(string name)
+        {
+            Debug.Log("Create Component");
+        }
+
+        public static void CreateRepository(string name)
+        {
+            Debug.Log("Create Repository");
+        }
+
+        public static void CreateService(string name)
+        {
+            Debug.Log("Create Service");
         }
 
         private static void WriteFile(string path, string str)
