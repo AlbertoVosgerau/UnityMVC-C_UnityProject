@@ -1,18 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityMVC;
 
 public class Component : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    protected View _view;
+    
+    public void SetView(View view)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _view = view;
     }
 }

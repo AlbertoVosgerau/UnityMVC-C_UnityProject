@@ -4,21 +4,21 @@ namespace UnityMVC
 {
     public class View : MonoBehaviour
     {
-        private Controller _controller => MVC.Controllers.Get<Controller>();
+        private Controller controller => MVC.Controllers.Get<Controller>();
 
         protected virtual void Awake()
         {
-            _controller.SetView(this);
+            controller.SetView(this);
         }
 
         protected virtual void Start()
         {
-            _controller.OnViewStart();
+            controller.OnViewStart();
         }
 
-        protected void OnDestroy()
+        protected virtual void OnDestroy()
         {
-            _controller?.OnViewDestroy();
+            controller?.OnViewDestroy();
         }
     }
 }

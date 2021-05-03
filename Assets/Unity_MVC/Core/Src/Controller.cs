@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace UnityMVC
 {
     public class Controller
@@ -13,14 +9,8 @@ namespace UnityMVC
             _view = view;
         }
 
-        public virtual void OnViewStart()
-        {
+        public virtual void OnViewStart(){ }
+        public virtual void OnViewDestroy(){ }
         
-        }
-
-        public virtual void OnViewDestroy()
-        {
-        
-        }
     }
 }

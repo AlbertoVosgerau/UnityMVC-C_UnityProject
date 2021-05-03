@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnityMVC
@@ -13,6 +11,10 @@ namespace UnityMVC
         public string ViewsPath => _viewsPath;
         [Header("Views will be created at Assets/")]
         [SerializeField] private string _viewsPath;
+        
+        public string ComponentsPath => _componentsPath;
+        [Header("Components will be created at Assets/")]
+        [SerializeField] private string _componentsPath;
         
         public string RepositoriesPath => _repositoriesPath;
         [Header("Repositories will be created at Assets/")]
