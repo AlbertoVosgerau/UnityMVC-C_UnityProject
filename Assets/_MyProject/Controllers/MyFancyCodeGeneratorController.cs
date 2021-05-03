@@ -1,5 +1,6 @@
 using UnityMVC;
-public class ControllerTemplate : Controller
+
+public class MyFancyCodeGeneratorController : Controller
 {
     private View _view;
 

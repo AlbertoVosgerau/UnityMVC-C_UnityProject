@@ -1,22 +1,20 @@
-﻿namespace UnityMVC.Templates
+﻿using UnityMVC;
+public class ViewTemplate : View
 {
-    public class ViewTemplate : View
+    private ControllerTemplate controller => MVC.Controllers.Get<ControllerTemplate>();
+
+    protected override void Awake()
     {
-        private ControllerTemplate controller => MVC.Controllers.Get<ControllerTemplate>();
+        base.Awake();
+    }
 
-        protected override void Awake()
-        {
-            base.Awake();
-        }
+    protected override void Start()
+    {
+        base.Start();
+    }
 
-        protected override void Start()
-        {
-            base.Start();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
     }
 }

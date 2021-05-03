@@ -1,12 +1,14 @@
 using UnityEngine;
-using UnityMVC;
 
-public class Component : MonoBehaviour
+namespace UnityMVC
 {
-    protected View _view;
-    
-    public void SetView(View view)
+    public class Component : MonoBehaviour
     {
-        _view = view;
+        protected View _view;
+    
+        public void SetView(View view)
+        {
+            _view = view;
+        }
     }
 }

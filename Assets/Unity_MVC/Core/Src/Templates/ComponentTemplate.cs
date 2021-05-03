@@ -1,7 +1,5 @@
-﻿namespace UnityMVC.Templates
+﻿using UnityMVC;
+public class ComponentTemplate : Component
 {
-    public class ComponentTemplate
-    {
-        
-    }
+    
 }

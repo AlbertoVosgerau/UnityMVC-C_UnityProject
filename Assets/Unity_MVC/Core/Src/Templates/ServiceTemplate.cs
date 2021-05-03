@@ -1,20 +1,19 @@
-﻿namespace UnityMVC.Templates
+﻿using UnityMVC;
+
+public class ServiceTemplate : Service
 {
-    public class ServiceTemplate : Service
+    public override void StartService()
     {
-        public override void StartService()
-        {
-            base.StartService();
-        }
+        base.StartService();
+    }
 
-        public override void StopService()
-        {
-            base.StopService();
-        }
+    public override void StopService()
+    {
+        base.StopService();
+    }
 
-        public override void ClearData()
-        {
-            base.ClearData();
-        }
+    public override void ClearData()
+    {
+        base.ClearData();
     }
 }

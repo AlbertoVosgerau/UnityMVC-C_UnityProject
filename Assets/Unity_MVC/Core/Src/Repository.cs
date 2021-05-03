@@ -1,4 +1,7 @@
-public class Repository
+namespace UnityMVC
 {
+    public class Repository
+    {
     
+    }
 }
