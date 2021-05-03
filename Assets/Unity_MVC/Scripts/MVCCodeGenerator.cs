@@ -118,12 +118,12 @@ namespace UnityMVC
             UnityMVCData data = GetMVCData();
             string assets = Application.dataPath;
             
-            if (string.IsNullOrEmpty(data.ControllersPath) || string.IsNullOrEmpty(data.Root))
+            if (string.IsNullOrEmpty(data.ScriptsFolder))
             {
                 return $"{assets}/Scripts/Controllers";
             }
 
-            return $"{assets}/{data.ControllersPath}";
+            return $"{assets}/Controllers";
         }
         
         private static string GetViewsPath()
@@ -131,12 +131,12 @@ namespace UnityMVC
             UnityMVCData data = GetMVCData();
             string assets = Application.dataPath;
             
-            if (string.IsNullOrEmpty(data.ViewsPath) || string.IsNullOrEmpty(data.Root))
+            if (string.IsNullOrEmpty(data.ScriptsFolder))
             {
                 return $"{assets}/Scripts/Views";
             }
 
-            return $"{assets}/{data.ViewsPath}";
+            return $"{assets}/Views";
         }
         
         private static string GetComponentsPath()
@@ -144,12 +144,12 @@ namespace UnityMVC
             UnityMVCData data = GetMVCData();
             string assets = Application.dataPath;
             
-            if (string.IsNullOrEmpty(data.ComponentsPath) || string.IsNullOrEmpty(data.Root))
+            if (string.IsNullOrEmpty(data.ScriptsFolder))
             {
                 return $"{assets}/Scripts/Components";
             }
 
-            return $"{assets}/{data.ComponentsPath}";
+            return $"{assets}/Components";
         }
         
         private static string GetServicesPath()
@@ -157,12 +157,12 @@ namespace UnityMVC
             UnityMVCData data = GetMVCData();
             string assets = Application.dataPath;
             
-            if (string.IsNullOrEmpty(data.ServicesPath) || string.IsNullOrEmpty(data.Root))
+            if (string.IsNullOrEmpty(data.ScriptsFolder))
             {
                 return $"{assets}/Scripts/Services";
             }
 
-            return $"{assets}/{data.ServicesPath}";
+            return $"{assets}/Services";
         }
         
         private static string GetRepositoriesPath()
@@ -170,12 +170,12 @@ namespace UnityMVC
             UnityMVCData data = GetMVCData();
             string assets = Application.dataPath;
             
-            if (string.IsNullOrEmpty(data.RepositoriesPath) || string.IsNullOrEmpty(data.Root))
+            if (string.IsNullOrEmpty(data.ScriptsFolder))
             {
                 return $"{assets}/Scripts/Repositories";
             }
 
-            return $"{assets}/{data.RepositoriesPath}";
+            return $"{assets}/Repositories";
         }
     }
 }

@@ -13,6 +13,16 @@ public class ViewTemplate : View
         base.Start();
     }
 
+    protected override void RegisterControllerEvents()
+    {
+        base.RegisterControllerEvents();
+    }
+
+    protected override void UnregisterControllerEvents()
+    {
+        base.UnregisterControllerEvents();
+    }
+
     protected override void OnDestroy()
     {
         base.OnDestroy();
