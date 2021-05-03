@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Windows.WebCam;
 
 namespace UnityMVC
 {
@@ -27,18 +23,14 @@ namespace UnityMVC
             name = name.Replace(" ", "");
             
             string controllerStr = GetControllerTemplate();
-            controllerStr = controllerStr.Replace("UnityController", $"{name}Controller");
-            controllerStr =controllerStr.Replace("UnityView", $"{name}View");
-            controllerStr = controllerStr.Replace($"class {name}Controller", $"class {name}Controller : UnityController");
-            controllerStr = controllerStr.Replace("virtual", "override");
-            
+            controllerStr = controllerStr.Replace("ControllerTemplate", $"{name}Controller");
+            controllerStr =controllerStr.Replace("ViewTemplate", $"{name}View");
+
             string viewStr = GetViewTemplate();
-            viewStr = viewStr.Replace("UnityController", $"{name}Controller");
-            viewStr = viewStr.Replace("UnityView", $"{name}View");
-            viewStr = viewStr.Replace($"MonoBehaviour", $"UnityView");
-            viewStr = viewStr.Replace("virtual", "override");
-            
-             string controllersPath = GetControllersPath();
+            viewStr = viewStr.Replace("ControllerTemplate", $"{name}Controller");
+            viewStr = viewStr.Replace("ViewTemplate", $"{name}View");
+
+            string controllersPath = GetControllersPath();
              string controllerFilePath = $"{controllersPath}/{name}Controller.cs";
              
              string viewsPath = GetViewsPath();
@@ -101,7 +93,7 @@ namespace UnityMVC
 
         private static string GetControllerTemplate()
         {
-            string[] asset = AssetDatabase.FindAssets("UnityController");
+            string[] asset = AssetDatabase.FindAssets("ControllerTemplate");
             string path = AssetDatabase.GUIDToAssetPath(asset[0]);
             string str = File.ReadAllText(path);
             return str;
@@ -109,7 +101,7 @@ namespace UnityMVC
         
         private static string GetViewTemplate()
         {
-            string[] asset = AssetDatabase.FindAssets("UnityView");
+            string[] asset = AssetDatabase.FindAssets("ViewTemplate");
             string path = AssetDatabase.GUIDToAssetPath(asset[0]);
             string str = File.ReadAllText(path);
             return str;
@@ -117,7 +109,7 @@ namespace UnityMVC
         
         private static string GetRepositoryTemplate()
         {
-            string[] asset = AssetDatabase.FindAssets("UnityRepository");
+            string[] asset = AssetDatabase.FindAssets("RepositoryTemplate");
             string path = AssetDatabase.GUIDToAssetPath(asset[0]);
             string str = File.ReadAllText(path);
             return str;
@@ -125,7 +117,7 @@ namespace UnityMVC
         
         private static string GetServiceTemplate()
         {
-            string[] asset = AssetDatabase.FindAssets("UnityService");
+            string[] asset = AssetDatabase.FindAssets("ServiceTemplate");
             string path = AssetDatabase.GUIDToAssetPath(asset[0]);
             string str = File.ReadAllText(path);
             return str;

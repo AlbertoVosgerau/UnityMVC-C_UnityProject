@@ -1,6 +1,6 @@
 namespace UnityMVC
 {
-    public class UnityService
+    public class Service
     {
         public virtual void StopService()
         {

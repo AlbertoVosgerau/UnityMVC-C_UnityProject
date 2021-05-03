@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace UnityMVC
 {
-    public class UnityView : MonoBehaviour
+    public class View : MonoBehaviour
     {
-        private UnityController controller => MVC.Controllers.Get<UnityController>();
+        private Controller controller => MVC.Controllers.Get<Controller>();
 
         protected virtual void Awake()
         {
@@ -16,7 +16,7 @@ namespace UnityMVC
             controller.OnViewStart();
         }
 
-        protected void OnDestroy()
+        protected virtual void OnDestroy()
         {
             controller?.OnViewDestroy();
         }
