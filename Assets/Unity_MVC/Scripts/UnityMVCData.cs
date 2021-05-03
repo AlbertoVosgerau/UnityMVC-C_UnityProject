@@ -4,6 +4,7 @@ namespace UnityMVC
 {
     public class UnityMVCData : ScriptableObject
     {
+        public string Root => _root;
         [Header("Root project folder inside Assets/")]
         [SerializeField] private string _root;
         
