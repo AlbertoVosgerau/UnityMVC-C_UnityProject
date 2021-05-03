@@ -11,6 +11,7 @@ namespace UnityMVC
         static void Init()
         {
             MVCCreateWindows window = (MVCCreateWindows)GetWindow(typeof(MVCCreateWindows));
+            window.titleContent = new GUIContent("MVC Generator");
             window.Show();
         }
 

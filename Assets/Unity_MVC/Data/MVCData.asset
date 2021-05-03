@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0d121dca3483a4f9a2ad7eb4500036, type: 3}
   m_Name: MVCData
   m_EditorClassIdentifier: 
-  _controllersPath: 
-  _viewsPath: 
-  _repositoriesPath: 
-  _servicesPath: 
+  _root: _MyProject
+  _controllersPath: Controllers
+  _viewsPath: Views
+  _componentsPath: Components
+  _repositoriesPath: Repositories
+  _servicesPath: Services
