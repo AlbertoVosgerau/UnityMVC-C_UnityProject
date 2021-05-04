@@ -6,6 +6,7 @@ namespace UnityMVC
     public class MVCCreateWindows : EditorWindow
     {
         string baseName = "";
+        private float btnWidth = 150;
     
         [MenuItem("Unity MVC/Open Creation Window")]
         static void Init()
@@ -22,37 +23,43 @@ namespace UnityMVC
             GUILayout.Space(20);
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("        Create View        "))
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Create View", GUILayout.Width(btnWidth)))
             {
                 MVCCodeGenerator.CreateView(baseName);
             }
-            if (GUILayout.Button("Create Controller  "))
+            if (GUILayout.Button("Create Controller", GUILayout.Width(btnWidth)))
             {
                 MVCCodeGenerator.CreateController(baseName);
             }
+            GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             GUILayout.Space(7);
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Create View/Controller"))
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Create View/Controller", GUILayout.Width(btnWidth)))
             {
                 MVCCodeGenerator.CreateViewAndController(baseName);
             }
-            if (GUILayout.Button("Create Component  "))
+            if (GUILayout.Button("Create Component", GUILayout.Width(btnWidth)))
             {
                 MVCCodeGenerator.CreateComponent(baseName);
             }
+            GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             GUILayout.Space(7);
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Create Repository  "))
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Create Repository", GUILayout.Width(btnWidth)))
             {
                 MVCCodeGenerator.CreateRepository(baseName);
             }
             
-            if (GUILayout.Button("Create Service  "))
+            if (GUILayout.Button("Create Service",GUILayout.Width(btnWidth)))
             {
                 MVCCodeGenerator.CreateService(baseName);
             }
+            GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
         }
