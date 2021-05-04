@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CoroutineHelper
@@ -13,7 +12,7 @@ public class CoroutineHelper
 
         Coroutine coroutine = CoroutineHelperComponent.Instance.StartCoroutine(iEnumerator);
     }
-
+    
     public static void StopCoroutine(Coroutine coroutine)
     {
         if (CoroutineHelperComponent.Instance == null)
