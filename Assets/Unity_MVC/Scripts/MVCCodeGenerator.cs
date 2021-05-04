@@ -42,7 +42,10 @@ namespace UnityMVC
 
             string templateStr = template;
             templateStr = templateStr.Replace($"{templateType}Template", $"{name}{templateType}");
-
+            if (templateType == "View")
+            {
+                templateStr = templateStr.Replace($"ControllerTemplate", $"{name}Controller");
+            }
             string directoryPath = path;
             string filePath = $"{directoryPath}/{name}{templateType}.cs";
 
