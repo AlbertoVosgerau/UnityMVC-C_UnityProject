@@ -2,33 +2,17 @@ using UnityEngine;
 
 namespace UnityMVC
 {
-    public class View : MonoBehaviour
+    public abstract class View : MonoBehaviour
     {
-        private Controller controller => MVC.Controllers.Get<Controller>();
+        protected abstract void LocateController();
 
         protected virtual void Awake()
         {
-            
+            LocateController();
         }
 
-        protected virtual void RegisterControllerEvents()
-        {
-            
-        }
+        protected abstract void RegisterControllerEvents();
 
-        protected virtual void UnregisterControllerEvents()
-        {
-            
-        }
-
-        protected virtual void Start()
-        {
-            controller.OnViewStart();
-        }
-
-        protected virtual void OnDestroy()
-        {
-            controller?.OnViewDestroy();
-        }
+        protected abstract void UnregisterControllerEvents();
     }
 }

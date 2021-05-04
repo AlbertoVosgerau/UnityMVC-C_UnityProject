@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace UnityMVC
 {
+    enum ScriptType
+    {
+        View,
+        Controller,
+        Component,
+        Repository,
+        Service
+    }
     public class MVCCodeGenerator
     {
         [MenuItem("Unity MVC/Open MVC Settings")]
@@ -15,23 +23,23 @@ namespace UnityMVC
         
         public static void CreateViewAndController(string name)
         {
-            GenerateScript(name, GetTemplate("View"), GetPath("Views"), "View");
-            GenerateScript(name, GetTemplate("Controller"), GetPath("Controllers"), "Controller");
+            GenerateScript(name, GetTemplate(ScriptType.View), GetPath("Views"), ScriptType.View);
+            GenerateScript(name, GetTemplate(ScriptType.Controller), GetPath("Controllers"), ScriptType.Controller);
         }
         public static void CreateComponent(string name)
         {
-            GenerateScript(name, GetTemplate("Component"), GetPath("Components"), "Component");
+            GenerateScript(name, GetTemplate(ScriptType.Component), GetPath("Components"), ScriptType.Component);
         }
         public static void CreateRepository(string name)
         {
-            GenerateScript(name, GetTemplate("Repository"), GetPath("Repositories"), "Repository");
+            GenerateScript(name, GetTemplate(ScriptType.Repository), GetPath("Repositories"), ScriptType.Repository);
         }
         public static void CreateService(string name)
         {
-            GenerateScript(name, GetTemplate("Service"), GetPath("Services"), "Service");
+            GenerateScript(name, GetTemplate(ScriptType.Service), GetPath("Services"), ScriptType.Service);
         }
 
-        private static void GenerateScript(string name, string template, string path, string templateType)
+        private static void GenerateScript(string name, string template, string path, ScriptType type)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -41,13 +49,14 @@ namespace UnityMVC
             name = name.Replace(" ", "");
 
             string templateStr = template;
-            templateStr = templateStr.Replace($"{templateType}Template", $"{name}{templateType}");
-            if (templateType == "View")
+            string typeStr = type.ToString();
+            templateStr = templateStr.Replace($"{typeStr}Template", $"{name}{typeStr}");
+            if (type == ScriptType.View)
             {
                 templateStr = templateStr.Replace($"ControllerTemplate", $"{name}Controller");
             }
             string directoryPath = path;
-            string filePath = $"{directoryPath}/{name}{templateType}.cs";
+            string filePath = $"{directoryPath}/{name}{typeStr}.cs";
 
             if (!Directory.Exists(directoryPath))
             {
@@ -57,7 +66,7 @@ namespace UnityMVC
             if (!File.Exists(filePath))
             {
                 WriteFile(filePath, templateStr);
-                Debug.Log($"{templateType} {filePath} created!");
+                Debug.Log($"{typeStr} {filePath} created!");
             }
             AssetDatabase.Refresh();
         }
@@ -77,9 +86,9 @@ namespace UnityMVC
             return data;
         }
         
-        private static string GetTemplate(string type)
+        private static string GetTemplate(ScriptType type)
         {
-            string[] asset = AssetDatabase.FindAssets($"{type}Template");
+            string[] asset = AssetDatabase.FindAssets($"{type.ToString()}Template");
             string path = AssetDatabase.GUIDToAssetPath(asset[0]);
             string str = File.ReadAllText(path);
             return str;
