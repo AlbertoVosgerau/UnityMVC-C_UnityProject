@@ -22,6 +22,17 @@ namespace UnityMVC
             GUILayout.Space(20);
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal();
+            if (GUILayout.Button("        Create View        "))
+            {
+                MVCCodeGenerator.CreateView(baseName);
+            }
+            if (GUILayout.Button("Create Controller  "))
+            {
+                MVCCodeGenerator.CreateController(baseName);
+            }
+            GUILayout.EndHorizontal();
+            GUILayout.Space(7);
+            GUILayout.BeginHorizontal();
             if (GUILayout.Button("Create View/Controller"))
             {
                 MVCCodeGenerator.CreateViewAndController(baseName);

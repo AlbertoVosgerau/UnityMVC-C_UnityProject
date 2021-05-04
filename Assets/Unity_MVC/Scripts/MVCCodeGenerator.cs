@@ -20,11 +20,21 @@ namespace UnityMVC
             UnityMVCData data = GetMVCData();
             AssetDatabase.OpenAsset(data);
         }
+
+        public static void CreateView(string name)
+        {
+            GenerateScript(name, GetTemplate(ScriptType.View), GetPath("Views"), ScriptType.View);
+        }
+
+        public static void CreateController(string name)
+        {
+            GenerateScript(name, GetTemplate(ScriptType.Controller), GetPath("Controllers"), ScriptType.Controller);
+        }
         
         public static void CreateViewAndController(string name)
         {
-            GenerateScript(name, GetTemplate(ScriptType.View), GetPath("Views"), ScriptType.View);
-            GenerateScript(name, GetTemplate(ScriptType.Controller), GetPath("Controllers"), ScriptType.Controller);
+            CreateView(name);
+            CreateController(name);
         }
         public static void CreateComponent(string name)
         {
@@ -102,7 +112,6 @@ namespace UnityMVC
             {
                 return $"{assets}/Scripts/{type}";
             }
-
             return $"{assets}/{data.ScriptsFolder}/{type}";
         }
     }
