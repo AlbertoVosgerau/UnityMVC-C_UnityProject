@@ -15,23 +15,23 @@ namespace UnityMVC
         
         public static void CreateViewAndController(string name)
         {
-            CreateScript(name, GetViewTemplate(), GetViewsPath(), "View");
-            CreateScript(name, GetControllerTemplate(), GetControllersPath(), "Controller");
+            GenerateScript(name, GetTemplate("View"), GetPath("Views"), "View");
+            GenerateScript(name, GetTemplate("Controller"), GetPath("Controllers"), "Controller");
         }
         public static void CreateComponent(string name)
         {
-            CreateScript(name, GetComponentTemplate(), GetComponentsPath(), "Component");
+            GenerateScript(name, GetTemplate("Component"), GetPath("Components"), "Component");
         }
         public static void CreateRepository(string name)
         {
-            CreateScript(name, GetRepositoryTemplate(), GetRepositoriesPath(), "Repository");
+            GenerateScript(name, GetTemplate("Repository"), GetPath("Repositories"), "Repository");
         }
         public static void CreateService(string name)
         {
-            CreateScript(name, GetServiceTemplate(), GetServicesPath(), "Service");
+            GenerateScript(name, GetTemplate("Service"), GetPath("Services"), "Service");
         }
 
-        private static void CreateScript(string name, string template, string path, string templateType)
+        private static void GenerateScript(string name, string template, string path, string templateType)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -76,109 +76,25 @@ namespace UnityMVC
             UnityMVCData data = AssetDatabase.LoadAssetAtPath<UnityMVCData>(path);
             return data;
         }
-
-        private static string GetControllerTemplate()
-        {
-            string[] asset = AssetDatabase.FindAssets("ControllerTemplate");
-            string path = AssetDatabase.GUIDToAssetPath(asset[0]);
-            string str = File.ReadAllText(path);
-            return str;
-        }
         
-        private static string GetViewTemplate()
+        private static string GetTemplate(string type)
         {
-            string[] asset = AssetDatabase.FindAssets("ViewTemplate");
+            string[] asset = AssetDatabase.FindAssets($"{type}Template");
             string path = AssetDatabase.GUIDToAssetPath(asset[0]);
             string str = File.ReadAllText(path);
             return str;
         }
-        private static string GetComponentTemplate()
-        {
-            string[] asset = AssetDatabase.FindAssets("ComponentTemplate");
-            string path = AssetDatabase.GUIDToAssetPath(asset[0]);
-            string str = File.ReadAllText(path);
-            return str;
-        }
-        
-        private static string GetRepositoryTemplate()
-        {
-            string[] asset = AssetDatabase.FindAssets("RepositoryTemplate");
-            string path = AssetDatabase.GUIDToAssetPath(asset[0]);
-            string str = File.ReadAllText(path);
-            return str;
-        }
-        
-        private static string GetServiceTemplate()
-        {
-            string[] asset = AssetDatabase.FindAssets("ServiceTemplate");
-            string path = AssetDatabase.GUIDToAssetPath(asset[0]);
-            string str = File.ReadAllText(path);
-            return str;
-        }
-
-        private static string GetControllersPath()
+        private static string GetPath(string type)
         {
             UnityMVCData data = GetMVCData();
             string assets = Application.dataPath;
             
             if (string.IsNullOrEmpty(data.ScriptsFolder))
             {
-                return $"{assets}/Scripts/Controllers";
+                return $"{assets}/Scripts/{type}";
             }
 
-            return $"{assets}/{data.ScriptsFolder}/Controllers";
-        }
-        
-        private static string GetViewsPath()
-        {
-            UnityMVCData data = GetMVCData();
-            string assets = Application.dataPath;
-            
-            if (string.IsNullOrEmpty(data.ScriptsFolder))
-            {
-                return $"{assets}/Scripts/Views";
-            }
-
-            return $"{assets}/{data.ScriptsFolder}/Views";
-        }
-        
-        private static string GetComponentsPath()
-        {
-            UnityMVCData data = GetMVCData();
-            string assets = Application.dataPath;
-            
-            if (string.IsNullOrEmpty(data.ScriptsFolder))
-            {
-                return $"{assets}/Scripts/Components";
-            }
-
-            return $"{assets}/{data.ScriptsFolder}/Components";
-        }
-        
-        private static string GetServicesPath()
-        {
-            UnityMVCData data = GetMVCData();
-            string assets = Application.dataPath;
-            
-            if (string.IsNullOrEmpty(data.ScriptsFolder))
-            {
-                return $"{assets}/Scripts/Services";
-            }
-
-            return $"{assets}/{data.ScriptsFolder}/Services";
-        }
-        
-        private static string GetRepositoriesPath()
-        {
-            UnityMVCData data = GetMVCData();
-            string assets = Application.dataPath;
-            
-            if (string.IsNullOrEmpty(data.ScriptsFolder))
-            {
-                return $"{assets}/Scripts/Repositories";
-            }
-
-            return $"{assets}/{data.ScriptsFolder}/Repositories";
+            return $"{assets}/{data.ScriptsFolder}/{type}";
         }
     }
 }
