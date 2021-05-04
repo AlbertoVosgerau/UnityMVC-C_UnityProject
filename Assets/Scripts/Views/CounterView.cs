@@ -1,10 +1,10 @@
-﻿using UnityMVC;
-public class ViewTemplate : View
+using UnityMVC;
+public class CounterView : View
 {
-    private ControllerTemplate _controller;
+    private CounterController _controller;
     protected override void LocateController()
     {
-        _controller = MVC.Controllers.Get<ControllerTemplate>();
+        _controller = MVC.Controllers.Get<CounterController>();
     }
 
     protected override void Awake()
