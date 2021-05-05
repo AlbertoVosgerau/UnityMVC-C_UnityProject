@@ -1,6 +1,7 @@
 ﻿using UnityMVC;
 public class ViewTemplate : View
 {
+
     private ControllerTemplate _controller;
     protected override void LocateController()
     {
