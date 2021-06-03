@@ -5,17 +5,18 @@ using UnityEngine;
 
 public class CoroutineHelperComponent : MonoBehaviour
 {
-    public static CoroutineHelperComponent Instance => _instance;
-    private static CoroutineHelperComponent _instance;
-
-    private void Awake()
+    public static CoroutineHelperComponent Instance
     {
-        if (_instance == null)
+        get
         {
-            _instance = this;
-            DontDestroyOnLoad(this);
-            return;
+            if (_instance == null)
+            {
+                GameObject newObject = new GameObject("CoroutineHelper");
+                _instance = newObject.AddComponent<CoroutineHelperComponent>();
+                DontDestroyOnLoad(newObject);
+            }
+            return _instance;
         }
-        Destroy(gameObject);
     }
+    private static CoroutineHelperComponent _instance;
 }
