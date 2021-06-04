@@ -1,15 +1,11 @@
-using System;
 using UnityMVC;
 
 public class ComponentControllerTemplate : ComponentController
 {
-    private void Start()
-    {
-        
-    }
+    private ComponentTemplate _component;
 
-    private void Update()
+    public void SetComponent(ComponentTemplate component)
     {
-        
+        _component = component;
     }
 }

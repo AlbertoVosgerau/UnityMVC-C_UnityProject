@@ -9,7 +9,10 @@ namespace UnityMVC
         protected virtual void Awake()
         {
             LocateController();
+            SolveDependencies();
         }
+        
+        protected virtual void SolveDependencies(){}
 
         protected abstract void RegisterControllerEvents();
 

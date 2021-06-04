@@ -2,7 +2,8 @@ namespace UnityMVC
 {
     public class Controller
     {
-        public virtual void OnViewStart(){ }
+        public virtual void OnViewStart(){}
+        public virtual void OnViewUpdate() {}
 
         public virtual void OnViewDestroy()
         {

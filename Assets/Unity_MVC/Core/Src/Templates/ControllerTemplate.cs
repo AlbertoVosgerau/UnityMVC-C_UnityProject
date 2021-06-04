@@ -6,6 +6,11 @@ public class ControllerTemplate : Controller
         base.OnViewStart();   
     }
 
+    public override void OnViewUpdate()
+    {
+        base.OnViewUpdate();
+    }
+
     public override void OnViewDestroy()
     {
         base.OnViewDestroy();
