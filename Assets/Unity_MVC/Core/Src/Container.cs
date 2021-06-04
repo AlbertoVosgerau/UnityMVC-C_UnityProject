@@ -1,7 +1,6 @@
 namespace UnityMVC
 {
-    public class Repository
+    public class Container
     {
-    
     }
 }

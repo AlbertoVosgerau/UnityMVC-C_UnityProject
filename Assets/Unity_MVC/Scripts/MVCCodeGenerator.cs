@@ -9,8 +9,9 @@ namespace UnityMVC
         View,
         Controller,
         Component,
-        Repository,
-        Service
+        Container,
+        Loader,
+        Solver
     }
     public class MVCCodeGenerator
     {
@@ -40,13 +41,18 @@ namespace UnityMVC
         {
             GenerateScript(name, GetTemplate(ScriptType.Component), GetPath("Components"), ScriptType.Component);
         }
-        public static void CreateRepository(string name)
+        public static void CreateContainer(string name)
         {
-            GenerateScript(name, GetTemplate(ScriptType.Repository), GetPath("Repositories"), ScriptType.Repository);
+            GenerateScript(name, GetTemplate(ScriptType.Container), GetPath("Containers"), ScriptType.Container);
         }
-        public static void CreateService(string name)
+        public static void CreateLoader(string name)
         {
-            GenerateScript(name, GetTemplate(ScriptType.Service), GetPath("Services"), ScriptType.Service);
+            GenerateScript(name, GetTemplate(ScriptType.Loader), GetPath("Loaders"), ScriptType.Loader);
+        }
+        
+        public static void CreateSolver(string name)
+        {
+            GenerateScript(name, GetTemplate(ScriptType.Solver), GetPath("Solvers"), ScriptType.Solver);
         }
 
         private static void GenerateScript(string name, string template, string path, ScriptType type)

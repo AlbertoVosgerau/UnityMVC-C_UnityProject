@@ -5,25 +5,33 @@ namespace UnityMVC
         public static ControllerLocator Controllers => _controllers;
         private static ControllerLocator _controllers = new ControllerLocator();
 
-        public static RepositoryLocator Repositories => _repositories;
-        private static RepositoryLocator _repositories = new RepositoryLocator();
+        public static ContainerLocator Containers => _containers;
+        private static ContainerLocator _containers = new ContainerLocator();
 
-        public static ServiceLocator Services => _services;
-        private static ServiceLocator _services = new ServiceLocator();
+        public static LoaderLocator Loaders => _loaders;
+        private static LoaderLocator _loaders = new LoaderLocator();
+
+        public static SolverLocator Solvers => _solvers;
+        private static SolverLocator _solvers = new SolverLocator();
 
         public static void ClearControllers()
         {
             _controllers.Clear();
         }
 
-        public static void ClearRepositories()
+        public static void ClearContainers()
         {
-            _repositories.Clear();
+            _containers.Clear();
         }
 
-        public static void ClearServices()
+        public static void ClearLoaders()
         {
-            _services.Clear();
+            _loaders.Clear();
+        }
+        
+        public static void ClearSolvers()
+        {
+            _solvers.Clear();
         }
     }
 }

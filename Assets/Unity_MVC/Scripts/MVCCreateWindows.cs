@@ -22,6 +22,11 @@ namespace UnityMVC
             baseName = EditorGUILayout.TextField("Base Name", baseName);
             GUILayout.Space(20);
             GUILayout.BeginVertical();
+            if (GUILayout.Button("Create View/Controller"))
+            {
+                MVCCodeGenerator.CreateViewAndController(baseName);
+            }
+            GUILayout.Space(10);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create View", GUILayout.Width(btnWidth)))
@@ -37,27 +42,29 @@ namespace UnityMVC
             GUILayout.Space(7);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Create View/Controller", GUILayout.Width(btnWidth)))
-            {
-                MVCCodeGenerator.CreateViewAndController(baseName);
-            }
             if (GUILayout.Button("Create Component", GUILayout.Width(btnWidth)))
             {
                 MVCCodeGenerator.CreateComponent(baseName);
+            }
+            if (GUILayout.Button("Create Container", GUILayout.Width(btnWidth)))
+            {
+                MVCCodeGenerator.CreateContainer(baseName);
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             GUILayout.Space(7);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Create Repository", GUILayout.Width(btnWidth)))
+            
+            
+            if (GUILayout.Button("Create Loader",GUILayout.Width(btnWidth)))
             {
-                MVCCodeGenerator.CreateRepository(baseName);
+                MVCCodeGenerator.CreateLoader(baseName);
             }
             
-            if (GUILayout.Button("Create Service",GUILayout.Width(btnWidth)))
+            if (GUILayout.Button("Create Solver",GUILayout.Width(btnWidth)))
             {
-                MVCCodeGenerator.CreateService(baseName);
+                MVCCodeGenerator.CreateSolver(baseName);
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
