@@ -23,9 +23,9 @@ namespace UnityMVC
             GUILayout.Space(20);
             GUILayout.BeginVertical();
             ViewAndController();
-            GUILayout.Space(32);
+            GUILayout.Space(20);
             ComponentAndController();
-            GUILayout.Space(32);
+            GUILayout.Space(20);
             LoaderSolverAndContainer();
             GUILayout.EndVertical();
         }
