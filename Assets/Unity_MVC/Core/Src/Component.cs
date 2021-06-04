@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace UnityMVC
@@ -9,6 +10,16 @@ namespace UnityMVC
         public void SetView(View view)
         {
             _view = view;
+        }
+
+        protected virtual void Awake()
+        {
+            SolveDependencies();
+        }
+
+        protected virtual void SolveDependencies()
+        {
+            
         }
     }
 }
