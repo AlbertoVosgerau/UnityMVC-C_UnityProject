@@ -9,6 +9,7 @@ namespace UnityMVC
         View,
         Controller,
         Component,
+        ComponentController,
         Container,
         Loader,
         Solver
@@ -41,6 +42,10 @@ namespace UnityMVC
         {
             GenerateScript(name, GetTemplate(ScriptType.Component), GetPath("Components"), ScriptType.Component);
         }
+        public static void CreateComponentController(string name)
+        {
+            GenerateScript(name, GetTemplate(ScriptType.ComponentController), GetPath("ComponentControllers"), ScriptType.ComponentController);
+        }
         public static void CreateContainer(string name)
         {
             GenerateScript(name, GetTemplate(ScriptType.Container), GetPath("Containers"), ScriptType.Container);
@@ -70,6 +75,14 @@ namespace UnityMVC
             if (type == ScriptType.View)
             {
                 templateStr = templateStr.Replace($"ControllerTemplate", $"{name}Controller");
+            }
+            if (type == ScriptType.Component)
+            {
+                templateStr = templateStr.Replace($"ComponentControllerTemplate", $"{name}ComponentController");
+            }
+            if (type == ScriptType.ComponentController)
+            {
+                templateStr = templateStr.Replace($"ComponentTemplate", $"{name}Component");
             }
             string directoryPath = path;
             string filePath = $"{directoryPath}/{name}{typeStr}.cs";

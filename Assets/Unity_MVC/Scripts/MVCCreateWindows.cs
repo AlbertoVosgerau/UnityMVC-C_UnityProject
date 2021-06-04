@@ -22,10 +22,24 @@ namespace UnityMVC
             baseName = EditorGUILayout.TextField("Base Name", baseName);
             GUILayout.Space(20);
             GUILayout.BeginVertical();
-            if (GUILayout.Button("Create View/Controller"))
+            ViewAndController();
+            GUILayout.Space(32);
+            ComponentAndController();
+            GUILayout.Space(32);
+            LoaderSolverAndContainer();
+            GUILayout.EndVertical();
+        }
+
+        private void ViewAndController()
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Create View/Controller", GUILayout.Width(btnWidth*2)))
             {
                 MVCCodeGenerator.CreateViewAndController(baseName);
             }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
             GUILayout.Space(10);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
@@ -39,24 +53,36 @@ namespace UnityMVC
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-            GUILayout.Space(32);
+        }
+        private void ComponentAndController()
+        {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Create Component", GUILayout.Width(btnWidth)))
+            if (GUILayout.Button("Create Component/ComponentController", GUILayout.Width(btnWidth*2)))
             {
                 MVCCodeGenerator.CreateComponent(baseName);
-            }
-            if (GUILayout.Button("Create Container", GUILayout.Width(btnWidth)))
-            {
-                MVCCodeGenerator.CreateContainer(baseName);
+                MVCCodeGenerator.CreateComponentController(baseName);
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             GUILayout.Space(7);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            
-            
+            if (GUILayout.Button("Create Component", GUILayout.Width(btnWidth)))
+            {
+                MVCCodeGenerator.CreateComponent(baseName);
+            }
+            if (GUILayout.Button("Component Controller", GUILayout.Width(btnWidth)))
+            {
+                MVCCodeGenerator.CreateComponentController(baseName);
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        private void LoaderSolverAndContainer()
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create Loader",GUILayout.Width(btnWidth)))
             {
                 MVCCodeGenerator.CreateLoader(baseName);
@@ -68,7 +94,15 @@ namespace UnityMVC
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-            GUILayout.EndVertical();
+            GUILayout.Space(7);
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Create Container", GUILayout.Width(btnWidth)))
+            {
+                MVCCodeGenerator.CreateContainer(baseName);
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
         }
     }
 }
