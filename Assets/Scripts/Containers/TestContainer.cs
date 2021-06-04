@@ -2,7 +2,7 @@ using UnityMVC;
 
 public class TestContainer : Container
 {
-    protected SolverTemplate Solver
+    public SolverTemplate Solver
     {
         get
         {

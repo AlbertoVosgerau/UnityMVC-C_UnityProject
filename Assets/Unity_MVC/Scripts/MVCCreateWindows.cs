@@ -39,7 +39,7 @@ namespace UnityMVC
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-            GUILayout.Space(7);
+            GUILayout.Space(32);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create Component", GUILayout.Width(btnWidth)))
