@@ -1,5 +1,4 @@
-﻿using System;
-using UnityMVC;
+﻿using UnityMVC;
 public class ComponentTemplate : Component
 {
     private ComponentControllerTemplate _controller;

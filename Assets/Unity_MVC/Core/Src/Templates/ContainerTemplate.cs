@@ -1,5 +1,4 @@
 using UnityMVC;
-
 public class ContainerTemplate : Container
 {
     protected SolverTemplate Solver

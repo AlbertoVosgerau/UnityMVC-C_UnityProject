@@ -1,5 +1,4 @@
 using UnityMVC;
-
 public class SolverTemplate : Solver
 {
     protected LoaderTemplate Solver

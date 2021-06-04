@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -117,9 +118,27 @@ namespace UnityMVC
         
         private static string GetTemplate(ScriptType type)
         {
-            string[] asset = AssetDatabase.FindAssets($"{type.ToString()}Template");
-            string path = AssetDatabase.GUIDToAssetPath(asset[0]);
+            Debug.Log($"Type: {type.ToString()}");
+            string[] assets = AssetDatabase.FindAssets($"{type.ToString()}Template");
+            string path = String.Empty;
+            if (type == ScriptType.Controller)
+            {
+                for (int i = 0; i < assets.Length; i++)
+                {
+                    string tempPath = AssetDatabase.GUIDToAssetPath(assets[i]);
+                    if (!tempPath.Contains("Component"))
+                    {
+                        path = AssetDatabase.GUIDToAssetPath(assets[1]);
+                    }
+                }
+            }
+            else
+            {
+                path = AssetDatabase.GUIDToAssetPath(assets[0]);
+            }
             string str = File.ReadAllText(path);
+            Debug.Log(path);
+            Debug.Log(str);
             return str;
         }
         private static string GetPath(string type)
