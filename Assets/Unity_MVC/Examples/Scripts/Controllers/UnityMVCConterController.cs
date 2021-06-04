@@ -21,7 +21,7 @@ public class UnityMVCConterController : Controller
     private IEnumerator CountOdd()
     {
         yield return new WaitForSeconds(1);
-        while (odd < 1000)
+        while (odd < 10)
         {
             odd += 2;
             Debug.Log($"Odd count: {odd}");
@@ -31,7 +31,7 @@ public class UnityMVCConterController : Controller
     private IEnumerator CountEven()
     {
         yield return new WaitForSeconds(1);
-        while (even < 1000)
+        while (even < 10)
         {
             even += 2;
             Debug.Log($"Even count: {even}");
