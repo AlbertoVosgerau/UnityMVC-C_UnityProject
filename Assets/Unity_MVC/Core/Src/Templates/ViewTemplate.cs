@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using UnityMVC;
 public class ViewTemplate : View
 {
@@ -17,7 +18,7 @@ public class ViewTemplate : View
     {
 
     }
-
+    
     private void StartController()
     {
         _controller.SetView(this);

@@ -77,6 +77,10 @@ namespace UnityMVC
             {
                 templateStr = templateStr.Replace($"ControllerTemplate", $"{name}Controller");
             }
+            if (type == ScriptType.Controller)
+            {
+                templateStr = templateStr.Replace($"ViewTemplate", $"{name}View");
+            }
             if (type == ScriptType.Component)
             {
                 templateStr = templateStr.Replace($"ComponentControllerTemplate", $"{name}ComponentController");
