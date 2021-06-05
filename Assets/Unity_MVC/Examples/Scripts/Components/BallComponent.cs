@@ -1,12 +1,12 @@
-﻿using UnityMVC;
-public class ComponentTemplate : Component
+using UnityMVC;
+public class BallComponent : Component
 {
-    private ComponentControllerTemplate _controller;
+    private BallComponentController _controller;
     
     // Start your code here
     protected override void Awake()
     {
-        _controller = new ComponentControllerTemplate();
+        _controller = new BallComponentController();
         _controller.SetComponent(this);
         base.Awake();
         _controller.OnComponentAwake();

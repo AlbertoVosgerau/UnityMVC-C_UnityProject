@@ -14,9 +14,6 @@ namespace UnityMVC
         public static SolverLocator Solvers => _solvers;
         private static SolverLocator _solvers = new SolverLocator();
 
-        public static ComponentControllersFactory ComponentControllerFactory => _componentControllersFactory;
-        private static ComponentControllersFactory _componentControllersFactory = new ComponentControllersFactory();
-
         public static void ClearControllers()
         {
             _controllers.Clear();
