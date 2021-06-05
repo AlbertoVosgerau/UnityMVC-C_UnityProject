@@ -1,7 +1,9 @@
 namespace UnityMVC
 {
-    public class Controller
+    public abstract class Controller
     {
+        public abstract void SetView(View view);
+
         public virtual void OnViewStart(){}
         public virtual void OnViewUpdate() {}
 

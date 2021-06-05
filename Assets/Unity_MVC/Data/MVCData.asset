@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0d121dca3483a4f9a2ad7eb4500036, type: 3}
   m_Name: MVCData
   m_EditorClassIdentifier: 
-  _scriptsFolder: Unity_MVC/Examples/Scripts
+  _scriptsFolder: 

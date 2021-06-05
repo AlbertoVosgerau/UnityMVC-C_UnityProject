@@ -7,6 +7,7 @@ public class ViewTemplate : View
     {
         _controller = MVC.Controllers.Get<ControllerTemplate>();
     }
+    
     protected override void RegisterControllerEvents()
     {
         
@@ -17,6 +18,12 @@ public class ViewTemplate : View
 
     }
 
+    private void StartController()
+    {
+        _controller.SetView(this);
+        _controller.OnViewStart();
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -24,7 +31,7 @@ public class ViewTemplate : View
 
     protected virtual void Start()
     {
-        _controller.OnViewStart();
+        StartController();
     }
 
     protected void Update()
