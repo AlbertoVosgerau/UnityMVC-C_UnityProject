@@ -15,4 +15,6 @@ public class SolverTemplate : Solver
         }
     }
     protected LoaderTemplate _solver;
+    
+    // Start your code here
 }

@@ -6,6 +6,8 @@ public class ControllerTemplate : Controller
     {
         _view = view as ViewTemplate;
     }
+    
+    // Start your code here
 
     public override void OnViewStart()
     {

@@ -2,6 +2,8 @@
 public class ComponentTemplate : Component
 {
     private ComponentControllerTemplate _controller;
+    
+    // Start your code here
     protected override void Awake()
     {
         _controller = MVC.ComponentControllerFactory.Get<ComponentControllerTemplate>() as ComponentControllerTemplate;

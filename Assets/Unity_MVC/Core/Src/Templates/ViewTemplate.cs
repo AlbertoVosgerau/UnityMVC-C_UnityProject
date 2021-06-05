@@ -19,6 +19,7 @@ public class ViewTemplate : View
 
     }
     
+    // Start your code here
     private void StartController()
     {
         _controller.SetView(this);

@@ -14,4 +14,6 @@ public class ContainerTemplate : Container
         }
     }
     protected SolverTemplate _solver;
+    
+    // Start your code here
 }
