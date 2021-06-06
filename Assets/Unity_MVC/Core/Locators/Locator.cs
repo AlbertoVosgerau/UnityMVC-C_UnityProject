@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace UnityMVC
 {
@@ -32,7 +33,7 @@ namespace UnityMVC
                 _dictionary[typeof(U)] = Create<U>();
                 return _dictionary[typeof(U)] as U;
             }
-            return _dictionary.OfType<U>().Any() as U;
+            return _dictionary[typeof(U)] as U;
         }
 
         public void Remove(T t)
