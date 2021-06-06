@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityMVC;
 public class BallSpawnerView : View

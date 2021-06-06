@@ -1,29 +1,30 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using UnityEngine;
 
-public class APIHelper
+namespace UnityMVC
 {
-    public static void APIGet<T>(string url, Action<T> callback)
+    public class APIHelper
     {
-        HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url);
-        myReq.BeginGetResponse(new AsyncCallback(delegate (IAsyncResult asyncResult)
+        public static void APIGet<T>(string url, Action<T> callback)
         {
-            FinishWebRequest(asyncResult, callback);
-        }), myReq);
-    }
+            HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url);
+            myReq.BeginGetResponse(new AsyncCallback(delegate (IAsyncResult asyncResult)
+            {
+                FinishWebRequest(asyncResult, callback);
+            }), myReq);
+        }
 
-    private static void FinishWebRequest<T>(IAsyncResult ar, Action<T> callback)
-    {
-        HttpWebResponse response = (ar.AsyncState as HttpWebRequest).EndGetResponse(ar) as HttpWebResponse;
-
-        using (var reader = new StreamReader(response.GetResponseStream()))
+        private static void FinishWebRequest<T>(IAsyncResult ar, Action<T> callback)
         {
-            var objText = reader.ReadToEnd();
-            callback.Invoke(JsonUtility.FromJson<T>(objText));
+            HttpWebResponse response = (ar.AsyncState as HttpWebRequest).EndGetResponse(ar) as HttpWebResponse;
+
+            using (var reader = new StreamReader(response.GetResponseStream()))
+            {
+                var objText = reader.ReadToEnd();
+                callback.Invoke(JsonUtility.FromJson<T>(objText));
+            }
         }
     }
 }

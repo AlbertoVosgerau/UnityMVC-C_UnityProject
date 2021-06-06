@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using UnityMVC;
+﻿using UnityMVC;
 public class ViewTemplate : View
 {
     private ControllerTemplate _controller;

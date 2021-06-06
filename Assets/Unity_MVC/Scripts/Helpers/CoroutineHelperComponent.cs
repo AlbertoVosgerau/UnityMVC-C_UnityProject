@@ -1,22 +1,22 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CoroutineHelperComponent : MonoBehaviour
+namespace UnityMVC
 {
-    public static CoroutineHelperComponent Instance
+    public class CoroutineHelperComponent : MonoBehaviour
     {
-        get
+        public static CoroutineHelperComponent Instance
         {
-            if (_instance == null)
+            get
             {
-                GameObject newObject = new GameObject("CoroutineHelper");
-                _instance = newObject.AddComponent<CoroutineHelperComponent>();
-                DontDestroyOnLoad(newObject);
+                if (_instance == null)
+                {
+                    GameObject newObject = new GameObject("CoroutineHelper");
+                    _instance = newObject.AddComponent<CoroutineHelperComponent>();
+                    DontDestroyOnLoad(newObject);
+                }
+                return _instance;
             }
-            return _instance;
         }
+        private static CoroutineHelperComponent _instance;
     }
-    private static CoroutineHelperComponent _instance;
 }
