@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityMVC;
 public class HUDView : View
@@ -20,6 +21,7 @@ public class HUDView : View
     }
     
     // Start your code here
+    [SerializeField] private TextMeshProUGUI _textMesh;
     private void StartController()
     {
         _controller.SetView(this);
@@ -49,5 +51,10 @@ public class HUDView : View
     protected override void SolveDependencies()
     {
         base.SolveDependencies();
+    }
+
+    private void UpdatePoints(int points)
+    {
+        _textMesh.text = points.ToString();
     }
 }

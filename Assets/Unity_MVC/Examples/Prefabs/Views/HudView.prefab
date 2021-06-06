@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2948104524828752786}
+  - component: {fileID: 762815951}
   m_Layer: 0
   m_Name: HudView
   m_TagString: Untagged
@@ -31,6 +32,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &762815951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2948104524828752787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6568bc609a4f71a41bbb7cc2be5df7de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMesh: {fileID: 2948104526014342008}
 --- !u!1001 &3368188624593936362
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -133,3 +147,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 457098624763560637, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
   m_PrefabInstance: {fileID: 3368188624593936362}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2948104526014342008 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 457098625506393234, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
+  m_PrefabInstance: {fileID: 3368188624593936362}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -46,7 +46,6 @@ public class MatchController : Controller
     public void OnPlayerGotTheBall()
     {
         _points++;
-        Debug.Log($"Got the ball. {_points} points");
         onPointsChanged?.Invoke(_points);
     }
 }
