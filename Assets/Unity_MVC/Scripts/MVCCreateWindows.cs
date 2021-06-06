@@ -7,7 +7,7 @@ namespace UnityMVC
     {
         string baseName = "";
         private float btnWidth = 150;
-    
+
         [MenuItem("Unity MVC/Open Creation Window")]
         static void Init()
         {
@@ -19,7 +19,11 @@ namespace UnityMVC
         void OnGUI()
         {
             GUILayout.Label("Create MVC Script", EditorStyles.boldLabel);
-            baseName = EditorGUILayout.TextField("Base Name", baseName);
+            GUILayout.Space(20);
+            UnityMVCData data = MVCCodeGenerator.GetMVCData();
+            data.scriptsFolder = EditorGUILayout.TextField("Create in Assets/",data.scriptsFolder);
+            GUILayout.Space(10);
+            baseName = EditorGUILayout.TextField("Base File Name", baseName);
             GUILayout.Space(20);
             GUILayout.BeginVertical();
             ViewAndController();

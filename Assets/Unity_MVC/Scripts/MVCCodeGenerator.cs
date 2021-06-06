@@ -15,14 +15,7 @@ namespace UnityMVC
     }
     public class MVCCodeGenerator
     {
-        [MenuItem("Unity MVC/Open MVC Settings")]
-        public static void OpenMVCSettings()
-        {
-            UnityMVCData data = GetMVCData();
-            AssetDatabase.OpenAsset(data);
-        }
-
-        public static void CreateView(string name)
+        public static void CreateView( string name)
         {
             GenerateScript(name, GetTemplate(ScriptType.View), GetPath("Views"), ScriptType.View);
         }
@@ -106,7 +99,7 @@ namespace UnityMVC
             file.Close();
         }
 
-        private static UnityMVCData GetMVCData()
+        public static UnityMVCData GetMVCData()
         {
             string[] asset = AssetDatabase.FindAssets("MVCData");
             string path = AssetDatabase.GUIDToAssetPath(asset[0]);
@@ -129,11 +122,11 @@ namespace UnityMVC
             UnityMVCData data = GetMVCData();
             string assets = Application.dataPath;
             
-            if (string.IsNullOrEmpty(data.ScriptsFolder))
+            if (string.IsNullOrEmpty(data.scriptsFolder))
             {
                 return $"{assets}/Scripts/{type}";
             }
-            return $"{assets}/{data.ScriptsFolder}/{type}";
+            return $"{assets}/{data.scriptsFolder}/{type}";
         }
     }
 }
