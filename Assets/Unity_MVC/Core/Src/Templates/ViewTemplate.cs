@@ -18,14 +18,14 @@ public class ViewTemplate : View
     {
 
     }
-    
-    // Start your code here
     private void StartController()
     {
         _controller.SetView(this);
         _controller.OnViewStart();
     }
-
+    
+    // Start your code here
+    
     protected override void Awake()
     {
         base.Awake();
