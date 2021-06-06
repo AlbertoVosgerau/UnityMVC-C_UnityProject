@@ -1,6 +1,12 @@
 using System;
 using UnityEngine;
 using UnityMVC;
+
+public class HUDControllerEvents
+{
+    public Action<int> onPointsUpdated;
+}
+
 public class HUDController : Controller
 {
     private HUDView _view;
@@ -8,18 +14,15 @@ public class HUDController : Controller
     {
         _view = view as HUDView;
     }
-    
+    public HUDControllerEvents Events => _events;
+    private HUDControllerEvents _events = new HUDControllerEvents();
     // Start your code here
     private MatchController _matchController;
-    
-    private Action<int> onPointsUpdated;
-
     public override void OnViewStart()
     {
         base.OnViewStart();
         _matchController = MVC.Controllers.Get<MatchController>();
-        Debug.Log($"{_matchController == null}");
-        _matchController.onPointsChanged += OnPointsUpdated;
+        _matchController.Events.onPointsChanged += OnPointsUpdated;
     }
 
     public override void OnViewUpdate()
@@ -30,12 +33,12 @@ public class HUDController : Controller
     public override void OnViewDestroy()    
     {
         base.OnViewDestroy();
-        _matchController.onPointsChanged -= OnPointsUpdated;
+        _matchController.Events.onPointsChanged -= OnPointsUpdated;
     }
 
     private void OnPointsUpdated(int points)
     {
-        Debug.Log($"Got the ball. {points} points");
-        onPointsUpdated?.Invoke(points);
+        Debug.Log($"Calling event with points {points}");
+        Events.onPointsUpdated?.Invoke(points);
     }
 }

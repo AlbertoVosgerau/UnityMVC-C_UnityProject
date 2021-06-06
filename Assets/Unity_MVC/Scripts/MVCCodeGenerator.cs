@@ -10,7 +10,6 @@ namespace UnityMVC
         View,
         Controller,
         Component,
-        ComponentController,
         Container,
         Loader,
         Solver
@@ -42,10 +41,6 @@ namespace UnityMVC
         public static void CreateComponent(string name)
         {
             GenerateScript(name, GetTemplate(ScriptType.Component), GetPath("Components"), ScriptType.Component);
-        }
-        public static void CreateComponentController(string name)
-        {
-            GenerateScript(name, GetTemplate(ScriptType.ComponentController), GetPath("ComponentControllers"), ScriptType.ComponentController);
         }
         public static void CreateContainer(string name)
         {
@@ -83,11 +78,11 @@ namespace UnityMVC
             }
             if (type == ScriptType.Component)
             {
-                templateStr = templateStr.Replace($"ComponentControllerTemplate", $"{name}ComponentController");
+                templateStr = templateStr.Replace($"ComponentTemplateEvents", $"{name}ComponentEvents");
             }
-            if (type == ScriptType.ComponentController)
+            if (type == ScriptType.Component)
             {
-                templateStr = templateStr.Replace($"ComponentTemplate", $"{name}Component");
+                templateStr = templateStr.Replace($"ComponentTemplateInfo", $"{name}ComponentInfo");
             }
             string directoryPath = path;
             string filePath = $"{directoryPath}/{name}{typeStr}.cs";
@@ -124,22 +119,7 @@ namespace UnityMVC
         {
             Debug.Log($"Type: {type.ToString()}");
             string[] assets = AssetDatabase.FindAssets($"{type.ToString()}Template");
-            string path = String.Empty;
-            if (type == ScriptType.Controller)
-            {
-                for (int i = 0; i < assets.Length; i++)
-                {
-                    string tempPath = AssetDatabase.GUIDToAssetPath(assets[i]);
-                    if (!tempPath.Contains("Component"))
-                    {
-                        path = AssetDatabase.GUIDToAssetPath(assets[1]);
-                    }
-                }
-            }
-            else
-            {
-                path = AssetDatabase.GUIDToAssetPath(assets[0]);
-            }
+            string path = AssetDatabase.GUIDToAssetPath(assets[0]);
             string str = File.ReadAllText(path);
             Debug.Log(path);
             Debug.Log(str);

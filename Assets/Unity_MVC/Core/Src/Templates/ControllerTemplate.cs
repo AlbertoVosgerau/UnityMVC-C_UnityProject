@@ -1,4 +1,10 @@
 using UnityMVC;
+
+public class ControllerTemplateEvents
+{
+    // Add events here
+}
+
 public class ControllerTemplate : Controller
 {
     private ViewTemplate _view;
@@ -6,6 +12,9 @@ public class ControllerTemplate : Controller
     {
         _view = view as ViewTemplate;
     }
+    
+    public ControllerTemplateEvents Events => _events;
+    private ControllerTemplateEvents _events = new ControllerTemplateEvents();
     
     // Start your code here
 

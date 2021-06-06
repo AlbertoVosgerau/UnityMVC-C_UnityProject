@@ -12,12 +12,12 @@ public class HUDView : View
     
     protected override void RegisterControllerEvents()
     {
-        
+        _controller.Events.onPointsUpdated += UpdatePoints;
     }
 
     protected override void UnregisterControllerEvents()
     {
-
+        _controller.Events.onPointsUpdated -= UpdatePoints;
     }
     
     // Start your code here
@@ -33,8 +33,9 @@ public class HUDView : View
         base.Awake();
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         StartController();
     }
 
@@ -43,18 +44,15 @@ public class HUDView : View
         _controller.OnViewUpdate();
     }
 
-    protected virtual void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         _controller.OnViewDestroy();
     }
-
-    protected override void SolveDependencies()
-    {
-        base.SolveDependencies();
-    }
-
+    
     private void UpdatePoints(int points)
     {
+        Debug.Log($"Points: {points}");
         _textMesh.text = points.ToString();
     }
 }

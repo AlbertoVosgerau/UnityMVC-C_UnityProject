@@ -140,6 +140,38 @@ PrefabInstance:
       propertyPath: m_Name
       value: HUD Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 457098625506393234, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.042452812
+      objectReference: {fileID: 0}
+    - target: {fileID: 457098625506393234, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.8688903
+      objectReference: {fileID: 0}
+    - target: {fileID: 457098625506393234, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278968063
+      objectReference: {fileID: 0}
+    - target: {fileID: 457098625506393235, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 457098625506393235, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 457098625506393235, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 310.7317
+      objectReference: {fileID: 0}
+    - target: {fileID: 457098625506393235, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 457098625506393235, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -89.5362
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
 --- !u!224 &2948104526339824983 stripped

@@ -32,8 +32,9 @@ public class MatchView : View
         base.Awake();
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         StartController();
     }
 
@@ -42,8 +43,9 @@ public class MatchView : View
         _controller.OnViewUpdate();
     }
 
-    protected virtual void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         _controller.OnViewDestroy();
     }
 

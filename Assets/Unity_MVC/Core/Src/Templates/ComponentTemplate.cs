@@ -1,33 +1,30 @@
 ﻿using UnityMVC;
+
+public class ComponentTemplateEvents
+{
+    // Add your actions and events here
+}
+
+public class ComponentTemplateInfo
+{
+    // Add metadata here
+}
+
 public class ComponentTemplate : Component
 {
-    private ComponentControllerTemplate _controller;
-    
+    public ComponentTemplateInfo Info => _info;
+    private ComponentTemplateInfo _info = new ComponentTemplateInfo();
+    public ComponentTemplateEvents Events => _events;
+    private ComponentTemplateEvents _events = new ComponentTemplateEvents();
+
     // Start your code here
     protected override void Awake()
     {
-        _controller = new ComponentControllerTemplate();
-        _controller.SetComponent(this);
         base.Awake();
-        _controller.OnComponentAwake();
-    }
-    protected virtual void Start()
-    {
-        _controller.OnComponentStart();
-    }
-
-    protected virtual void Update()
-    {
-        _controller.OnComponentUpdate();
-    }
-
-    protected void OnDestroy()
-    {
-        _controller.OnComponentDestroy();
     }
 
     protected override void SolveDependencies()
     {
-        
+        // Solve private dependencies
     }
 }

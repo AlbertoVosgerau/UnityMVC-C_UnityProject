@@ -1,5 +1,11 @@
 using UnityEngine;
 using UnityMVC;
+
+public class BallSpawnerControllerEvents
+{
+    
+}
+
 public class BallSpawnerController : Controller
 {
     private BallSpawnerView _view;
@@ -7,7 +13,8 @@ public class BallSpawnerController : Controller
     {
         _view = view as BallSpawnerView;
     }
-    
+    public BallSpawnerControllerEvents Events => _events;
+    private BallSpawnerControllerEvents _events = new BallSpawnerControllerEvents();
     // Start your code here
     private BallSpawnerComponent _ballSpawner;
 

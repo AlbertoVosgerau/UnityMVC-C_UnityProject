@@ -13,7 +13,6 @@ namespace UnityMVC
 
         public static SolverLocator Solvers => _solvers;
         private static SolverLocator _solvers = new SolverLocator();
-
         public static void ClearControllers()
         {
             _controllers.Clear();

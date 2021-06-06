@@ -32,8 +32,9 @@ public class BallSpawnerView : View
         base.Awake();
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         StartController();
     }
 
@@ -42,14 +43,10 @@ public class BallSpawnerView : View
         _controller.OnViewUpdate();
     }
 
-    protected virtual void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         _controller.OnViewDestroy();
-    }
-
-    protected override void SolveDependencies()
-    {
-        base.SolveDependencies();
     }
 
     public BallSpawnerComponent GetBallSpawnerPrefab()

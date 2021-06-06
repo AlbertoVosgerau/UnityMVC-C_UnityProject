@@ -31,8 +31,9 @@ public class ViewTemplate : View
         base.Awake();
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         StartController();
     }
 
@@ -41,13 +42,14 @@ public class ViewTemplate : View
         _controller.OnViewUpdate();
     }
 
-    protected virtual void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         _controller.OnViewDestroy();
     }
 
     protected override void SolveDependencies()
     {
-        base.SolveDependencies();
+        // Solve private dependencies
     }
 }

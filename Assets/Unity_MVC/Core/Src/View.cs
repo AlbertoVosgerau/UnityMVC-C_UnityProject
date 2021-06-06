@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace UnityMVC
@@ -11,7 +12,17 @@ namespace UnityMVC
             LocateController();
             SolveDependencies();
         }
-        
+
+        protected virtual void Start()
+        {
+            RegisterControllerEvents();
+        }
+
+        protected virtual void OnDestroy()
+        {
+            UnregisterControllerEvents();
+        }
+
         protected virtual void SolveDependencies(){}
 
         protected abstract void RegisterControllerEvents();

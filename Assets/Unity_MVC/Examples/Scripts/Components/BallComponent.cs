@@ -1,33 +1,48 @@
+using System;
 using UnityMVC;
+
+public class BallComponentEvents
+{
+    
+}
+
+public class BallComponentInfo
+{
+    
+}
 public class BallComponent : Component
 {
-    private BallComponentController _controller;
-    
+    public BallComponentInfo Info => _info;
+    private BallComponentInfo _info = new BallComponentInfo();
+    public BallComponentEvents Events => _events;
+    private BallComponentEvents _events = new BallComponentEvents();
     // Start your code here
+    
     protected override void Awake()
     {
-        _controller = new BallComponentController();
-        _controller.SetComponent(this);
         base.Awake();
-        _controller.OnComponentAwake();
     }
-    protected virtual void Start()
-    {
-        _controller.OnComponentStart();
-    }
-
-    protected virtual void Update()
-    {
-        _controller.OnComponentUpdate();
-    }
-
-    protected void OnDestroy()
-    {
-        _controller.OnComponentDestroy();
-    }
-
     protected override void SolveDependencies()
     {
         
+    }
+
+    private void Update()
+    {
+        if (IsAlive())
+        {
+            return;
+        }
+        SelfDestroy();
+    }
+
+    public bool IsAlive()
+    {
+        return transform.position.y > -1;
+    }
+
+    public void SelfDestroy()
+    {
+        Destroy(gameObject);
     }
 }

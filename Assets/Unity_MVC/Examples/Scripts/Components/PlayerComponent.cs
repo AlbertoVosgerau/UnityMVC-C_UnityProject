@@ -2,33 +2,28 @@ using System;
 using UnityEngine;
 using Component = UnityMVC.Component;
 
+public class PlayerComponentEvents
+{
+    public Action onGotTheBall;
+}
+
+public class PlayerComponentInfo
+{
+    
+}
+
 public class PlayerComponent : Component
 {
-    // TODO: Create a system to get the controller just passing the component instance to MVC
-    public PlayerComponentController Controller => _controller;
-    private PlayerComponentController _controller;
+    public PlayerComponentInfo Info => _info;
+    private PlayerComponentInfo _info = new PlayerComponentInfo();
+    public PlayerComponentEvents Events => _events;
+    private PlayerComponentEvents _events = new PlayerComponentEvents();
     
     // Start your code here
+    
     protected override void Awake()
     {
-        _controller = new PlayerComponentController();
-        _controller.SetComponent(this);
         base.Awake();
-        _controller.OnComponentAwake();
-    }
-    protected virtual void Start()
-    {
-        _controller.OnComponentStart();
-    }
-
-    protected virtual void Update()
-    {
-        _controller.OnComponentUpdate();
-    }
-
-    protected void OnDestroy()
-    {
-        _controller.OnComponentDestroy();
     }
 
     protected override void SolveDependencies()
@@ -38,6 +33,7 @@ public class PlayerComponent : Component
 
     private void OnCollisionEnter(Collision other)
     {
-        _controller.OnBallHit(other);
+        Destroy(other.gameObject);
+        Events.onGotTheBall.Invoke();
     }
 }
