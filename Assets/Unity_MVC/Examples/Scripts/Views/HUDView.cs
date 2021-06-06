@@ -1,5 +1,5 @@
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityMVC;
 
 /// <summary>
@@ -24,7 +24,7 @@ public class HUDView : View
     }
     
     // Start your code here
-    [SerializeField] private TextMeshProUGUI _textMesh;
+    [SerializeField] private Text _textMesh;
     private void StartController()
     {
         _controller.SetView(this);

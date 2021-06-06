@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6568bc609a4f71a41bbb7cc2be5df7de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _textMesh: {fileID: 2948104526014342008}
+  _textMesh: {fileID: 5766415730902431151}
 --- !u!1001 &3368188624593936362
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -179,14 +179,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 457098624763560637, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
   m_PrefabInstance: {fileID: 3368188624593936362}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2948104526014342008 stripped
+--- !u!114 &5766415730902431151 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 457098625506393234, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
+  m_CorrespondingSourceObject: {fileID: 9131146355954625093, guid: d203e7c039e2cb14ebd32924b1180bce, type: 3}
   m_PrefabInstance: {fileID: 3368188624593936362}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
