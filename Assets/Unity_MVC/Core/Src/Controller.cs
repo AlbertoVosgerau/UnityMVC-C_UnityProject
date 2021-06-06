@@ -4,7 +4,12 @@ namespace UnityMVC
     {
         public abstract void SetView(View view);
 
-        public virtual void OnViewStart(){}
+        public virtual void OnViewStart()
+        {
+            SolveDependencies();
+        }
+
+        protected virtual void SolveDependencies(){}
         public virtual void OnViewUpdate() {}
 
         public virtual void OnViewDestroy()

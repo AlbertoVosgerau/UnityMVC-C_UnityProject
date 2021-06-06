@@ -5,9 +5,15 @@ using UnityMVC;
 using Component = UnityMVC.Component;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// Components will handle visual stuff, local events of the object and internal logic.
+/// In this case, the object have a routine that spawns a ball every defined time
+/// Events will inform external listeners of important events that might be used by another entity or controller.
+/// </summary>
 public class BallSpawnerComponentEvents
 {
-    
+    public Action onCreated;
+    public Action onDestroyed;
 }
 
 public class BallSpawnerComponentInfo
@@ -34,24 +40,17 @@ public class BallSpawnerComponent : Component
         transform.position = new Vector3(0, _height, 0);
     }
 
-    protected override void SolveDependencies()
-    {
-        
-    }
-
-    public void StartSpawnRoutine()
-    {
-        StartCoroutine(SpawnBalls());
-    }
-
     public void SetLimits(float height, float size)
     {
         _height = height;
         _size = size;
         transform.position = new Vector3(0, _height, 0);
     }
-
-    private IEnumerator SpawnBalls()
+    public void StartSpawnBallsRoutine()
+    {
+        StartCoroutine(SpawnBallsRoutine());
+    }
+    private IEnumerator SpawnBallsRoutine()
     {
         while (true)
         {
@@ -59,7 +58,6 @@ public class BallSpawnerComponent : Component
             SpawnBall(_ballPrefab, _height, _size);
         }
     }
-    
     private void SpawnBall(GameObject prefab, float height, float limits)
     {
         Vector3 instancePosition = new Vector3(Random.Range(-limits, limits), height, 0);

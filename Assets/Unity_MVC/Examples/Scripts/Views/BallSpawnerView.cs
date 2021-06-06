@@ -1,5 +1,9 @@
 using UnityEngine;
 using UnityMVC;
+
+/// <summary>
+/// Provides the Monobehaviour functionalities and data to its Controller
+/// </summary>
 public class BallSpawnerView : View
 {
     private BallSpawnerController _controller;
@@ -24,11 +28,6 @@ public class BallSpawnerView : View
     {
         _controller.SetView(this);
         _controller.OnViewStart();
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
     }
 
     protected override void Start()

@@ -2,6 +2,11 @@ using System;
 using UnityEngine;
 using UnityMVC;
 
+/// <summary>
+/// Controllers handle business logic.
+/// Meaning that all the main logic of a game will be defined by controllers.
+/// This Controller handle the HUD that informs the player its points
+/// </summary>
 public class HUDControllerEvents
 {
     public Action<int> onPointsUpdated;
@@ -21,13 +26,12 @@ public class HUDController : Controller
     public override void OnViewStart()
     {
         base.OnViewStart();
-        _matchController = MVC.Controllers.Get<MatchController>();
         _matchController.Events.onPointsChanged += OnPointsUpdated;
     }
 
-    public override void OnViewUpdate()
+    protected override void SolveDependencies()
     {
-        base.OnViewUpdate();
+        _matchController = MVC.Controllers.Get<MatchController>();
     }
 
     public override void OnViewDestroy()    
@@ -38,7 +42,6 @@ public class HUDController : Controller
 
     private void OnPointsUpdated(int points)
     {
-        Debug.Log($"Calling event with points {points}");
         Events.onPointsUpdated?.Invoke(points);
     }
 }

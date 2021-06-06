@@ -1,6 +1,12 @@
 using UnityEngine;
 using UnityMVC;
 
+/// <summary>
+/// Controllers handle business logic.
+/// Meaning that all the main logic of a game will be defined by controllers.
+/// This Controller handle the existence of the ball spawner and its functional state
+/// </summary>
+
 public class BallSpawnerControllerEvents
 {
     
@@ -17,26 +23,10 @@ public class BallSpawnerController : Controller
     private BallSpawnerControllerEvents _events = new BallSpawnerControllerEvents();
     // Start your code here
     private BallSpawnerComponent _ballSpawner;
-
-    public override void OnViewStart()
-    {
-        base.OnViewStart();   
-        CreateBallSpawner();
-    }
-
-    public override void OnViewUpdate()
-    {
-        base.OnViewUpdate();
-    }
-
-    public override void OnViewDestroy()
-    {
-        base.OnViewDestroy();
-    }
-
-    private void CreateBallSpawner()
+    
+    public void CreateBallSpawner()
     {
         _ballSpawner = Object.Instantiate(_view.GetBallSpawnerPrefab());
-        _ballSpawner.StartSpawnRoutine();
+        _ballSpawner.StartSpawnBallsRoutine();
     }
 }

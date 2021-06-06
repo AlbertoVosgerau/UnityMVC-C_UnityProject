@@ -1,6 +1,10 @@
 using TMPro;
 using UnityEngine;
 using UnityMVC;
+
+/// <summary>
+/// Provides the Monobehaviour functionalities and data to its Controller
+/// </summary>
 public class HUDView : View
 {
     private HUDController _controller;
@@ -27,11 +31,6 @@ public class HUDView : View
         _controller.OnViewStart();
     }
 
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
     protected override void Start()
     {
         base.Start();
@@ -51,7 +50,6 @@ public class HUDView : View
     
     private void UpdatePoints(int points)
     {
-        Debug.Log($"Points: {points}");
         _textMesh.text = points.ToString();
     }
 }

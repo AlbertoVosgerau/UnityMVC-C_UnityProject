@@ -1,8 +1,11 @@
-﻿using UnityMVC;
+﻿using System;
+using UnityMVC;
 
 public class ComponentTemplateEvents
 {
     // Add your actions and events here
+    public Action onCreated;
+    public Action onDestroyed;
 }
 
 public class ComponentTemplateInfo
@@ -21,6 +24,12 @@ public class ComponentTemplate : Component
     protected override void Awake()
     {
         base.Awake();
+        _events.onCreated?.Invoke();
+    }
+
+    private void OnDestroy()
+    {
+        _events.onDestroyed?.Invoke();
     }
 
     protected override void SolveDependencies()

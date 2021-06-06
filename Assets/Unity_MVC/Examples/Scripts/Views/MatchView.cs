@@ -1,5 +1,10 @@
+using System;
 using UnityEngine;
 using UnityMVC;
+
+/// <summary>
+/// Provides the Monobehaviour functionalities and data to its Controller
+/// </summary>
 public class MatchView : View
 {
     private MatchController _controller;
@@ -25,15 +30,9 @@ public class MatchView : View
         _controller.SetView(this);
         _controller.OnViewStart();
     }
-
-    protected override void Awake()
+    
+    protected virtual void Start()
     {
-        base.Awake();
-    }
-
-    protected override void Start()
-    {
-        base.Start();
         StartController();
     }
 
@@ -42,15 +41,9 @@ public class MatchView : View
         _controller.OnViewUpdate();
     }
 
-    protected override void OnDestroy()
+    protected virtual void OnDestroy()
     {
-        base.OnDestroy();
         _controller.OnViewDestroy();
-    }
-
-    protected override void SolveDependencies()
-    {
-        base.SolveDependencies();
     }
 
     public PlayerComponent GetPlayerPrefab()

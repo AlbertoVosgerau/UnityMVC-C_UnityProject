@@ -23,6 +23,11 @@ public class ControllerTemplate : Controller
         base.OnViewStart();   
     }
 
+    protected override void SolveDependencies()
+    {
+        
+    }
+
     public override void OnViewUpdate()
     {
         base.OnViewUpdate();
