@@ -28,6 +28,16 @@ public class ControllerTemplate : Controller
         
     }
 
+    protected virtual void RegisterEvents()
+    {
+        
+    }
+
+    protected virtual void UnregisterEvents()
+    {
+        
+    }
+
     public override void OnViewUpdate()
     {
         base.OnViewUpdate();

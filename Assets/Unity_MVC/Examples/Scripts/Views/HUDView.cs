@@ -15,16 +15,19 @@ public class HUDView : View
     
     protected override void RegisterControllerEvents()
     {
-        _controller.Events.onPointsUpdated += UpdatePoints;
+        _controller.Events.onScoreUpdated += UpdatePoints;
+        _controller.Events.onBestScoreSet += OnBestScoreSet;
     }
 
     protected override void UnregisterControllerEvents()
     {
-        _controller.Events.onPointsUpdated -= UpdatePoints;
+        _controller.Events.onScoreUpdated -= UpdatePoints;
+        _controller.Events.onBestScoreSet -= OnBestScoreSet;
     }
     
     // Start your code here
-    [SerializeField] private Text _textMesh;
+    [SerializeField] private Text _scoreText;
+    [SerializeField] private Text _bestScoreText;
     private void StartController()
     {
         _controller.SetView(this);
@@ -47,9 +50,14 @@ public class HUDView : View
         base.OnDestroy();
         _controller.OnViewDestroy();
     }
-    
+
+    private void OnBestScoreSet(int points)
+    {
+        _bestScoreText.text = $"Best: {points.ToString()}";
+    }
+
     private void UpdatePoints(int points)
     {
-        _textMesh.text = points.ToString();
+        _scoreText.text = points.ToString();
     }
 }

@@ -1,19 +1,20 @@
 using UnityMVC;
 public class ContainerTemplate : Container
 {
-    protected SolverTemplate Solver
+    protected LoaderTemplate Loader
     {
         get
         {
-            if (_solver != null)
+            if (_loader != null)
             {
-                return _solver;
+                return _loader;
             }
-            _solver = MVC.Solvers.Get<SolverTemplate>();
-            return _solver;
+
+            _loader = MVC.Loaders.Get<LoaderTemplate>();
+            return _loader;
         }
     }
-    protected SolverTemplate _solver;
+    protected LoaderTemplate _loader;
     
     // Start your code here
 }

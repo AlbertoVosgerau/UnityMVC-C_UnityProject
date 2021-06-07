@@ -76,6 +76,14 @@ namespace UnityMVC
             {
                 templateStr = templateStr.Replace($"ComponentTemplateInfo", $"{name}ComponentInfo");
             }
+            if (type == ScriptType.Container)
+            {
+                templateStr = templateStr.Replace($"LoaderTemplate", $"{name}Loader");
+            }
+            if (type == ScriptType.Loader)
+            {
+                templateStr = templateStr.Replace($"SolverTemplate", $"{name}Solver");
+            }
             string directoryPath = path;
             string filePath = $"{directoryPath}/{name}{typeStr}.cs";
 

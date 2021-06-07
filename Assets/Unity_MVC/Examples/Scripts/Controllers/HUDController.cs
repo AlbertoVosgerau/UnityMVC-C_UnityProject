@@ -9,7 +9,8 @@ using UnityMVC;
 /// </summary>
 public class HUDControllerEvents
 {
-    public Action<int> onPointsUpdated;
+    public Action<int> onBestScoreSet;
+    public Action<int> onScoreUpdated;
 }
 
 public class HUDController : Controller
@@ -26,7 +27,7 @@ public class HUDController : Controller
     public override void OnViewStart()
     {
         base.OnViewStart();
-        _matchController.Events.onPointsChanged += OnPointsUpdated;
+        RegisterEvents();
     }
 
     protected override void SolveDependencies()
@@ -34,14 +35,31 @@ public class HUDController : Controller
         _matchController = MVC.Controllers.Get<MatchController>();
     }
 
+    protected virtual void RegisterEvents()
+    {
+        _matchController.Events.onBestScoreSet += OnBestScoreSet;
+        _matchController.Events.onScoreChanged += OnPointsUpdated;
+    }
+
+    protected virtual void UnregisterEvents()
+    {
+        _matchController.Events.onBestScoreSet -= OnBestScoreSet;
+        _matchController.Events.onScoreChanged -= OnPointsUpdated;
+    }
+
     public override void OnViewDestroy()    
     {
         base.OnViewDestroy();
-        _matchController.Events.onPointsChanged -= OnPointsUpdated;
+        UnregisterEvents();
+    }
+
+    private void OnBestScoreSet(int points)
+    {
+        _events.onBestScoreSet?.Invoke(points);
     }
 
     private void OnPointsUpdated(int points)
     {
-        Events.onPointsUpdated?.Invoke(points);
+        _events.onScoreUpdated?.Invoke(points);
     }
 }
