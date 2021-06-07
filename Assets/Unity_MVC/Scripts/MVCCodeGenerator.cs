@@ -117,12 +117,9 @@ namespace UnityMVC
         
         private static string GetTemplate(ScriptType type)
         {
-            Debug.Log($"Type: {type.ToString()}");
             string[] assets = AssetDatabase.FindAssets($"{type.ToString()}Template");
             string path = AssetDatabase.GUIDToAssetPath(assets[0]);
             string str = File.ReadAllText(path);
-            Debug.Log(path);
-            Debug.Log(str);
             return str;
         }
         private static string GetPath(string type)
