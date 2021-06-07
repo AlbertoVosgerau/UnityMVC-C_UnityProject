@@ -1,0 +1,16 @@
+{
+    "name": "Unity_MVC_Examples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:cea6bc984c66c2c4fbac456ef0c3428d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
