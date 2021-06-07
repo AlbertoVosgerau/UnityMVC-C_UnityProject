@@ -24,7 +24,6 @@ public class MatchView : View
     }
     
     // Start your code here
-    [SerializeField] private PlayerComponent _playerPrefab;
     private void StartController()
     {
         _controller.SetView(this);
@@ -44,10 +43,5 @@ public class MatchView : View
     protected virtual void OnDestroy()
     {
         _controller.OnViewDestroy();
-    }
-
-    public PlayerComponent GetPlayerPrefab()
-    {
-        return _playerPrefab;
     }
 }

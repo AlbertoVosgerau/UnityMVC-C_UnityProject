@@ -29,9 +29,9 @@ public class PlayerComponent : Component
     public PlayerComponentEvents Events => _events;
     private PlayerComponentEvents _events = new PlayerComponentEvents();
     
-    // Start your code here
     [SerializeField] private float _speed = 2;
     private PlayerInputImpl _input;
+    
     protected override void Awake()
     {
         base.Awake();

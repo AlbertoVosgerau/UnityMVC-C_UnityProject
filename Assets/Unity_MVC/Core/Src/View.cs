@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace UnityMVC
@@ -15,6 +16,17 @@ namespace UnityMVC
         protected virtual void Start()
         {
             RegisterControllerEvents();
+            StartCoroutine(LateStartRoutine());
+        }
+
+        protected IEnumerator LateStartRoutine()
+        {
+            yield return null;
+            LateStart();
+        }
+
+        protected virtual void LateStart()
+        {
         }
 
         protected virtual void OnDestroy()

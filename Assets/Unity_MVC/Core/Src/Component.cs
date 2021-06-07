@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace UnityMVC
@@ -14,7 +16,22 @@ namespace UnityMVC
         {
             SolveDependencies();
         }
-        
+
+        protected virtual void Start()
+        {
+            StartCoroutine(LateStartRoutine());
+        }
+
+        protected IEnumerator LateStartRoutine()
+        {
+            yield return null;
+            LateStart();
+        }
+
+        protected virtual void LateStart()
+        {
+        }
+
         protected virtual void SolveDependencies()
         {
             

@@ -27,6 +27,11 @@ public class ComponentTemplate : Component
         _events.onCreated?.Invoke();
     }
 
+    protected override void Start()
+    {
+        base.Start();
+    }
+
     private void OnDestroy()
     {
         _events.onDestroyed?.Invoke();

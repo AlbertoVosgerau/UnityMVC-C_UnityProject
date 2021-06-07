@@ -20,7 +20,8 @@ public class ControllerTemplate : Controller
 
     public override void OnViewStart()
     {
-        base.OnViewStart();   
+        base.OnViewStart();
+        RegisterEvents();
     }
 
     protected override void SolveDependencies()
@@ -45,6 +46,7 @@ public class ControllerTemplate : Controller
 
     public override void OnViewDestroy()
     {
+        UnregisterEvents();
         base.OnViewDestroy();
     }
 }

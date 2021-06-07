@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace UnityMVC
 {
     public abstract class Controller
@@ -7,11 +9,21 @@ namespace UnityMVC
         public virtual void OnViewStart()
         {
             SolveDependencies();
+            CoroutineHelper.StartCoroutine(this,LateStartRoutine());
+        }
+
+        protected IEnumerator LateStartRoutine()
+        {
+            yield return null;
+            LateStart();
+        }
+
+        protected virtual void LateStart()
+        {
         }
 
         protected virtual void SolveDependencies(){}
         public virtual void OnViewUpdate() {}
-
         public virtual void OnViewDestroy()
         {
             CoroutineHelper.StoppAllCoroutinesFromSender(this);

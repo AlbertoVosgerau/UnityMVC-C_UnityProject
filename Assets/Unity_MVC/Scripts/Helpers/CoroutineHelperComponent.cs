@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace UnityMVC
@@ -18,5 +19,10 @@ namespace UnityMVC
             }
         }
         private static CoroutineHelperComponent _instance;
+
+        private void OnDestroy()
+        {
+            CoroutineHelper.StopAllCoroutines();
+        }
     }
 }

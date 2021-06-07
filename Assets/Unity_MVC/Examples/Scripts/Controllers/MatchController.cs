@@ -29,6 +29,7 @@ public class MatchController : Controller
     private MatchControllerEvents _events = new MatchControllerEvents();
     // Start your code here
     private BallSpawnerController _ballSpawnerController;
+    private PlayerController _playerController;
     private GameDataContainer _gameDataContainer;
     public int Points => _points;
     private int _points = 0;
@@ -38,26 +39,32 @@ public class MatchController : Controller
     public override void OnViewStart()
     {
         base.OnViewStart();
-        CreatePlayer();
         CreateSpawner();
         RegisterEvents();
+        
+    }
+
+    protected override void LateStart()
+    {
         SetBestScore(_gameDataContainer.BestScore);
     }
 
     protected virtual void RegisterEvents()
     {
-        _player.Events.onGotTheBall += OnPlayerGotTheBall;
+        _playerController.Events.onPlayerHitTheBall += OnPlayerGotTheBall;
     }
 
     protected virtual void UnregisterEvents()
     {
-        _player.Events.onGotTheBall -= OnPlayerGotTheBall;
+        _playerController.Events.onPlayerHitTheBall -= OnPlayerGotTheBall;
     }
 
     protected override void SolveDependencies()
     {
         _ballSpawnerController = MVC.Controllers.Get<BallSpawnerController>();
+        _playerController = MVC.Controllers.Get<PlayerController>();
         _gameDataContainer = MVC.Containers.Get<GameDataContainer>();
+        _player = _playerController.Player;
     }
 
     public override void OnViewDestroy()
@@ -74,23 +81,12 @@ public class MatchController : Controller
     {
         _ballSpawnerController.CreateBallSpawner();
     }
-
-    public void CreatePlayer()
-    {
-        _player = Object.Instantiate(_view.GetPlayerPrefab());
-    }
-
+    
     private void SetBestScore(int points)
     {
-        CoroutineHelper.StartCoroutine(this,SetBestScoreRoutine(points));
-    }
-
-    private IEnumerator SetBestScoreRoutine(int points)
-    {
-        yield return null;
         _events.onBestScoreSet?.Invoke(points);
     }
-    
+
     public void OnPlayerGotTheBall()
     {
         _points++;
