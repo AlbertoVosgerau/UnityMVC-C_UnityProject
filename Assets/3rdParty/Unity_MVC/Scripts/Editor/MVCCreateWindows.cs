@@ -74,7 +74,7 @@ namespace UnityMVC
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Create Loader /Solver / Container", GUILayout.Width(btnWidth * 2)))
+            if (GUILayout.Button("Create Loader / Solver / Container", GUILayout.Width(btnWidth * 2)))
             {
                 MVCCodeGenerator.CreateContainer(baseName);
                 MVCCodeGenerator.CreateLoader(baseName);
