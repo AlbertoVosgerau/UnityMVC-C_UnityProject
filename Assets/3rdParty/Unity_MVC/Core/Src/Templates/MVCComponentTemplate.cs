@@ -1,21 +1,21 @@
-using System;
+﻿using System;
 using UnityMVC;
 
-public class asdasdfComponentEvents
+public class MVCComponentTemplateEvents
 {
     // Add your actions and events here
     public Action onCreated;
     public Action onDestroyed;
 }
 
-public partial class asdasdfComponent : Component
+public partial class MVCComponentTemplate : MVCComponent
 {
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public asdasdfComponentEvents Events => _events;
-    private asdasdfComponentEvents _events = new asdasdfComponentEvents();
+    public MVCComponentTemplateEvents Events => _events;
+    private MVCComponentTemplateEvents _events = new MVCComponentTemplateEvents();
 }
 
-public partial class asdasdfComponent
+public partial class MVCComponentTemplate
 {
     protected virtual void RegisterEvents()
     {

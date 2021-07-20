@@ -32,9 +32,9 @@ public partial class ControllerTemplate
         // otherObject.EventName -= MyMethod;
     }
     
-    public override void OnViewStart()
+    public override void OnInitializeController()
     {
-        base.OnViewStart();
+        base.OnInitializeController();
         RegisterEvents();
     }
 

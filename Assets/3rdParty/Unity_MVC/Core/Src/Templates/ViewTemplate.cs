@@ -14,15 +14,32 @@ public partial class ViewTemplate : View
         _controller = MVC.Controllers.Get<ControllerTemplate>();
     }
     
-    protected override void StartController()
+    protected override void InitializeController()
     {
         _controller.SetView(this);
-        _controller.OnViewStart();
+        _controller.OnInitializeController();
     }
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
     public ViewTemplateEvents Events => _events;
     private ViewTemplateEvents _events = new ViewTemplateEvents();
+
+    protected override void MVCStart()
+    {
+        base.MVCStart();
+        _controller.OnViewStart();
+    }
+
+    protected override void MVCOnDestroy()
+    {
+        base.MVCOnDestroy();
+        _controller.OnViewDestroy();
+    }
+
+    protected void MVCUpdate()
+    {
+        _controller.OnViewUpdate();
+    }
 }
 
 public partial class ViewTemplate
@@ -51,13 +68,12 @@ public partial class ViewTemplate
 
     protected void Update()
     {
-        _controller.OnViewUpdate();
+        MVCUpdate();
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        _controller.OnViewDestroy();
     }
 
     protected override void SolveDependencies()

@@ -1,31 +1,48 @@
 using System.Collections.Generic;
 using UnityMVC;
 
-public class sViewEvents
+public class SomeTestViewEvents
 {
     // Add events here
 }
 
-public partial class sView : View
+public partial class SomeTestView : View
 {
-    private sController _controller;
+    private SomeTestController _controller;
     protected override void LocateController()
     {
-        _controller = MVC.Controllers.Get<sController>();
+        _controller = MVC.Controllers.Get<SomeTestController>();
     }
     
-    protected override void StartController()
+    protected override void InitializeController()
     {
         _controller.SetView(this);
-        _controller.OnViewStart();
+        _controller.OnInitializeController();
     }
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public sViewEvents Events => _events;
-    private sViewEvents _events = new sViewEvents();
+    public SomeTestViewEvents Events => _events;
+    private SomeTestViewEvents _events = new SomeTestViewEvents();
+
+    protected override void MVCStart()
+    {
+        base.MVCStart();
+        _controller.OnViewStart();
+    }
+
+    protected override void MVCOnDestroy()
+    {
+        base.MVCOnDestroy();
+        _controller.OnViewDestroy();
+    }
+
+    protected void MVCUpdate()
+    {
+        _controller.OnViewUpdate();
+    }
 }
 
-public partial class sView
+public partial class SomeTestView
 {
     protected override void RegisterControllerEvents()
     {
@@ -51,13 +68,12 @@ public partial class sView
 
     protected void Update()
     {
-        _controller.OnViewUpdate();
+        MVCUpdate();
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        _controller.OnViewDestroy();
     }
 
     protected override void SolveDependencies()

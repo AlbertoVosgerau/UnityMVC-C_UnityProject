@@ -8,8 +8,8 @@ namespace UnityMVC
 {
     public abstract class View : MonoBehaviour
     {
-        private List<Component> _components = new List<Component>();
-        [SerializeField] private List<Component> _MVCComponentsToTrack = new List<Component>();
+        private List<MVCComponent> _components = new List<MVCComponent>();
+        [SerializeField] private List<MVCComponent> _MVCComponentsToTrack = new List<MVCComponent>();
         protected abstract void LocateController();
 
         protected virtual void Awake()
@@ -17,13 +17,18 @@ namespace UnityMVC
             SolveComponents();
             LocateController();
             SolveDependencies();
-            StartController();
+            InitializeController();
+        }
+
+        protected virtual void MVCStart()
+        {
+            RegisterControllerEvents();
+            StartCoroutine(LateStartRoutine());
         }
 
         protected virtual void Start()
         {
-            RegisterControllerEvents();
-            StartCoroutine(LateStartRoutine());
+            MVCStart();
         }
 
         protected IEnumerator LateStartRoutine()
@@ -36,22 +41,25 @@ namespace UnityMVC
         {
         }
 
-        
-
         protected void MakePersistent()
         {
             transform.parent = null;
             DontDestroyOnLoad(this);
         }
 
-        protected virtual void OnDestroy()
+        protected virtual void MVCOnDestroy()
         {
             UnregisterControllerEvents();
         }
 
+        protected virtual void OnDestroy()
+        {
+            MVCOnDestroy();
+        }
+
         protected virtual void SolveDependencies(){}
 
-        protected abstract void StartController();
+        protected abstract void InitializeController();
         protected abstract void RegisterControllerEvents();
 
         protected abstract void UnregisterControllerEvents();
@@ -65,7 +73,7 @@ namespace UnityMVC
 
         private void InitializeComponentsList()
         {
-            foreach (Component component in _MVCComponentsToTrack)
+            foreach (MVCComponent component in _MVCComponentsToTrack)
             {
                 _components.Add(component);
             }
@@ -73,37 +81,37 @@ namespace UnityMVC
 
         private void GetComponents()
         {
-            _components = GetComponentsInChildren<Component>().ToList();
+            _components = GetComponentsInChildren<MVCComponent>().ToList();
         }
         
         private void SetViewOnComponents()
         {
-            foreach (Component component in _components)
+            foreach (MVCComponent component in _components)
             {
                 component.SetView(this);
             }
         }
 
-        public T AddComponentMVC<T>(GameObject gameObject) where T : Component, new()
+        public T AddMVCComponent<T>(GameObject gameObject) where T : MVCComponent, new()
         {
             T newComponent = gameObject.AddComponent<T>();
             RegisterComponentToView(newComponent);
             return newComponent as T;
         }
         
-        public T GetComponentMVC<T>() where T : Component
+        public T GetMVCComponent<T>() where T : MVCComponent
         {
             return _components.FirstOrDefault(x => x.GetType() == typeof(T)) as T;
         }
 
-        public void RegisterComponentToView(Component component)
+        public void RegisterComponentToView(MVCComponent mvcComponent)
         {
-            _components.Add(component);
+            _components.Add(mvcComponent);
         }
         
-        public void UnregisterComponentFromView(Component component)
+        public void UnregisterComponentFromView(MVCComponent mvcComponent)
         {
-            _components.Remove(component);
+            _components.Remove(mvcComponent);
         }
     }
 }

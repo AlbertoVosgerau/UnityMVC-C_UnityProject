@@ -7,7 +7,7 @@ using UnityEngine;
 namespace UnityMVC
 {
     [Serializable]
-    public class Component : MonoBehaviour
+    public class MVCComponent : MonoBehaviour
     {
         protected View _view;
         public void SetView(View view)

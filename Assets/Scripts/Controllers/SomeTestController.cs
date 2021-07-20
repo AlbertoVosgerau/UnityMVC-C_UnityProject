@@ -1,24 +1,24 @@
 using UnityMVC;
 
-public class sControllerEvents
+public class SomeTestControllerEvents
 {
     // Add events here
 }
 
-public partial class sController : Controller
+public partial class SomeTestController : Controller
 {
-    private sView _view;
+    private SomeTestView _view;
     public override void SetView(View view)
     {
-        _view = view as sView;
+        _view = view as SomeTestView;
     }
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public sControllerEvents Events => _events;
-    private sControllerEvents _events = new sControllerEvents();
+    public SomeTestControllerEvents Events => _events;
+    private SomeTestControllerEvents _events = new SomeTestControllerEvents();
 }
 
-public partial class sController
+public partial class SomeTestController
 {
     // Start your code here
     
@@ -32,9 +32,9 @@ public partial class sController
         // otherObject.EventName -= MyMethod;
     }
     
-    public override void OnViewStart()
+    public override void OnInitializeController()
     {
-        base.OnViewStart();
+        base.OnInitializeController();
         RegisterEvents();
     }
 

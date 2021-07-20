@@ -9,7 +9,7 @@ namespace UnityMVC
     {
         View,
         Controller,
-        Component,
+        MVCComponent,
         Container,
         Loader,
         Solver
@@ -33,7 +33,7 @@ namespace UnityMVC
         }
         public static void CreateComponent(string name)
         {
-            GenerateScript(name, GetTemplate(ScriptType.Component), GetPath("Components"), ScriptType.Component);
+            GenerateScript(name, GetTemplate(ScriptType.MVCComponent), GetPath("Components"), ScriptType.MVCComponent);
         }
         public static void CreateContainer(string name)
         {
@@ -69,11 +69,11 @@ namespace UnityMVC
             {
                 templateStr = templateStr.Replace($"ViewTemplate", $"{name}View");
             }
-            if (type == ScriptType.Component)
+            if (type == ScriptType.MVCComponent)
             {
                 templateStr = templateStr.Replace($"ComponentTemplateEvents", $"{name}ComponentEvents");
             }
-            if (type == ScriptType.Component)
+            if (type == ScriptType.MVCComponent)
             {
                 templateStr = templateStr.Replace($"ComponentTemplateInfo", $"{name}ComponentInfo");
             }
