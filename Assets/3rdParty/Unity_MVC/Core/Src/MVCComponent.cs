@@ -64,10 +64,10 @@ namespace UnityMVC
             _unityComponents.Remove(component);
         }
 
-        public T GetComponentFromMVC<T>(bool addToStoredComponentsList = false) where T : Component
+        public T GetUnityComponentFromMVC<T>(bool addToStoredComponentsList = false) where T : Component
         {
             T component = _unityComponents.FirstOrDefault(x => x.GetType() == typeof(T)) as T;
-            
+
             if (component == null)
             {
                 component = GetComponent<T>();
@@ -83,15 +83,15 @@ namespace UnityMVC
             return component;
         }
         
-        public List<T> GetComponentsFromMVC<T>(bool addToStoredComponentsList = false) where T : Component
+        public List<T> GetUnityComponentsFromMVC<T>(bool addToStoredComponentsList = false) where T : Component
         {
             List<T> components = _unityComponents.Where(x => x.GetType() == typeof(T)) as List<T>;
-            
+
             if (components.Count == 0)
             {
                 components = GetComponents<T>().ToList();
             }
-            
+
             if (addToStoredComponentsList && components.Count > 0)
             {
                 foreach (T component in components)
@@ -101,7 +101,6 @@ namespace UnityMVC
                         _unityComponents.Add(component);
                     }
                 }
-                
             }
             return components;
         }
