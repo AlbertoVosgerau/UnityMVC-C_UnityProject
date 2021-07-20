@@ -11,7 +11,7 @@ public partial class ViewTemplate : View
     private ControllerTemplate _controller;
     protected override void LocateController()
     {
-        _controller = MVC.Controllers.Get<ControllerTemplate>();
+        _controller = MVCApplication.Controllers.Get<ControllerTemplate>();
     }
     
     protected override void InitializeController()

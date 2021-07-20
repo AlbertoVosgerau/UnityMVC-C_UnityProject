@@ -16,7 +16,7 @@ public partial class ContainerTemplate : Container
                 return _loader;
             }
 
-            _loader = MVC.Loaders.Get<LoaderTemplate>();
+            _loader = MVCApplication.Loaders.Get<LoaderTemplate>();
             return _loader;
         }
     }

@@ -11,7 +11,7 @@ public partial class SomeTestView : View
     private SomeTestController _controller;
     protected override void LocateController()
     {
-        _controller = MVC.Controllers.Get<SomeTestController>();
+        _controller = MVCApplication.Controllers.Get<SomeTestController>();
     }
     
     protected override void InitializeController()

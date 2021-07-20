@@ -15,7 +15,7 @@ public partial class LoaderTemplate : Loader
             {
                 return _solver;
             }
-            _solver = MVC.Solvers.Get<SolverTemplate>();
+            _solver = MVCApplication.Solvers.Get<SolverTemplate>();
             return _solver;
         }
     }

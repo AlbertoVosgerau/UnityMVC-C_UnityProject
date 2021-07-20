@@ -1,6 +1,6 @@
 namespace UnityMVC
 {
-    public class MVC
+    public class MVCApplication
     {
         public static ControllerLocator Controllers => _controllers;
         private static ControllerLocator _controllers = new ControllerLocator();
