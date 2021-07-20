@@ -6,9 +6,14 @@ namespace UnityMVC
     {
         public abstract void SetView(View view);
 
-        public virtual void OnInitializeController()
+        protected virtual void MVCOnInitializeController()
         {
             SolveDependencies();
+        }
+
+        public virtual void OnInitializeController()
+        {
+            MVCOnInitializeController();
         }
 
         protected IEnumerator LateStartRoutine()
@@ -30,9 +35,14 @@ namespace UnityMVC
         protected abstract void UnregisterEvents();
         protected abstract void SolveDependencies();
         public virtual void OnViewUpdate() {}
-        public virtual void OnViewDestroy()
+
+        protected virtual void MVCOnViewDestroy()
         {
             CoroutineHelper.StoppAllCoroutinesFromSender(this);
+        }
+        public virtual void OnViewDestroy()
+        {
+            MVCOnViewDestroy();
         }        
     }
 }

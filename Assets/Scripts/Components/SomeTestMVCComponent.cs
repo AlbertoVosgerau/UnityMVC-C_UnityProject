@@ -1,20 +1,20 @@
-﻿using System;
+using System;
 using UnityMVC;
 
-public class MVCComponentTemplateEvents
+public class SomeTestMVCComponentEvents
 {
     // Add your actions and events here
     public Action onCreated;
     public Action onDestroyed;
 }
 
-public partial class MVCComponentTemplate
+public partial class SomeTestMVCComponent
 {
     private ViewTemplate _view => _baseView as ViewTemplate;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public MVCComponentTemplateEvents Events => _events;
-    private MVCComponentTemplateEvents _events = new MVCComponentTemplateEvents();
+    public SomeTestMVCComponentEvents Events => _events;
+    private SomeTestMVCComponentEvents _events = new SomeTestMVCComponentEvents();
     
     // Start your code here
     protected override void RegisterEvents()

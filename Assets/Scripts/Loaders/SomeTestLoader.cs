@@ -1,17 +1,17 @@
 using UnityMVC;
 
-public class LoaderTemplateEvents
+public class SomeTestLoaderEvents
 {
     // Add events here
 }
 
-public partial class LoaderTemplate
+public partial class SomeTestLoader
 {
-    private SolverTemplate _solver;
+    private SomeTestSolver _solver;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public LoaderTemplateEvents Events => _events;
-    private LoaderTemplateEvents _events = new LoaderTemplateEvents();
+    public SomeTestLoaderEvents Events => _events;
+    private SomeTestLoaderEvents _events = new SomeTestLoaderEvents();
     // Start your code here
     protected override void RegisterEvents()
     {

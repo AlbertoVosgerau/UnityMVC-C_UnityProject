@@ -5,36 +5,23 @@ public class ContainerTemplateEvents
     // Add events here
 }
 
-public partial class ContainerTemplate : Container
+public partial class ContainerTemplate
 {
-    protected LoaderTemplate Loader
-    {
-        get
-        {
-            if (_loader != null)
-            {
-                return _loader;
-            }
-
-            _loader = MVCApplication.Loaders.Get<LoaderTemplate>();
-            return _loader;
-        }
-    }
-    protected LoaderTemplate _loader;
+    private LoaderTemplate _loader;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
     public ContainerTemplateEvents Events => _events;
     private ContainerTemplateEvents _events = new ContainerTemplateEvents();
-}
-
-public partial class ContainerTemplate
-{
+    
     // Start your code here
-    protected override void UnregisterEvents()
-    {
-    }
     
     protected override void RegisterEvents()
     {
+        // otherObject.EventName += MyMethod;
+    }
+
+    protected override void UnregisterEvents()
+    {
+        // otherObject.EventName -= MyMethod;
     }
 }

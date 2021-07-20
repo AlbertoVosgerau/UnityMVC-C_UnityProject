@@ -9,14 +9,14 @@ namespace UnityMVC
     [Serializable]
     public abstract class MVCComponent : MonoBehaviour
     {
-        public string View => _view.gameObject.name;
-        protected View _view;
+        public string View => _baseView.gameObject.name;
+        protected View _baseView;
         public Component Owner => _owner;
         protected Component _owner;
         public void SetView(View view)
         {
-            _view = view;
-            OnViewWasSet(_view);
+            _baseView = view;
+            OnViewWasSet(_baseView);
         }
 
         protected virtual void OnViewWasSet(View view)
@@ -30,9 +30,13 @@ namespace UnityMVC
         
         [SerializeField] private List<Component> _unityComponents;
 
-        protected virtual void Awake()
+        protected virtual void MVCAwake()
         {
             SolveDependencies();
+        }
+        protected virtual void Awake()
+        {
+            MVCAwake();
         }
 
         protected virtual void MVCStart()
@@ -62,7 +66,7 @@ namespace UnityMVC
 
         protected virtual void MVCOnDestroy()
         {
-            _view.UnregisterComponentFromView(this);
+            _baseView.UnregisterComponentFromView(this);
         }
         protected virtual void OnDestroy()
         {

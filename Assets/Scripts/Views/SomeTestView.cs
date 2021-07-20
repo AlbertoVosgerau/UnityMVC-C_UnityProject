@@ -1,32 +1,32 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using UnityMVC;
 
-public class MVCComponentTemplateEvents
+public class SomeTestViewEvents
 {
-    // Add your actions and events here
-    public Action onCreated;
-    public Action onDestroyed;
+    // Add events here
+    public Action<View> onViewDestroyed;
 }
 
-public partial class MVCComponentTemplate
+public partial class SomeTestView
 {
-    private ViewTemplate _view => _baseView as ViewTemplate;
+    private SomeTestController _controller;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public MVCComponentTemplateEvents Events => _events;
-    private MVCComponentTemplateEvents _events = new MVCComponentTemplateEvents();
+    public SomeTestViewEvents Events => _events;
+    private SomeTestViewEvents _events = new SomeTestViewEvents();
     
     // Start your code here
-    protected override void RegisterEvents()
+    protected override void RegisterControllerEvents()
     {
         // otherObject.EventName += MyMethod;
     }
 
-    protected override void UnregisterEvents()
+    protected override void UnregisterControllerEvents()
     {
         // otherObject.EventName -= MyMethod;
     }
-    
+
     protected override void SolveDependencies()
     {
         // Awake calls this method. Solve your dependencies here.
@@ -35,18 +35,20 @@ public partial class MVCComponentTemplate
     protected override void Awake()
     {
         base.Awake();
-        // Add your code from here
     }
-    
+
     protected override void Start()
     {
         base.Start();
-        // Add your code from here
+    }
+
+    protected override void Update()
+    {
+        base.Update();
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        // Add your code from here
     }
 }

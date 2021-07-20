@@ -1,19 +1,19 @@
 using System;
 using UnityMVC;
 
-public class ControllerTemplateEvents
+public class SomeTestControllerEvents
 {
     // Add events here
     public Action<Controller> onControllerInitialized;
     public Action<Controller> onControllerDestroyed;
 }
-public partial class ControllerTemplate
+public partial class SomeTestController
 {
-    private ViewTemplate _view;
+    private SomeTestView _view;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public ControllerTemplateEvents Events => _events;
-    private ControllerTemplateEvents _events = new ControllerTemplateEvents();
+    public SomeTestControllerEvents Events => _events;
+    private SomeTestControllerEvents _events = new SomeTestControllerEvents();
     
     // Start your code here
     

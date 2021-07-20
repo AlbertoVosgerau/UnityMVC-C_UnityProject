@@ -8,45 +8,14 @@ public class ViewTemplateEvents
     public Action<View> onViewDestroyed;
 }
 
-public partial class ViewTemplate : View
+public partial class ViewTemplate
 {
     private ControllerTemplate _controller;
-    protected override void LocateController()
-    {
-        _controller = MVCApplication.Controllers.Get<ControllerTemplate>();
-    }
-    
-    protected override void InitializeController()
-    {
-        _controller.SetView(this);
-        _controller.OnInitializeController();
-    }
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
     public ViewTemplateEvents Events => _events;
     private ViewTemplateEvents _events = new ViewTemplateEvents();
-
-    protected override void MVCStart()
-    {
-        base.MVCStart();
-        _controller.OnViewStart();
-    }
-
-    protected override void MVCOnDestroy()
-    {
-        base.MVCOnDestroy();
-        _events.onViewDestroyed?.Invoke(this);
-        _controller.OnViewDestroy();
-    }
-
-    protected override void MVCUpdate()
-    {
-        _controller.OnViewUpdate();
-    }
-}
-
-public partial class ViewTemplate
-{
+    
     // Start your code here
     protected override void RegisterControllerEvents()
     {
