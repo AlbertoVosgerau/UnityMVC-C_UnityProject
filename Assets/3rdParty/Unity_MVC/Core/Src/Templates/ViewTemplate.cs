@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityMVC;
 
 public class ViewTemplateEvents
 {
     // Add events here
+    public Action<View> onViewDestroyed;
 }
 
 public partial class ViewTemplate : View
@@ -33,10 +35,11 @@ public partial class ViewTemplate : View
     protected override void MVCOnDestroy()
     {
         base.MVCOnDestroy();
+        _events.onViewDestroyed?.Invoke(this);
         _controller.OnViewDestroy();
     }
 
-    protected void MVCUpdate()
+    protected override void MVCUpdate()
     {
         _controller.OnViewUpdate();
     }
@@ -44,6 +47,7 @@ public partial class ViewTemplate : View
 
 public partial class ViewTemplate
 {
+    // Start your code here
     protected override void RegisterControllerEvents()
     {
         // otherObject.EventName += MyMethod;
@@ -54,7 +58,10 @@ public partial class ViewTemplate
         // otherObject.EventName -= MyMethod;
     }
 
-    // Start your code here
+    protected override void SolveDependencies()
+    {
+        // Awake calls this method. Solve your dependencies here.
+    }
     
     protected override void Awake()
     {
@@ -66,18 +73,13 @@ public partial class ViewTemplate
         base.Start();
     }
 
-    protected void Update()
+    protected override void Update()
     {
-        MVCUpdate();
+        base.Update();
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-    }
-
-    protected override void SolveDependencies()
-    {
-        // Awake calls this method. Solve your dependencies here.
     }
 }

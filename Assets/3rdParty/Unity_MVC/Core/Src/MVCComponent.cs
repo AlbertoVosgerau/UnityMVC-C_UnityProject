@@ -7,9 +7,12 @@ using UnityEngine;
 namespace UnityMVC
 {
     [Serializable]
-    public class MVCComponent : MonoBehaviour
+    public abstract class MVCComponent : MonoBehaviour
     {
+        public string View => _view.gameObject.name;
         protected View _view;
+        public Component Owner => _owner;
+        protected Component _owner;
         public void SetView(View view)
         {
             _view = view;
@@ -20,6 +23,10 @@ namespace UnityMVC
         {
             
         }
+        public virtual void SetOwner(Component owner)
+        {
+            _owner = owner;
+        }
         
         [SerializeField] private List<Component> _unityComponents;
 
@@ -28,9 +35,14 @@ namespace UnityMVC
             SolveDependencies();
         }
 
-        protected virtual void Start()
+        protected virtual void MVCStart()
         {
             StartCoroutine(LateStartRoutine());
+        }
+
+        protected virtual void Start()
+        {
+            MVCStart();
         }
 
         protected IEnumerator LateStartRoutine()
@@ -44,14 +56,15 @@ namespace UnityMVC
             
         }
 
-        protected virtual void SolveDependencies()
-        {
-            
-        }
+        protected abstract void SolveDependencies();
 
-        protected virtual void OnDestroy()
+        protected virtual void MVCOnDestroy()
         {
             _view.UnregisterComponentFromView(this);
+        }
+        protected virtual void OnDestroy()
+        {
+            MVCOnDestroy();
         }
 
         public void RegisterComponent(Component component)

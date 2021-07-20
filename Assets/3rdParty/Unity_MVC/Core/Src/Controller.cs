@@ -26,7 +26,7 @@ namespace UnityMVC
         {
         }
 
-        protected virtual void SolveDependencies(){}
+        protected abstract void SolveDependencies();
         public virtual void OnViewUpdate() {}
         public virtual void OnViewDestroy()
         {

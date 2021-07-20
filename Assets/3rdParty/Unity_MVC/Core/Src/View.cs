@@ -57,11 +57,19 @@ namespace UnityMVC
             MVCOnDestroy();
         }
 
-        protected virtual void SolveDependencies(){}
+        protected virtual void MVCUpdate()
+        {
+            
+        }
 
+        protected virtual void Update()
+        {
+            MVCUpdate();
+        }
+
+        protected abstract void SolveDependencies();
         protected abstract void InitializeController();
         protected abstract void RegisterControllerEvents();
-
         protected abstract void UnregisterControllerEvents();
 
         private void SolveComponents()

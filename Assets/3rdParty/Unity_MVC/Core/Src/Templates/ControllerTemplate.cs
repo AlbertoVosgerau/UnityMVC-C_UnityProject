@@ -1,8 +1,11 @@
+using System;
 using UnityMVC;
 
 public class ControllerTemplateEvents
 {
     // Add events here
+    public Action<Controller> onControllerInitialized;
+    public Action<Controller> onControllerDestroyed;
 }
 
 public partial class ControllerTemplate : Controller
@@ -31,16 +34,21 @@ public partial class ControllerTemplate
     {
         // otherObject.EventName -= MyMethod;
     }
+    protected override void SolveDependencies()
+    {
+        // Awake calls this method. Solve your dependencies here.
+    }
     
     public override void OnInitializeController()
     {
         base.OnInitializeController();
         RegisterEvents();
+        _events.onControllerInitialized?.Invoke(this);
     }
 
-    protected override void SolveDependencies()
+    public override void OnViewStart()
     {
-        // Awake calls this method. Solve your dependencies here.
+        base.OnViewStart();
     }
 
     public override void OnViewUpdate()
@@ -50,6 +58,7 @@ public partial class ControllerTemplate
 
     public override void OnViewDestroy()
     {
+        _events.onControllerDestroyed?.Invoke(this);
         UnregisterEvents();
         base.OnViewDestroy();
     }
