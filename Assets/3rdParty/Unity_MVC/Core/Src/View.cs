@@ -103,6 +103,11 @@ namespace UnityMVC
         {
             return _components.FirstOrDefault(x => x.GetType() == typeof(T)) as T;
         }
+        
+        public List<T> GetMVCComponents<T>() where T : MVCComponent
+        {
+            return _components.Where(x => x.GetType() == typeof(T)) as List<T>;
+        }
 
         public void RegisterComponentToView(MVCComponent mvcComponent)
         {
