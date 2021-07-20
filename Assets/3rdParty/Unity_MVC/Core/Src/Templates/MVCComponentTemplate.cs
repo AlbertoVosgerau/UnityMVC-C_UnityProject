@@ -31,12 +31,12 @@ public partial class MVCComponentTemplate : MVCComponent
 public partial class MVCComponentTemplate
 {
     // Start your code here
-    protected virtual void RegisterEvents()
+    protected override void RegisterEvents()
     {
         // otherObject.EventName += MyMethod;
     }
 
-    protected virtual void UnregisterEvents()
+    protected override void UnregisterEvents()
     {
         // otherObject.EventName -= MyMethod;
     }

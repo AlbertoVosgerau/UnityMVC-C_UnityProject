@@ -30,4 +30,11 @@ public partial class ContainerTemplate : Container
 public partial class ContainerTemplate
 {
     // Start your code here
+    protected override void UnregisterEvents()
+    {
+    }
+    
+    protected override void RegisterEvents()
+    {
+    }
 }

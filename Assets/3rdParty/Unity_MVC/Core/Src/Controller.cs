@@ -26,6 +26,8 @@ namespace UnityMVC
         {
         }
 
+        protected abstract void RegisterEvents();
+        protected abstract void UnregisterEvents();
         protected abstract void SolveDependencies();
         public virtual void OnViewUpdate() {}
         public virtual void OnViewDestroy()

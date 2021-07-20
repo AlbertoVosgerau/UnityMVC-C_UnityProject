@@ -66,7 +66,7 @@ namespace UnityMVC
         {
             MVCUpdate();
         }
-
+        
         protected abstract void SolveDependencies();
         protected abstract void InitializeController();
         protected abstract void RegisterControllerEvents();

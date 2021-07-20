@@ -55,7 +55,9 @@ namespace UnityMVC
         {
             
         }
-
+        
+        protected abstract void RegisterEvents();
+        protected abstract void UnregisterEvents();
         protected abstract void SolveDependencies();
 
         protected virtual void MVCOnDestroy()

@@ -25,12 +25,11 @@ public partial class ControllerTemplate
 {
     // Start your code here
     
-    protected virtual void RegisterEvents()
+    protected override void RegisterEvents()
     {
         // otherObject.EventName += MyMethod;
     }
-
-    protected virtual void UnregisterEvents()
+    protected override void UnregisterEvents()
     {
         // otherObject.EventName -= MyMethod;
     }

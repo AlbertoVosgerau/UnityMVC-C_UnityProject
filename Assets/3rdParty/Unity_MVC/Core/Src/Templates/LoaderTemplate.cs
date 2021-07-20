@@ -29,4 +29,11 @@ public partial class LoaderTemplate : Loader
 public partial class LoaderTemplate
 {
     // Start your code here
+    protected override void RegisterEvents()
+    {
+    }
+
+    protected override void UnregisterEvents()
+    {
+    }
 }

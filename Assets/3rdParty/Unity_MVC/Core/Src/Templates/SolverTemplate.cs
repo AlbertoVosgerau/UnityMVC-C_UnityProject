@@ -14,4 +14,11 @@ public partial class SolverTemplate : Solver
 public partial class SolverTemplate
 {
     // Start your code here
+    protected override void UnregisterEvents()
+    {
+    }
+    
+    protected override void RegisterEvents()
+    {
+    }
 }
