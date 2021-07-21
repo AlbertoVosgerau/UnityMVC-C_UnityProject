@@ -8,8 +8,7 @@ namespace UnityMVC.View
 {
     public abstract class View : MonoBehaviour
     {
-        private List<MVCComponent> _components = new List<MVCComponent>();
-        [SerializeField] private List<MVCComponent> _MVCComponentsToTrack = new List<MVCComponent>();
+        [SerializeField] private List<MVCComponent> _MVCComponents = new List<MVCComponent>();
         protected abstract void LocateController();
 
         protected virtual void Awake()
@@ -81,20 +80,20 @@ namespace UnityMVC.View
 
         private void InitializeComponentsList()
         {
-            foreach (MVCComponent component in _MVCComponentsToTrack)
+            foreach (MVCComponent component in _MVCComponents)
             {
-                _components.Add(component);
+                _MVCComponents.Add(component);
             }
         }
 
         private void GetComponents()
         {
-            _components = GetComponentsInChildren<MVCComponent>().ToList();
+            _MVCComponents = GetComponentsInChildren<MVCComponent>().ToList();
         }
         
         private void SetViewOnComponents()
         {
-            foreach (MVCComponent component in _components)
+            foreach (MVCComponent component in _MVCComponents)
             {
                 component.SetView(this);
             }
@@ -109,22 +108,22 @@ namespace UnityMVC.View
         
         public T GetMVCComponent<T>() where T : MVCComponent
         {
-            return _components.FirstOrDefault(x => x.GetType() == typeof(T)) as T;
+            return _MVCComponents.FirstOrDefault(x => x.GetType() == typeof(T)) as T;
         }
         
         public List<T> GetMVCComponents<T>() where T : MVCComponent
         {
-            return _components.Where(x => x.GetType() == typeof(T)) as List<T>;
+            return _MVCComponents.Where(x => x.GetType() == typeof(T)) as List<T>;
         }
 
         public void RegisterComponentToView(MVCComponent mvcComponent)
         {
-            _components.Add(mvcComponent);
+            _MVCComponents.Add(mvcComponent);
         }
         
         public void UnregisterComponentFromView(MVCComponent mvcComponent)
         {
-            _components.Remove(mvcComponent);
+            _MVCComponents.Remove(mvcComponent);
         }
     }
 }

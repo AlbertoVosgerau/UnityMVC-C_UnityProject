@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -122,6 +123,16 @@ namespace UnityMVC
             UnityMVCData data = AssetDatabase.LoadAssetAtPath<UnityMVCData>(path);
             return data;
         }
+
+        public static string GetMVCDataPath()
+        {
+            string[] asset = AssetDatabase.FindAssets("MVCData");
+            string path = AssetDatabase.GUIDToAssetPath(asset[0]);
+            List<string> directories = path.Split(new[] { "/", "\\" }, StringSplitOptions.None).ToList();
+            directories.RemoveAt(directories.Count-1);
+            path = String.Join("/", directories);
+            return path;
+        }
         
         private static string GetTemplate(ScriptType type,bool removeComments, bool isPartial = false)
         {
@@ -149,11 +160,11 @@ namespace UnityMVC
             UnityMVCData data = GetMVCData();
             string assets = Application.dataPath;
 
-            if (string.IsNullOrEmpty(data.scriptsFolder))
+            if (string.IsNullOrEmpty(data.editorData.scriptsFolder))
             {
                 return $"{assets}/Scripts/{type}";
             }
-            return $"{assets}/{data.scriptsFolder}/{type}";
+            return $"{assets}/{data.editorData.scriptsFolder}/{type}";
         }
     }
     #endif
