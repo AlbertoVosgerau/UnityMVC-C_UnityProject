@@ -23,7 +23,7 @@ public partial class ColorMVCComponent
     protected override void SolveDependencies()
     {
         _renderer = GetUnityComponentFromMVC<Renderer>(true);
-        _colorRandomizer = GetUnityComponentFromMVC<MaterialColorRandomizer>(true);
+        _colorRandomizer = GetUnityComponentFromMVC<MaterialColorRandomizer>();
     }
     protected override void RegisterEvents()
     {
