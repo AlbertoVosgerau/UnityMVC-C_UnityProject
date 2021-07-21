@@ -31,7 +31,6 @@ public partial class InputController
         _view.Events.changeColorWasPressed -= OnColorChangeWasPressed;
     }
     
-    
     public override void OnInitializeController()
     {
         base.OnInitializeController();
