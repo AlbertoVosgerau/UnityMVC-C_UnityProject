@@ -4,11 +4,9 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using UnityMVC;
-using UnityMVC.View;
 
-
-#if UNITY_EDITOR
+namespace UnityMVC
+{
     public class MVCCreateWindows : EditorWindow
     {
         private string _baseName = "";
@@ -27,12 +25,13 @@ using UnityMVC.View;
 
         private void OnEnable()
         {
+            CheckTypes();
             
         }
 
         void OnGUI()
         {
-            CheckTypes();
+            
             UpdateTypesList();
             GUILayout.Label("Create MVC Script", EditorStyles.boldLabel);
             GUILayout.Space(20);
@@ -65,8 +64,8 @@ using UnityMVC.View;
         private void CheckTypes()
         {
             _types.Clear();
-
-            var viewTypes = GetEnumerableOfType(typeof(View)).ToArray();
+            _types.Add("Base");
+            var viewTypes = GetTypesList(typeof(Controller.Controller)).ToArray();
             
             foreach (string viewType in viewTypes)
             {
@@ -74,13 +73,24 @@ using UnityMVC.View;
             }
         }
         
-        public static List<string> GetEnumerableOfType(Type objectType)
+        public static List<string> GetTypesList(Type objectType)
         {
             List<string> objects = new List<string>();
             foreach (Type type in Assembly.GetAssembly(objectType).GetTypes()
-                    .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(objectType)))
+                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(objectType) && !myType.Name.Contains("Template")))
             {
                 objects.Add(type.Name);
+            }
+            
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Console.WriteLine(assembly.FullName);
+
+                foreach (var attribute in assembly.GetCustomAttributesData())
+                {
+                    Console.WriteLine(attribute);
+                }
+                Console.WriteLine();
             }
             return objects;
         }
@@ -168,4 +178,6 @@ using UnityMVC.View;
             GUILayout.EndHorizontal();
         }
     }
-    #endif
+}
+#if UNITY_EDITOR
+#endif
