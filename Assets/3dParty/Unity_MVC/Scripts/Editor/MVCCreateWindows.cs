@@ -25,14 +25,14 @@ namespace UnityMVC
 
         private void OnEnable()
         {
-            CheckTypes();
-            
+            // TODO: Add inheritance to system
+            //CheckTypes();
         }
 
         void OnGUI()
         {
-            
-            UpdateTypesList();
+            // TODO: Add inheritance to system
+            //UpdateTypesList();
             GUILayout.Label("Create MVC Script", EditorStyles.boldLabel);
             GUILayout.Space(20);
             SetMVCData();
