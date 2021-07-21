@@ -1,5 +1,4 @@
 using System;
-using UnityMVC;
 
 public class ColorMVCComponentEvents
 {

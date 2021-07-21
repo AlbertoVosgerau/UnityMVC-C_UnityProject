@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using Implementations;
-using UnityEngine;
-using UnityMVC;
 using UnityMVC.View;
 
 public class InputViewEvents

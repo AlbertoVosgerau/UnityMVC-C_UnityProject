@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityMVC;
 using UnityMVC.View;
 
 public class ColorViewEvents

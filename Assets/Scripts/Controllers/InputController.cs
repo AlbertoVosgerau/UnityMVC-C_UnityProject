@@ -1,6 +1,4 @@
 using System;
-using UnityEngine;
-using UnityMVC;
 using UnityMVC.Controller;
 
 public class InputControllerEvents

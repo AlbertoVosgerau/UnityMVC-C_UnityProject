@@ -1,4 +1,3 @@
-using UnityMVC;
 using UnityMVC.Component;
 
 public partial class ColorMVCComponent : MVCComponent
