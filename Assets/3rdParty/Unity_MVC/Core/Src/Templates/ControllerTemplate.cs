@@ -20,7 +20,6 @@ public partial class ControllerTemplate
     private ControllerTemplateEvents _events = new ControllerTemplateEvents();
     
     // Start your code here
-    
     protected override void SolveDependencies()
     {
         // Awake calls this method. Solve your dependencies here.

@@ -20,7 +20,6 @@ public partial class MVCComponentTemplate
     private MVCComponentTemplateEvents _events = new MVCComponentTemplateEvents();
     
     // Start your code here
-    
     protected override void SolveDependencies()
     {
         // Awake calls this method. Solve your dependencies here.

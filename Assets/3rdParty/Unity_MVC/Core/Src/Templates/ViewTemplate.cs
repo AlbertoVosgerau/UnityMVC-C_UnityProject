@@ -19,7 +19,6 @@ public partial class ViewTemplate
     private ViewTemplateEvents _events = new ViewTemplateEvents();
     
     // Start your code here
-    
     protected override void SolveDependencies()
     {
         // Awake calls this method. Solve your dependencies here.

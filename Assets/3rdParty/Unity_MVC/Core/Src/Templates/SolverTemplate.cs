@@ -16,7 +16,6 @@ public class SolverTemplate : Solver
     private SolverTemplateEvents _events = new SolverTemplateEvents();
     
     // Start your code here
-    
     protected override void RegisterEvents()
     {
         // otherObject.EventName += MyMethod;

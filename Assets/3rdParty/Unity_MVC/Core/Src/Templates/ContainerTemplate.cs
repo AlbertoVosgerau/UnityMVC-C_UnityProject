@@ -17,7 +17,6 @@ public partial class ContainerTemplate
     private ContainerTemplateEvents _events = new ContainerTemplateEvents();
 
     // Start your code here
-
     protected override void RegisterEvents()
     {
         // otherObject.EventName += MyMethod;

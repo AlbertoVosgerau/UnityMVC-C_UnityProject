@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -17,42 +18,42 @@ namespace UnityMVC
     }
     public class MVCCodeGenerator
     {
-        public static void CreateView( string name)
+        public static void CreateView(string name, bool removeComments)
         {
-            GenerateScript(name, GetTemplate(ScriptType.View), GetPath("Views"), ScriptType.View);
-            GenerateScript(name, GetTemplate(ScriptType.View, true), GetPath("Views"), ScriptType.View, true);
+            GenerateScript(name, GetTemplate(ScriptType.View, removeComments), GetPath("Views"), ScriptType.View);
+            GenerateScript(name, GetTemplate(ScriptType.View, removeComments, true), GetPath("Views"), ScriptType.View, true);
         }
 
-        public static void CreateController(string name)
+        public static void CreateController(string name, bool removeComments)
         {
-            GenerateScript(name, GetTemplate(ScriptType.Controller), GetPath("Controllers"), ScriptType.Controller);
-            GenerateScript(name, GetTemplate(ScriptType.Controller, true), GetPath("Controllers"), ScriptType.Controller, true);
+            GenerateScript(name, GetTemplate(ScriptType.Controller, removeComments), GetPath("Controllers"), ScriptType.Controller);
+            GenerateScript(name, GetTemplate(ScriptType.Controller, removeComments,true), GetPath("Controllers"), ScriptType.Controller, true);
         }
         
-        public static void CreateViewAndController(string name)
+        public static void CreateViewAndController(string name, bool removeComments)
         {
-            CreateView(name);
-            CreateController(name);
+            CreateView(name, removeComments);
+            CreateController(name, removeComments);
         }
-        public static void CreateComponent(string name)
+        public static void CreateComponent(string name, bool removeComments)
         {
-            GenerateScript(name, GetTemplate(ScriptType.MVCComponent), GetPath("Components"), ScriptType.MVCComponent);
-            GenerateScript(name, GetTemplate(ScriptType.MVCComponent, true), GetPath("Components", true), ScriptType.MVCComponent, true);
+            GenerateScript(name, GetTemplate(ScriptType.MVCComponent, removeComments), GetPath("Components"), ScriptType.MVCComponent);
+            GenerateScript(name, GetTemplate(ScriptType.MVCComponent,removeComments,  true), GetPath("Components", true), ScriptType.MVCComponent, true);
         }
-        public static void CreateContainer(string name)
+        public static void CreateContainer(string name, bool removeComments)
         {
-            GenerateScript(name, GetTemplate(ScriptType.Container), GetPath("Containers"), ScriptType.Container);
-            GenerateScript(name, GetTemplate(ScriptType.Container, true), GetPath("Containers"), ScriptType.Container, true);
+            GenerateScript(name, GetTemplate(ScriptType.Container, removeComments), GetPath("Containers"), ScriptType.Container);
+            GenerateScript(name, GetTemplate(ScriptType.Container, removeComments, true), GetPath("Containers"), ScriptType.Container, true);
         }
-        public static void CreateLoader(string name)
+        public static void CreateLoader(string name, bool removeComments)
         {
-            GenerateScript(name, GetTemplate(ScriptType.Loader), GetPath("Loaders"), ScriptType.Loader);
-            GenerateScript(name, GetTemplate(ScriptType.Loader, true), GetPath("Loaders"), ScriptType.Loader, true);
+            GenerateScript(name, GetTemplate(ScriptType.Loader, removeComments), GetPath("Loaders"), ScriptType.Loader);
+            GenerateScript(name, GetTemplate(ScriptType.Loader, removeComments, true), GetPath("Loaders"), ScriptType.Loader, true);
         }
         
-        public static void CreateSolver(string name)
+        public static void CreateSolver(string name, bool removeComments)
         {
-            GenerateScript(name, GetTemplate(ScriptType.Solver), GetPath("Solvers"), ScriptType.Solver);
+            GenerateScript(name, GetTemplate(ScriptType.Solver, removeComments), GetPath("Solvers"), ScriptType.Solver);
         }
 
         private static void GenerateScript(string name, string template, string path, ScriptType type, bool isPartial = false)
@@ -122,12 +123,25 @@ namespace UnityMVC
             return data;
         }
         
-        private static string GetTemplate(ScriptType type, bool isPartial = false)
+        private static string GetTemplate(ScriptType type,bool removeComments, bool isPartial = false)
         {
             string templateName = isPartial? $"{type.ToString()}TemplatePartial" : $"{type.ToString()}Template";
             string[] assets = AssetDatabase.FindAssets(templateName);
             string path = AssetDatabase.GUIDToAssetPath(assets[0]);
             string str = File.ReadAllText(path);
+
+            if (removeComments)
+            {
+                str = StringWithoutComments(str);
+            }
+            return str;
+        }
+
+        private static String StringWithoutComments(string str)
+        {
+            string[] lines = str.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            var removedCommentsStr = lines.Where(x => !x.Contains("//")).ToArray();
+            str = String.Join("\n", removedCommentsStr);
             return str;
         }
         private static string GetPath(string type, bool isPartial = false)

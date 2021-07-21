@@ -6,8 +6,9 @@ namespace UnityMVC
     #if UNITY_EDITOR
     public class MVCCreateWindows : EditorWindow
     {
-        string baseName = "";
-        private float btnWidth = 150;
+        private string _baseName = "";
+        private float _btnWidth = 150;
+        private bool _removeComments = false;
 
         [MenuItem("Unity MVC/Open Creation Window")]
         static void Init()
@@ -24,9 +25,11 @@ namespace UnityMVC
             UnityMVCData data = MVCCodeGenerator.GetMVCData();
             data.scriptsFolder = EditorGUILayout.TextField("Create in Assets/",data.scriptsFolder);
             GUILayout.Space(10);
-            baseName = EditorGUILayout.TextField("Base File Name", baseName);
-            GUILayout.Space(20);
+            _baseName = EditorGUILayout.TextField("Base File Name", _baseName);
             GUILayout.BeginVertical();
+            GUILayout.Space(5);
+            _removeComments = GUILayout.Toggle(_removeComments, "Remove comments from generated code");
+            GUILayout.Space(20);
             ViewAndController();
             GUILayout.Space(20);
             Component();
@@ -39,22 +42,22 @@ namespace UnityMVC
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Create View / Controller", GUILayout.Width(btnWidth*2)))
+            if (GUILayout.Button("Create View / Controller", GUILayout.Width(_btnWidth*2)))
             {
-                MVCCodeGenerator.CreateViewAndController(baseName);
+                MVCCodeGenerator.CreateViewAndController(_baseName, _removeComments);
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             GUILayout.Space(10);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Create View", GUILayout.Width(btnWidth)))
+            if (GUILayout.Button("Create View", GUILayout.Width(_btnWidth)))
             {
-                MVCCodeGenerator.CreateView(baseName);
+                MVCCodeGenerator.CreateView(_baseName, _removeComments);
             }
-            if (GUILayout.Button("Create Controller", GUILayout.Width(btnWidth)))
+            if (GUILayout.Button("Create Controller", GUILayout.Width(_btnWidth)))
             {
-                MVCCodeGenerator.CreateController(baseName);
+                MVCCodeGenerator.CreateController(_baseName, _removeComments);
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
@@ -63,9 +66,9 @@ namespace UnityMVC
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Create Component", GUILayout.Width(btnWidth * 2)))
+            if (GUILayout.Button("Create Component", GUILayout.Width(_btnWidth * 2)))
             {
-                MVCCodeGenerator.CreateComponent(baseName);
+                MVCCodeGenerator.CreateComponent(_baseName, _removeComments);
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
@@ -74,34 +77,34 @@ namespace UnityMVC
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Create Loader / Solver / Container", GUILayout.Width(btnWidth * 2)))
+            if (GUILayout.Button("Create Loader / Solver / Container", GUILayout.Width(_btnWidth * 2)))
             {
-                MVCCodeGenerator.CreateContainer(baseName);
-                MVCCodeGenerator.CreateLoader(baseName);
-                MVCCodeGenerator.CreateSolver(baseName);
+                MVCCodeGenerator.CreateContainer(_baseName, _removeComments);
+                MVCCodeGenerator.CreateLoader(_baseName, _removeComments);
+                MVCCodeGenerator.CreateSolver(_baseName, _removeComments);
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             GUILayout.Space(7);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Create Container", GUILayout.Width(btnWidth * 2)))
+            if (GUILayout.Button("Create Container", GUILayout.Width(_btnWidth * 2)))
             {
-                MVCCodeGenerator.CreateContainer(baseName);
+                MVCCodeGenerator.CreateContainer(_baseName, _removeComments);
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             GUILayout.Space(7);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Create Loader",GUILayout.Width(btnWidth)))
+            if (GUILayout.Button("Create Loader",GUILayout.Width(_btnWidth)))
             {
-                MVCCodeGenerator.CreateLoader(baseName);
+                MVCCodeGenerator.CreateLoader(_baseName, _removeComments);
             }
             
-            if (GUILayout.Button("Create Solver",GUILayout.Width(btnWidth)))
+            if (GUILayout.Button("Create Solver",GUILayout.Width(_btnWidth)))
             {
-                MVCCodeGenerator.CreateSolver(baseName);
+                MVCCodeGenerator.CreateSolver(_baseName, _removeComments);
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
