@@ -9,7 +9,7 @@ public partial class InputController : Controller
     {
         if (_view != null)
         {
-            Debug.LogException(new Exception("More than one View are trying to access the same Controller."));
+            Debug.LogException(new Exception($"More than one View are trying to access {this.GetType()}"));
             return;
         }
         _view = view as InputView;
