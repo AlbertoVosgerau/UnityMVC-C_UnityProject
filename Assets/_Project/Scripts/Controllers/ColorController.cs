@@ -57,11 +57,6 @@ public partial class ColorController
 
     private void OnChangeColorWasPressed()
     {
-        _view.ChangeColor(GetRandomColor());
-    }
-
-    public Color GetRandomColor()
-    {
-        return Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+        _view.ChangeColor();
     }
 }

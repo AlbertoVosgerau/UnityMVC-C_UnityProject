@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class ColorMVCComponentEvents
 {
@@ -16,10 +17,13 @@ public partial class ColorMVCComponent
     private ColorMVCComponentEvents _events = new ColorMVCComponentEvents();
     
     // Start your code here
+    private Renderer _renderer;
+    private MaterialColorRandomizer _colorRandomizer;
     
     protected override void SolveDependencies()
     {
-        // Awake calls this method. Solve your dependencies here.
+        _renderer = GetUnityComponentFromMVC<Renderer>(true);
+        _colorRandomizer = GetUnityComponentFromMVC<MaterialColorRandomizer>(true);
     }
     protected override void RegisterEvents()
     {
@@ -46,5 +50,10 @@ public partial class ColorMVCComponent
     {
         base.OnDestroy();
         // Add your code from here
+    }
+
+    public void SetRandomColorToMaterial()
+    {
+        _colorRandomizer.ChangeColor(_renderer.material);
     }
 }

@@ -16,12 +16,10 @@ public partial class ColorView
     public ColorViewEvents Events => _events;
     private ColorViewEvents _events = new ColorViewEvents();
 
-    private ColorMVCComponent _colorMvcComponent;
-    private Renderer _renderer;
+    private ColorMVCComponent _colorMVCComponent;
     protected override void SolveDependencies()
     {
-        _colorMvcComponent = GetMVCComponent<ColorMVCComponent>();
-        _renderer = _colorMvcComponent.GetUnityComponentFromMVC<Renderer>();
+        _colorMVCComponent = GetMVCComponent<ColorMVCComponent>();
     }
     
     protected override void RegisterControllerEvents()
@@ -54,8 +52,8 @@ public partial class ColorView
         base.OnDestroy();
     }
 
-    public void ChangeColor(Color color)
+    public void ChangeColor()
     {
-        _renderer.material.color = color;
+        _colorMVCComponent.SetRandomColorToMaterial();
     }
 }
