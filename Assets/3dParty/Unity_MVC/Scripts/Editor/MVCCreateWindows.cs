@@ -1,15 +1,21 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using UnityMVC;
+using UnityMVC.View;
 
-namespace UnityMVC
-{
-    #if UNITY_EDITOR
+
+#if UNITY_EDITOR
     public class MVCCreateWindows : EditorWindow
     {
         private string _baseName = "";
         private float _btnWidth = 150;
         private UnityMVCData _data;
+        private int _typeIndex = 0;
+        private List<string> _types = new List<string>();
 
         [MenuItem("Unity MVC/Open Creation Window")]
         private static void Init()
@@ -26,6 +32,8 @@ namespace UnityMVC
 
         void OnGUI()
         {
+            CheckTypes();
+            UpdateTypesList();
             GUILayout.Label("Create MVC Script", EditorStyles.boldLabel);
             GUILayout.Space(20);
             SetMVCData();
@@ -52,6 +60,34 @@ namespace UnityMVC
             GUILayout.Space(20);
             LoaderSolverAndContainer();
             GUILayout.EndVertical();
+        }
+
+        private void CheckTypes()
+        {
+            _types.Clear();
+
+            var viewTypes = GetEnumerableOfType(typeof(View)).ToArray();
+            
+            foreach (string viewType in viewTypes)
+            {
+                _types.Add(viewType);
+            }
+        }
+        
+        public static List<string> GetEnumerableOfType(Type objectType)
+        {
+            List<string> objects = new List<string>();
+            foreach (Type type in Assembly.GetAssembly(objectType).GetTypes()
+                    .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(objectType)))
+            {
+                objects.Add(type.Name);
+            }
+            return objects;
+        }
+
+        private void UpdateTypesList()
+        {
+            _typeIndex = EditorGUILayout.Popup(_typeIndex, _types.ToArray());
         }
 
         private void SetMVCData()
@@ -133,4 +169,3 @@ namespace UnityMVC
         }
     }
     #endif
-}
