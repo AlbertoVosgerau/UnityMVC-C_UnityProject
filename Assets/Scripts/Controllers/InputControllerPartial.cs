@@ -1,11 +1,17 @@
+using System;
+using UnityEngine;
 using UnityMVC;
 
-public partial class SomeTestController : Controller
+public partial class InputController : Controller
 {
-    
     public override void SetView(View view)
     {
-        _view = view as SomeTestView;
+        if (_view != null)
+        {
+            Debug.LogException(new Exception("More than one View are trying to access the same Controller."));
+            return;
+        }
+        _view = view as InputView;
     }
 
     protected override void MVCOnInitializeController()
@@ -20,6 +26,5 @@ public partial class SomeTestController : Controller
         base.MVCOnViewDestroy();
         _events.onControllerDestroyed?.Invoke(this);
         UnregisterEvents();
-        base.OnViewDestroy();
     }
 }

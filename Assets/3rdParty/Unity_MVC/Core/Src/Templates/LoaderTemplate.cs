@@ -1,5 +1,3 @@
-using UnityMVC;
-
 public class LoaderTemplateEvents
 {
     // Add events here
@@ -13,11 +11,12 @@ public partial class LoaderTemplate
     public LoaderTemplateEvents Events => _events;
     private LoaderTemplateEvents _events = new LoaderTemplateEvents();
     // Start your code here
+    
     protected override void RegisterEvents()
     {
         // otherObject.EventName += MyMethod;
     }
-
+    
     protected override void UnregisterEvents()
     {
         // otherObject.EventName -= MyMethod;

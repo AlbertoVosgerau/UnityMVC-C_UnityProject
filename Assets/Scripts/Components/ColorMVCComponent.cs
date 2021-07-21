@@ -1,37 +1,36 @@
 using System;
 using UnityMVC;
 
-public class SomeTestMVCComponentEvents
+public class ColorMVCComponentEvents
 {
     // Add your actions and events here
     public Action onCreated;
     public Action onDestroyed;
 }
 
-public partial class SomeTestMVCComponent
+public partial class ColorMVCComponent
 {
     private ViewTemplate _view => _baseView as ViewTemplate;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public SomeTestMVCComponentEvents Events => _events;
-    private SomeTestMVCComponentEvents _events = new SomeTestMVCComponentEvents();
+    public ColorMVCComponentEvents Events => _events;
+    private ColorMVCComponentEvents _events = new ColorMVCComponentEvents();
     
     // Start your code here
-    protected override void RegisterEvents()
-    {
-        // otherObject.EventName += MyMethod;
-    }
-
-    protected override void UnregisterEvents()
-    {
-        // otherObject.EventName -= MyMethod;
-    }
     
     protected override void SolveDependencies()
     {
         // Awake calls this method. Solve your dependencies here.
     }
-    
+    protected override void RegisterEvents()
+    {
+        // otherObject.EventName += MyMethod;
+    }
+    protected override void UnregisterEvents()
+    {
+        // otherObject.EventName -= MyMethod;
+    }
+
     protected override void Awake()
     {
         base.Awake();

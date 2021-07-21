@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityMVC;
 
-public partial class ControllerTemplate : Controller
+public partial class ColorController : Controller
 {
     public override void SetView(View view)
     {
@@ -11,7 +11,7 @@ public partial class ControllerTemplate : Controller
             Debug.LogException(new Exception("More than one View are trying to access the same Controller."));
             return;
         }
-        _view = view as ViewTemplate;
+        _view = view as ColorView;
     }
 
     protected override void MVCOnInitializeController()

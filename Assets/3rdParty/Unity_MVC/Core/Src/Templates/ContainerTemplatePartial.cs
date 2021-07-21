@@ -1,15 +1,16 @@
-using UnityMVC;
-
-public partial class ContainerTemplate : Container
+namespace UnityMVC.Model
 {
-    private LoaderTemplate Loader => _loader;
-    public void Initialize()
+    public partial class ContainerTemplate : Container
     {
-        if (_loader != null)
+        private LoaderTemplate Loader => _loader;
+        public void Initialize()
         {
-            return;
-        }
+            if (_loader != null)
+            {
+                return;
+            }
 
-        _loader = MVCApplication.Loaders.Get<LoaderTemplate>();
+            _loader = MVCApplication.Loaders.Get<LoaderTemplate>();
+        }
     }
 }

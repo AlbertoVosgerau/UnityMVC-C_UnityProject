@@ -1,38 +1,36 @@
 using System;
+using UnityEngine;
 using UnityMVC;
+using Random = UnityEngine.Random;
 
-public class ControllerTemplateEvents
+public class ColorControllerEvents
 {
     // Add events here
     public Action<Controller> onControllerInitialized;
     public Action<Controller> onControllerDestroyed;
 }
-
-public partial class ControllerTemplate
+public partial class ColorController
 {
-    private ViewTemplate _view;
+    private ColorView _view;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public ControllerTemplateEvents Events => _events;
-    private ControllerTemplateEvents _events = new ControllerTemplateEvents();
-    
-    // Start your code here
-    
+    public ColorControllerEvents Events => _events;
+    private ColorControllerEvents _events = new ColorControllerEvents();
+
+    private InputController _inputController;
     protected override void SolveDependencies()
     {
-        // Awake calls this method. Solve your dependencies here.
+        _inputController = MVCApplication.Controllers.Get<InputController>();
     }
-    
     protected override void RegisterEvents()
     {
-        // otherObject.EventName += MyMethod;
+        _inputController.Events.onColorChangeWasPressed += OnChangeColorWasPressed;
     }
-    
     protected override void UnregisterEvents()
     {
-        // otherObject.EventName -= MyMethod;
+        _inputController.Events.onColorChangeWasPressed += OnChangeColorWasPressed;
     }
-
+    
     public override void OnInitializeController()
     {
         base.OnInitializeController();
@@ -48,12 +46,21 @@ public partial class ControllerTemplate
     public override void OnViewUpdate()
     {
         base.OnViewUpdate();
-        // Start your code from here
     }
 
     public override void OnViewDestroy()
     {
         base.OnViewDestroy();
         // Start your code from here
+    }
+
+    private void OnChangeColorWasPressed()
+    {
+        _view.ChangeColor(GetRandomColor());
+    }
+
+    public Color GetRandomColor()
+    {
+        return Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
     }
 }

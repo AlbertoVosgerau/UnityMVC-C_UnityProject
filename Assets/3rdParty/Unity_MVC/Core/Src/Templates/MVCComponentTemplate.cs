@@ -17,21 +17,22 @@ public partial class MVCComponentTemplate
     private MVCComponentTemplateEvents _events = new MVCComponentTemplateEvents();
     
     // Start your code here
-    protected override void RegisterEvents()
-    {
-        // otherObject.EventName += MyMethod;
-    }
-
-    protected override void UnregisterEvents()
-    {
-        // otherObject.EventName -= MyMethod;
-    }
     
     protected override void SolveDependencies()
     {
         // Awake calls this method. Solve your dependencies here.
     }
     
+    protected override void RegisterEvents()
+    {
+        // otherObject.EventName += MyMethod;
+    }
+    
+    protected override void UnregisterEvents()
+    {
+        // otherObject.EventName -= MyMethod;
+    }
+
     protected override void Awake()
     {
         base.Awake();

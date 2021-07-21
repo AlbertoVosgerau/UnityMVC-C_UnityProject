@@ -1,6 +1,6 @@
 using UnityMVC;
 
-public partial class SomeTestMVCComponent : MVCComponent
+public partial class ColorMVCComponent : MVCComponent
 {
     protected override void MVCAwake()
     {

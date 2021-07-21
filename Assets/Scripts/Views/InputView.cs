@@ -1,28 +1,33 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using Implementations;
+using UnityEngine;
 using UnityMVC;
 
-public class ViewTemplateEvents
+public class InputViewEvents
 {
     // Add events here
     public Action<View> onViewDestroyed;
+
+    public Action changeColorWasPressed;
 }
 
-public partial class ViewTemplate
+public partial class InputView
 {
-    private ControllerTemplate _controller;
+    private InputController _controller;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public ViewTemplateEvents Events => _events;
-    private ViewTemplateEvents _events = new ViewTemplateEvents();
+    public InputViewEvents Events => _events;
+    private InputViewEvents _events = new InputViewEvents();
     
     // Start your code here
+
+    private InputImpl _input;
     
     protected override void SolveDependencies()
     {
-        // Awake calls this method. Solve your dependencies here.
+        _input = new InputImpl();
     }
-    
     protected override void RegisterControllerEvents()
     {
         // otherObject.EventName += MyMethod;
@@ -46,6 +51,10 @@ public partial class ViewTemplate
     protected override void Update()
     {
         base.Update();
+        if (_input.ChangeColor)
+        {
+            _events.changeColorWasPressed?.Invoke();
+        }
     }
 
     protected override void OnDestroy()

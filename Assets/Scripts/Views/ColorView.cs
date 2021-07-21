@@ -1,22 +1,30 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityMVC;
 
-public class SomeTestViewEvents
+public class ColorViewEvents
 {
     // Add events here
     public Action<View> onViewDestroyed;
 }
 
-public partial class SomeTestView
+public partial class ColorView
 {
-    private SomeTestController _controller;
+    private ColorController _controller;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public SomeTestViewEvents Events => _events;
-    private SomeTestViewEvents _events = new SomeTestViewEvents();
+    public ColorViewEvents Events => _events;
+    private ColorViewEvents _events = new ColorViewEvents();
+
+    private ColorMVCComponent _colorMvcComponent;
+    private Renderer _renderer;
+    protected override void SolveDependencies()
+    {
+        _colorMvcComponent = GetMVCComponent<ColorMVCComponent>();
+        _renderer = _colorMvcComponent.GetUnityComponentFromMVC<Renderer>();
+    }
     
-    // Start your code here
     protected override void RegisterControllerEvents()
     {
         // otherObject.EventName += MyMethod;
@@ -25,11 +33,6 @@ public partial class SomeTestView
     protected override void UnregisterControllerEvents()
     {
         // otherObject.EventName -= MyMethod;
-    }
-
-    protected override void SolveDependencies()
-    {
-        // Awake calls this method. Solve your dependencies here.
     }
     
     protected override void Awake()
@@ -50,5 +53,10 @@ public partial class SomeTestView
     protected override void OnDestroy()
     {
         base.OnDestroy();
+    }
+
+    public void ChangeColor(Color color)
+    {
+        _renderer.material.color = color;
     }
 }
