@@ -1,12 +1,11 @@
 using UnityMVC;
 using UnityMVC.View;
 
-
-public partial class ColorView : View
+public partial class JonView : View
 {
     protected override void LocateController()
     {
-        _controller = MVCApplication.Controllers.Get<ColorController>();
+        _controller = MVCApplication.Controllers.Get<JonController>();
     }
     
     protected override void InitializeController()

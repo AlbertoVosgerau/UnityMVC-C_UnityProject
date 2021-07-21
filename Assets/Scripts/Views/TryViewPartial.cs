@@ -1,12 +1,11 @@
 using UnityMVC;
 using UnityMVC.View;
 
-
-public partial class ColorView : View
+public partial class TryView : View
 {
     protected override void LocateController()
     {
-        _controller = MVCApplication.Controllers.Get<ColorController>();
+        _controller = MVCApplication.Controllers.Get<TryController>();
     }
     
     protected override void InitializeController()
