@@ -1,11 +1,14 @@
 using System;
-using UnityMVC;
+using UnityMVC.Events;
 
-public class ControllerTemplateEvents
+namespace UnityMVC.Events
 {
-    // Add events here
-    public Action<Controller> onControllerInitialized;
-    public Action<Controller> onControllerDestroyed;
+    public class ControllerTemplateEvents
+    {
+        // Add events here
+        public Action<UnityMVC.Controller.Controller> onControllerInitialized;
+        public Action<UnityMVC.Controller.Controller> onControllerDestroyed;
+    }
 }
 
 public partial class ControllerTemplate

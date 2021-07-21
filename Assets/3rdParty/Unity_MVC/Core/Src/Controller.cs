@@ -1,10 +1,10 @@
 using System.Collections;
 
-namespace UnityMVC
+namespace UnityMVC.Controller
 {
     public abstract class Controller
     {
-        public abstract void SetView(View view);
+        public abstract void SetView(View.View view);
 
         protected virtual void MVCOnInitializeController()
         {

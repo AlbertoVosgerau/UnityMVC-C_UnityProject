@@ -1,6 +1,11 @@
-public class LoaderTemplateEvents
+using UnityMVC.Events;
+
+namespace UnityMVC.Events
 {
-    // Add events here
+    public class LoaderTemplateEvents
+    {
+        // Add events here
+    }
 }
 
 public partial class LoaderTemplate

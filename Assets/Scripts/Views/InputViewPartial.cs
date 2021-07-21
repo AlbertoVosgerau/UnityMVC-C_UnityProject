@@ -1,4 +1,5 @@
 using UnityMVC;
+using UnityMVC.View;
 
 public partial class InputView : View
 {

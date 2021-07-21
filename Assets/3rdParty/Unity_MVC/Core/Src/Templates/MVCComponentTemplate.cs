@@ -1,11 +1,14 @@
 ﻿using System;
-using UnityMVC;
+using UnityMVC.Events;
 
-public class MVCComponentTemplateEvents
+namespace UnityMVC.Events
 {
-    // Add your actions and events here
-    public Action onCreated;
-    public Action onDestroyed;
+    public class MVCComponentTemplateEvents
+    {
+        // Add your actions and events here
+        public Action onCreated;
+        public Action onDestroyed;
+    }
 }
 
 public partial class MVCComponentTemplate

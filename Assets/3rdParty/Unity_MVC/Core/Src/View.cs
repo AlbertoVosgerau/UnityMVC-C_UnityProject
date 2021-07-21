@@ -1,10 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityMVC.Component;
 
-namespace UnityMVC
+namespace UnityMVC.View
 {
     public abstract class View : MonoBehaviour
     {

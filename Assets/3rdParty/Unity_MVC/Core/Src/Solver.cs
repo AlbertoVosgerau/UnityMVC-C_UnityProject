@@ -1,4 +1,4 @@
-namespace UnityMVC
+namespace UnityMVC.Model
 {
     public abstract class Solver
     {

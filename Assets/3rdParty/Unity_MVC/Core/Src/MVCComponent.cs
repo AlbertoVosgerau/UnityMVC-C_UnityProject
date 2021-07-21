@@ -1,34 +1,32 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace UnityMVC
+namespace UnityMVC.Component
 {
-    [Serializable]
     public abstract class MVCComponent : MonoBehaviour
     {
         public string View => _baseView.gameObject.name;
-        protected View _baseView;
-        public Component Owner => _owner;
-        protected Component _owner;
-        public void SetView(View view)
+        protected View.View _baseView;
+        public UnityEngine.Component Owner => _owner;
+        protected UnityEngine.Component _owner;
+        public void SetView(View.View view)
         {
             _baseView = view;
             OnViewWasSet(_baseView);
         }
 
-        protected virtual void OnViewWasSet(View view)
+        protected virtual void OnViewWasSet(View.View view)
         {
             
         }
-        public virtual void SetOwner(Component owner)
+        public virtual void SetOwner(UnityEngine.Component owner)
         {
             _owner = owner;
         }
         
-        [SerializeField] private List<Component> _unityComponents;
+        [SerializeField] private List<UnityEngine.Component> _unityComponents;
 
         protected virtual void MVCAwake()
         {
@@ -73,17 +71,17 @@ namespace UnityMVC
             MVCOnDestroy();
         }
 
-        public void RegisterComponent(Component component)
+        public void RegisterComponent(UnityEngine.Component component)
         {
             _unityComponents.Add(component);
         }
 
-        public void UnregisterComponent(Component component)
+        public void UnregisterComponent(UnityEngine.Component component)
         {
             _unityComponents.Remove(component);
         }
 
-        public T GetUnityComponentFromMVC<T>(bool addToStoredComponentsList = false) where T : Component
+        public T GetUnityComponentFromMVC<T>(bool addToStoredComponentsList = false) where T : UnityEngine.Component
         {
             T component = _unityComponents.FirstOrDefault(x => x.GetType() == typeof(T)) as T;
 
@@ -102,7 +100,7 @@ namespace UnityMVC
             return component;
         }
         
-        public List<T> GetUnityComponentsFromMVC<T>(bool addToStoredComponentsList = false) where T : Component
+        public List<T> GetUnityComponentsFromMVC<T>(bool addToStoredComponentsList = false) where T : UnityEngine.Component
         {
             List<T> components = _unityComponents.Where(x => x.GetType() == typeof(T)) as List<T>;
 

@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
-namespace UnityMVC
+namespace UnityMVC.Locator
 {
     public class Locator<T> where T: class
     {

@@ -1,4 +1,5 @@
 using UnityMVC;
+using UnityMVC.Model;
 
 public partial class LoaderTemplate : Loader
 {

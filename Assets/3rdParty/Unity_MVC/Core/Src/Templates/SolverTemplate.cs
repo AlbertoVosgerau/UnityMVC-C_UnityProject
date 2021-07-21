@@ -1,8 +1,12 @@
-using UnityMVC;
+using UnityMVC.Events;
+using UnityMVC.Model;
 
-public class SolverTemplateEvents
+namespace UnityMVC.Events
 {
-    // Add events here
+    public class SolverTemplateEvents
+    {
+        // Add events here
+    }
 }
 
 public class SolverTemplate : Solver

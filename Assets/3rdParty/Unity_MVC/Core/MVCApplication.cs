@@ -1,3 +1,5 @@
+using UnityMVC.Locator;
+
 namespace UnityMVC
 {
     public class MVCApplication

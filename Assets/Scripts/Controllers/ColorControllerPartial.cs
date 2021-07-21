@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using UnityMVC;
+using UnityMVC.Controller;
+using UnityMVC.View;
 
 public partial class ColorController : Controller
 {

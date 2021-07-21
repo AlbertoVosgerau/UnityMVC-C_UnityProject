@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityMVC;
+using UnityMVC.Controller;
 using Random = UnityEngine.Random;
 
 public class ColorControllerEvents

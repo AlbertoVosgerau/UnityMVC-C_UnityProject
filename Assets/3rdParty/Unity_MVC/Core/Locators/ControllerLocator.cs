@@ -1,6 +1,6 @@
-namespace UnityMVC
+namespace UnityMVC.Locator
 {
-    public class ControllerLocator : Locator<Controller>
+    public class ControllerLocator : Locator<Controller.Controller>
     {
         
     }

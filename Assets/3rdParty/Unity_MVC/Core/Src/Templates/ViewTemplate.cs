@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using UnityMVC;
+using UnityMVC.Events;
 
-public class ViewTemplateEvents
+namespace UnityMVC.Events
 {
-    // Add events here
-    public Action<View> onViewDestroyed;
+    public class ViewTemplateEvents
+    {
+        // Add events here
+        public Action<View.View> onViewDestroyed;
+    }
 }
 
 public partial class ViewTemplate
