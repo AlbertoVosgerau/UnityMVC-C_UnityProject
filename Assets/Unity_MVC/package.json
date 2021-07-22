@@ -1,0 +1,15 @@
+{
+  "name": "com.albertovosgerau.unitymvc",
+  "displayName": "Unity MVC",
+  "version": "0.0.1",
+  "unity": "2020.3",
+  "description": "Unity MVC Code Generator",
+  "keywords": [
+    "unity"
+  ],
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:AlbertoVosgerau/Unity_MVC.git#release"
+  }
+}
