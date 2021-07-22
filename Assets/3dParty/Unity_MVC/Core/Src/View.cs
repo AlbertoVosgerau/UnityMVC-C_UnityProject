@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityMVC.Component;
 
 namespace UnityMVC.View
@@ -11,63 +13,82 @@ namespace UnityMVC.View
         [SerializeField] private List<MVCComponent> _MVCComponents = new List<MVCComponent>();
         protected abstract void LocateController();
 
-        protected virtual void Awake()
+        private void Awake()
         {
             SolveComponents();
             LocateController();
             SolveDependencies();
-            InitializeController();
+            InternalAwake();
+            AwakeMVC();
         }
 
-        protected virtual void MVCStart()
+        private void Start()
+        {
+            InternalStart();
+            ControllerStart();
+            StartMVC();
+        }
+        
+        private void Update()
+        {
+            ControllerUpdate();
+            UpdateMVC();
+        }
+
+        private void OnEnable()
+        {
+            ControllerOnEnable();
+            OnEnableMVC();
+        }
+
+        private void OnDisable()
+        {
+            ControllerOnDisable();
+            OnDisableMVC();
+        }
+
+        private void OnDestroy()
+        {
+            ControllerOnDestroy();
+            OnDestroyMVC();
+        }
+
+        protected virtual void InternalStart()
         {
             RegisterControllerEvents();
             StartCoroutine(LateStartRoutine());
         }
 
-        protected virtual void Start()
-        {
-            MVCStart();
-        }
-
-        protected IEnumerator LateStartRoutine()
-        {
-            yield return null;
-            LateStart();
-        }
-
-        protected virtual void LateStart()
-        {
-        }
-
-        protected void MakePersistent()
-        {
-            transform.parent = null;
-            DontDestroyOnLoad(this);
-        }
-
-        protected virtual void MVCOnDestroy()
+        protected virtual void InternalOnDestroy()
         {
             UnregisterControllerEvents();
         }
-
-        protected virtual void OnDestroy()
-        {
-            MVCOnDestroy();
-        }
-
-        protected virtual void MVCUpdate()
-        {
-            
-        }
-
-        protected virtual void Update()
-        {
-            MVCUpdate();
-        }
         
+        protected virtual void AwakeMVC() {}
+        protected virtual void StartMVC() {}
+        protected virtual void UpdateMVC() {}
+        protected virtual void LateStartMVC() {}
+        protected virtual void OnEnableMVC() {}
+        protected virtual void OnDisableMVC() {}
+        protected virtual void OnDestroyMVC() {}
+
+        protected abstract void ControllerStart();
+        protected IEnumerator LateStartRoutine()
+        {
+            yield return null;
+            LateStartMVC();
+        }
+
+        protected abstract void ControllerUpdate();
+
+        protected abstract void ControllerOnEnable();
+
+        protected abstract void ControllerOnDisable();
+
+        protected abstract void ControllerOnDestroy();
+
         protected abstract void SolveDependencies();
-        protected abstract void InitializeController();
+        protected abstract void InternalAwake();
         protected abstract void RegisterControllerEvents();
         protected abstract void UnregisterControllerEvents();
 

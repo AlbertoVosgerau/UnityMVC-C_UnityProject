@@ -34,23 +34,18 @@ public partial class ViewTemplate
         // otherObject.EventName -= MyMethod;
     }
 
-    protected override void Awake()
+    protected override void StartMVC()
     {
-        base.Awake();
+        // Add your code here
     }
 
-    protected override void Start()
+    protected override void LateStartMVC()
     {
-        base.Start();
+        // Add your code here
     }
 
-    protected override void Update()
+    protected override void UpdateMVC()
     {
-        base.Update();
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
+        // Add your code here
     }
 }

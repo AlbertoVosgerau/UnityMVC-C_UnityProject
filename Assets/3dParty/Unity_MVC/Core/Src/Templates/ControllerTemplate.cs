@@ -35,27 +35,18 @@ public partial class ControllerTemplate
         // otherObject.EventName -= MyMethod;
     }
 
-    public override void OnInitializeController()
+    protected override void StartMVC()
     {
-        base.OnInitializeController();
-        //Start your code from here
+        // Start your code from here
     }
 
-    public override void OnViewStart()
+    protected override void LateStartMVC()
     {
-        base.OnViewStart();
         // Start your code from here
     }
 
     public override void OnViewUpdate()
     {
-        base.OnViewUpdate();
-        // Start your code from here
-    }
-
-    public override void OnViewDestroy()
-    {
-        base.OnViewDestroy();
         // Start your code from here
     }
 }

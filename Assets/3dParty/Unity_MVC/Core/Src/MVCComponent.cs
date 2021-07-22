@@ -11,6 +11,8 @@ namespace UnityMVC.Component
         protected View.View _baseView;
         public UnityEngine.Component Owner => _owner;
         protected UnityEngine.Component _owner;
+        
+        [SerializeField] private List<UnityEngine.Component> _unityComponents;
         public void SetView(View.View view)
         {
             _baseView = view;
@@ -26,61 +28,64 @@ namespace UnityMVC.Component
             _owner = owner;
         }
         
-        [SerializeField] private List<UnityEngine.Component> _unityComponents;
-
-        protected virtual void MVCAwake()
-        {
-            SolveDependencies();
-        }
-        protected virtual void Awake()
-        {
-            MVCAwake();
-        }
-
-        protected virtual void MVCStart()
-        {
-            StartCoroutine(LateStartRoutine());
-        }
-
-        protected virtual void Start()
-        {
-            MVCStart();
-        }
-
-        protected IEnumerator LateStartRoutine()
-        {
-            yield return null;
-            LateStart();
-        }
-
-        protected virtual void LateStart()
-        {
-            
-        }
-        
         protected abstract void RegisterEvents();
         protected abstract void UnregisterEvents();
         protected abstract void SolveDependencies();
 
-        protected virtual void MVCOnDestroy()
+        protected abstract void InternalStart();
+        protected abstract void InternalOnDestroy();
+
+        private void Awake()
         {
-            _baseView.UnregisterComponentFromView(this);
+            SolveDependencies();
+            AwakeMVC();
         }
-        protected virtual void OnDestroy()
+        private void Start()
         {
-            MVCOnDestroy();
+            InternalStart();
+            StartCoroutine(LateStartRoutine());
+            StartMVC();
+        }
+        private void Update()
+        {
+            UpdateMVC();
+        }
+        private void OnEnable()
+        {
+            OnEnableMVC();
+        }
+        private void OnDisable()
+        {
+            OnDisableMVC();
+        }
+        private void OnDestroy()
+        {
+            OnDestroyMVC();
+            InternalOnDestroy();
         }
 
+        protected virtual void AwakeMVC() {}
+        protected virtual void StartMVC() {}
+        protected virtual void UpdateMVC() {}
+        protected virtual void LateStartMVC() {}
+        protected virtual void OnEnableMVC() {}
+        protected virtual void OnDisableMVC() {}
+        protected virtual void OnDestroyMVC() {}
+
+        protected IEnumerator LateStartRoutine()
+        {
+            yield return null;
+            LateStartMVC();
+        }
+        
         public void RegisterComponent(UnityEngine.Component component)
         {
             _unityComponents.Add(component);
         }
-
         public void UnregisterComponent(UnityEngine.Component component)
         {
             _unityComponents.Remove(component);
         }
-
         public T GetUnityComponentFromMVC<T>(bool addToStoredComponentsList = false) where T : UnityEngine.Component
         {
             T component = _unityComponents.FirstOrDefault(x => x.GetType() == typeof(T)) as T;
@@ -99,7 +104,6 @@ namespace UnityMVC.Component
             }
             return component;
         }
-        
         public List<T> GetUnityComponentsFromMVC<T>(bool addToStoredComponentsList = false) where T : UnityEngine.Component
         {
             List<T> components = _unityComponents.Where(x => x.GetType() == typeof(T)) as List<T>;

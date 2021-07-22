@@ -35,21 +35,18 @@ public partial class MVCComponentTemplate
         // otherObject.EventName -= MyMethod;
     }
 
-    protected override void Awake()
+    protected override void StartMVC()
     {
-        base.Awake();
-        // Add your code from here
-    }
-    
-    protected override void Start()
-    {
-        base.Start();
-        // Add your code from here
+        // Add your code here
     }
 
-    protected override void OnDestroy()
+    protected override void LateStartMVC()
     {
-        base.OnDestroy();
-        // Add your code from here
+        // Add your code here
+    }
+
+    protected override void UpdateMVC()
+    {
+        // Add your code here
     }
 }
