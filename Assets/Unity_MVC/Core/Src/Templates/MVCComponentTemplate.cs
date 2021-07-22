@@ -13,7 +13,7 @@ namespace UnityMVC.Events
 
 public partial class MVCComponentTemplate
 {
-    private ViewTemplate _view => _baseView as ViewTemplate;
+    private new ViewTemplate _view;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
     public /*new*/ MVCComponentTemplateEvents Events => _events;

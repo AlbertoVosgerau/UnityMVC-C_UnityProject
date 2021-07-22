@@ -95,10 +95,7 @@ namespace UnityMVC
             if (type == ScriptType.MVCComponent)
             {
                 templateStr = templateStr.Replace($"ComponentTemplateEvents", $"{name}ComponentEvents");
-            }
-            if (type == ScriptType.MVCComponent)
-            {
-                templateStr = templateStr.Replace($"ComponentTemplateInfo", $"{name}ComponentInfo");
+                templateStr = templateStr.Replace("ViewTemplate", $"{name}View");
             }
             if (type == ScriptType.Container)
             {

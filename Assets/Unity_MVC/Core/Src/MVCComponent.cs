@@ -7,18 +7,13 @@ namespace UnityMVC.Component
 {
     public abstract class MVCComponent : MonoBehaviour
     {
-        public string View => _baseView.gameObject.name;
-        protected View.View _baseView;
+        public string View => _view.gameObject.name;
+        protected View.View _view;
         public UnityEngine.Component Owner => _owner;
         protected UnityEngine.Component _owner;
         
         [SerializeField] private List<UnityEngine.Component> _unityComponents;
-        public void SetView(View.View view)
-        {
-            _baseView = view;
-            OnViewWasSet(_baseView);
-        }
-
+        public abstract void SetView(View.View view);
         protected virtual void OnViewWasSet(View.View view)
         {
             
