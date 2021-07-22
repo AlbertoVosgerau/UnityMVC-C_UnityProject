@@ -13,6 +13,7 @@ namespace UnityMVC
     {
         private string _baseName = "";
         private float _btnWidth = 150;
+        private Vector2 _scrollPosition = new Vector2(0,0);
         
         private UnityMVCData _data;
         
@@ -49,7 +50,9 @@ namespace UnityMVC
         void OnGUI()
         {
             SetMVCData();
+            _scrollPosition = GUILayout.BeginScrollView(_scrollPosition, false, true);
             BuildInspector();
+            GUILayout.EndScrollView();
         }
 
         private void BuildInspector()
