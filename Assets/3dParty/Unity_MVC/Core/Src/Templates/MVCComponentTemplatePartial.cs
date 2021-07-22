@@ -8,7 +8,6 @@ public partial class MVCComponentTemplate : MVCComponent
         RegisterEvents();
         _events.onCreated?.Invoke();
     }
-    
     protected override void InternalOnDestroy()
     {
         _baseView.UnregisterComponentFromView(this);

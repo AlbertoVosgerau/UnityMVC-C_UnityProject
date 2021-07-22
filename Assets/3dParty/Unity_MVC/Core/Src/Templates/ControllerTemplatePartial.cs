@@ -22,7 +22,6 @@ public partial class ControllerTemplate : Controller
         RegisterEvents();
         _events.onControllerInitialized?.Invoke(this);
     }
-
     protected override void InternalOnDestroy()
     {
         _events.onControllerDestroyed?.Invoke(this);

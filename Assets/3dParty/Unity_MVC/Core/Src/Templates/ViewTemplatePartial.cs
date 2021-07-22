@@ -14,24 +14,21 @@ public partial class ViewTemplate : View
         _controller.SetView(this);
         _controller.OnViewAwake();
     }
-
     protected override void InternalStart()
     {
         base.InternalStart();
         ControllerStart();
     }
-
     protected override void InternalOnDestroy()
     {
         _events.onViewDestroyed?.Invoke(this);
         base.InternalOnDestroy();
     }
-
+    
     protected override void ControllerStart()
     {
         _controller.OnViewStart();
     }
-
     protected override void ControllerUpdate()
     {
         _controller.OnViewUpdate();
