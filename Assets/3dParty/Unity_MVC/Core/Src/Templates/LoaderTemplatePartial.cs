@@ -5,7 +5,7 @@ using UnityMVC.Model;
 public partial class LoaderTemplate : Loader
 {
     private SolverTemplate Solver => _solver;
-    public void Initialize()
+    public /*new*/ void Initialize()
     {
         if (_solver != null)
         {
