@@ -14,6 +14,10 @@ namespace UnityMVC
         private string _baseName = "";
         private float _btnWidth = 150;
         private UnityMVCData _data;
+        private List<string> _controllerAndViewTypes = new List<string>();
+        private int _controllerAndViewTypeIndex;
+        private List<string> _loaderSolverAndContainerTypes = new List<string>();
+        private int _loaderSolverAndContainerIntex;
         private List<string> _controllerTypes = new List<string>();
         private int _controllerTypeIndex;
         private List<string> _viewTypes = new List<string>();
@@ -66,7 +70,7 @@ namespace UnityMVC
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             EditorGUI.BeginChangeCheck();
-            _data.editorData.removeComments = GUILayout.Toggle(_data.editorData.removeComments, "Remove comments from generated code", GUILayout.Width(_btnWidth*2));
+            _data.editorData.removeComments = GUILayout.Toggle(_data.editorData.removeComments, " Remove comments from generated code", GUILayout.Width(_btnWidth*2));
             if (EditorGUI.EndChangeCheck())
             {
                 OnChangedValue();
@@ -85,7 +89,7 @@ namespace UnityMVC
 
         private void Footer()
         {
-            RegionFooter("Created by Alberto Vosgerau Neto\n\nFeel free to change this in any way you wish.\nQuestions and suggestions:\nalberto@argames.com.br\n\nWill add documentation link soon, I promise!\n\nHappy coding!");
+            RegionFooter("Created by Alberto Vosgerau Neto\n\nFeel free to change this in any way you wish ;)\nQuestions and suggestions:\n\nalberto@argames.com.br\n\nWill add documentation link soon, I promise!\n\nHappy coding!");
         }
 
         private void OnChangedValue()
@@ -98,14 +102,15 @@ namespace UnityMVC
             UpdateAllTypes();
         }
 
-        public static List<string> GetTypesList(Type objectType)
+        public static List<string> GetTypesList(Type objectType, string suffix)
         {
             List<string> objects = new List<string>();
             objects.Add("Base");
             foreach (Type type in Assembly.GetAssembly(objectType).GetTypes()
                 .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(objectType) && !myType.Name.Contains("Template")))
             {
-                objects.Add(type.Name);
+                string str = $"{type.Name}{suffix}";
+                objects.Add(str);
             }
             
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -123,6 +128,8 @@ namespace UnityMVC
 
         private void UpdateAllTypes()
         {
+            UpdateTypesList(ref _controllerAndViewTypes, typeof(Controller.Controller), " - View");
+            UpdateTypesList(ref  _loaderSolverAndContainerTypes, typeof(Loader), " - Solver - Container");
             UpdateTypesList(ref _controllerTypes, typeof(Controller.Controller));
             UpdateTypesList(ref _viewTypes, typeof(View.View));
             UpdateTypesList(ref _componentTypes, typeof(MVCComponent));
@@ -134,6 +141,7 @@ namespace UnityMVC
 
         private void ResetAllTypeIndexes()
         {
+            _controllerAndViewTypeIndex = 0;
             _componentTypeIndex = 0;
             _containerTypeIndex = 0;
             _controllerTypeIndex = 0;
@@ -141,15 +149,15 @@ namespace UnityMVC
             _solverTypeIndex = 0;
             _viewTypeIndex = 0;
         }
-        private void UpdateTypesList(ref List<string> types, Type type)
+        private void UpdateTypesList(ref List<string> types, Type type, string suffix = "")
         {
             types.Clear();
-            types = GetTypesList(type);
+            types = GetTypesList(type, suffix);
         }
 
-        private void TypesListDropdown(ref int index, List<string> types)
+        private void TypesListDropdown(ref int index, List<string> types, float sizeMultiplier = 1)
         {
-            index = EditorGUILayout.Popup(index, types.ToArray(), GUILayout.Width(_btnWidth));
+            index = EditorGUILayout.Popup(index, types.ToArray(), GUILayout.Width(_btnWidth * sizeMultiplier));
         }
 
         private void SetMVCData()
@@ -165,6 +173,7 @@ namespace UnityMVC
             GUILayout.Label(header, GUILayout.Width(_btnWidth*2));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+            GUILayout.Space(3);
         }
         
         private void RegionFooter(string str)
@@ -177,10 +186,52 @@ namespace UnityMVC
             GUILayout.EndHorizontal();
         }
 
+        private void SimpleLabel(string str)
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Label(str, GUILayout.Width(_btnWidth*2));
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void CreateLabel()
+        {
+            SimpleLabel("Create:");
+        }
+
+        private void InheritsFromLabel()
+        {
+            SimpleLabel("That inherits from:");
+        }
+
+        private void SingleTypesDropdown(ref int index, List<string> types)
+        {
+            InheritsFromLabel();
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            TypesListDropdown(ref index, types, 2);
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+
+        private void DoubleTypesDropwn(ref int index1, List<string> types1, ref int index2, List<string> types2)
+        {
+            InheritsFromLabel();
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            TypesListDropdown(ref _viewTypeIndex, _viewTypes);
+            TypesListDropdown(ref _controllerTypeIndex, _controllerTypes);
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+
         private void ViewAndController()
         {
             RegionHeader("View and Controller");
 
+            
+            CreateLabel();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create View / Controller", GUILayout.Width(_btnWidth*2)))
@@ -190,15 +241,13 @@ namespace UnityMVC
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+            SingleTypesDropdown(ref _controllerAndViewTypeIndex, _controllerAndViewTypes);
             GUILayout.Space(10);
             
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            TypesListDropdown(ref _viewTypeIndex, _viewTypes);
-            TypesListDropdown(ref _controllerTypeIndex, _controllerTypes);
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
             
+
+            
+            CreateLabel();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create View", GUILayout.Width(_btnWidth)))
@@ -213,11 +262,13 @@ namespace UnityMVC
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+            DoubleTypesDropwn(ref _viewTypeIndex, _viewTypes, ref _controllerTypeIndex, _controllerTypes);
         }
         private void Component()
         {
             RegionHeader("Component");
             
+            CreateLabel();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create Component", GUILayout.Width(_btnWidth * 2)))
@@ -227,11 +278,13 @@ namespace UnityMVC
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+            SingleTypesDropdown(ref _componentTypeIndex, _componentTypes);
         }
         private void LoaderSolverAndContainer()
         {
             RegionHeader("Model");
             
+            CreateLabel();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create Loader / Solver / Container", GUILayout.Width(_btnWidth * 2)))
@@ -243,7 +296,12 @@ namespace UnityMVC
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+            
+            SingleTypesDropdown(ref _loaderSolverAndContainerIntex, _loaderSolverAndContainerTypes);
+            
             GUILayout.Space(7);
+            
+            CreateLabel();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create Container", GUILayout.Width(_btnWidth * 2)))
@@ -253,6 +311,8 @@ namespace UnityMVC
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+            SingleTypesDropdown(ref _containerTypeIndex, _containerrTypes);
+            
             GUILayout.Space(7);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
@@ -269,6 +329,7 @@ namespace UnityMVC
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+            DoubleTypesDropwn(ref  _loaderTypeIndex, _loaderTypes, ref _solverTypeIndex, _solverTypes);
         }
     }
 }
