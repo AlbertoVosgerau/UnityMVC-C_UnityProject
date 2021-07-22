@@ -289,7 +289,6 @@ namespace UnityMVC
             SimpleLabel("That inherits from:");
         }
 
-
         private void ViewAndControllerButtons()
         {
             LabelCreate();
