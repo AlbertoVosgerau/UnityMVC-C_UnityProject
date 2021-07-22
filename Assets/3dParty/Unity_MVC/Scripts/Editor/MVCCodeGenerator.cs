@@ -182,7 +182,7 @@ namespace UnityMVC
         private static String StringWithoutComments(string str)
         {
             string[] lines = str.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-            var removedCommentsStr = lines.Where(x => !x.Contains("// ")).ToArray();
+            var removedCommentsStr = lines.Where(x => !x.Contains("//")).ToArray();
             str = String.Join("\n", removedCommentsStr);
             return str;
         }
