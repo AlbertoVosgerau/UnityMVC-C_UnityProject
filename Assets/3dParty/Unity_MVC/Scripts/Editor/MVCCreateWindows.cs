@@ -248,8 +248,8 @@ namespace UnityMVC
             LabelInheritFrom();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            TypesListDropdown(ref _viewTypeIndex, _viewTypes);
-            TypesListDropdown(ref _controllerTypeIndex, _controllerTypes);
+            TypesListDropdown(ref index1, types1);
+            TypesListDropdown(ref index2, types2);
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
