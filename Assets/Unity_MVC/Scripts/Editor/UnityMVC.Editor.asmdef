@@ -1,0 +1,18 @@
+{
+    "name": "UnityMVC.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:32d4352593ec4b3498c9b6643798b946"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
