@@ -317,18 +317,10 @@ namespace UnityMVC
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create View / Controller", GUILayout.Width(_btnWidth * 2)))
             {
-                if (_controllerAndViewTypeIndex == 0)
-                {
-                    MVCCodeGenerator.CreateViewAndController(_baseName, _data.editorData.removeComments);
-                }
-                else
-                {
-                    {
-                        string controllerBase = _controllerTypes[_controllerAndViewTypeIndex];
-                        string viewBase = _viewTypes[_controllerAndViewTypeIndex];
-                        MVCCodeGenerator.CreateViewAndController(_baseName, _data.editorData.removeComments, controllerBase, viewBase);
-                    }
-                }
+                string controllerBase = _controllerAndViewTypeIndex == 0? null : _controllerTypes[_controllerAndViewTypeIndex];
+                string viewBase = _controllerAndViewTypeIndex == 0? null : _viewTypes[_controllerAndViewTypeIndex];
+                
+                MVCCodeGenerator.CreateViewAndController(_baseName, _data.editorData.removeComments, controllerBase, viewBase);
                 
                 OnCreatedFile();
             }
