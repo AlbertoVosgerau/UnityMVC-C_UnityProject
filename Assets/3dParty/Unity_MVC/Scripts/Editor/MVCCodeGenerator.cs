@@ -21,14 +21,14 @@ namespace UnityMVC
     {
         public static void CreateView(string name, bool removeComments, string inheritsFrom = null)
         {
-            GenerateScript(name, GetTemplate(ScriptType.View, removeComments), GetPath("Views"), ScriptType.View);
-            GenerateScript(name, GetTemplate(ScriptType.View, removeComments, true), GetPath("Views"), ScriptType.View, true, inheritsFrom);
+            GenerateScript(name, GetTemplate(ScriptType.View, removeComments), GetPath("Views"), ScriptType.View, virtualToOverride: inheritsFrom != null);
+            GenerateScript(name, GetTemplate(ScriptType.View, removeComments, true), GetPath("Views"), ScriptType.View, true, inheritsFrom, inheritsFrom != null);
         }
 
         public static void CreateController(string name, bool removeComments, string inheritsFrom = null)
         {
-            GenerateScript(name, GetTemplate(ScriptType.Controller, removeComments), GetPath("Controllers"), ScriptType.Controller);
-            GenerateScript(name, GetTemplate(ScriptType.Controller, removeComments,true), GetPath("Controllers"), ScriptType.Controller, true, inheritsFrom);
+            GenerateScript(name, GetTemplate(ScriptType.Controller, removeComments), GetPath("Controllers"), ScriptType.Controller, virtualToOverride: inheritsFrom != null);
+            GenerateScript(name, GetTemplate(ScriptType.Controller, removeComments,true), GetPath("Controllers"), ScriptType.Controller, true, inheritsFrom, inheritsFrom != null);
         }
         
         public static void CreateViewAndController(string name, bool removeComments, string controllerInheritsFrom = null, string viewInheritsFrom = null)
@@ -36,28 +36,28 @@ namespace UnityMVC
             CreateController(name, removeComments, controllerInheritsFrom);
             CreateView(name, removeComments, viewInheritsFrom);
         }
-        public static void CreateComponent(string name, bool removeComments)
+        public static void CreateComponent(string name, bool removeComments, string inheritsFrom = null)
         {
-            GenerateScript(name, GetTemplate(ScriptType.MVCComponent, removeComments), GetPath("Components"), ScriptType.MVCComponent);
-            GenerateScript(name, GetTemplate(ScriptType.MVCComponent,removeComments,  true), GetPath("Components", true), ScriptType.MVCComponent, true);
+            GenerateScript(name, GetTemplate(ScriptType.MVCComponent, removeComments), GetPath("Components"), ScriptType.MVCComponent, virtualToOverride: inheritsFrom != null);
+            GenerateScript(name, GetTemplate(ScriptType.MVCComponent,removeComments,  true), GetPath("Components", true), ScriptType.MVCComponent, true, inheritsFrom, inheritsFrom != null);
         }
-        public static void CreateContainer(string name, bool removeComments)
+        public static void CreateContainer(string name, bool removeComments, string inheritsFrom = null)
         {
-            GenerateScript(name, GetTemplate(ScriptType.Container, removeComments), GetPath("Containers"), ScriptType.Container);
-            GenerateScript(name, GetTemplate(ScriptType.Container, removeComments, true), GetPath("Containers"), ScriptType.Container, true);
+            GenerateScript(name, GetTemplate(ScriptType.Container, removeComments), GetPath("Containers"), ScriptType.Container, virtualToOverride: inheritsFrom != null);
+            GenerateScript(name, GetTemplate(ScriptType.Container, removeComments, true), GetPath("Containers"), ScriptType.Container, true, inheritsFrom, inheritsFrom != null);
         }
-        public static void CreateLoader(string name, bool removeComments)
+        public static void CreateLoader(string name, bool removeComments, string inheritsFrom = null)
         {
-            GenerateScript(name, GetTemplate(ScriptType.Loader, removeComments), GetPath("Loaders"), ScriptType.Loader);
-            GenerateScript(name, GetTemplate(ScriptType.Loader, removeComments, true), GetPath("Loaders"), ScriptType.Loader, true);
+            GenerateScript(name, GetTemplate(ScriptType.Loader, removeComments), GetPath("Loaders"), ScriptType.Loader, virtualToOverride: inheritsFrom != null);
+            GenerateScript(name, GetTemplate(ScriptType.Loader, removeComments, true), GetPath("Loaders"), ScriptType.Loader, true, inheritsFrom, inheritsFrom != null);
         }
         
-        public static void CreateSolver(string name, bool removeComments)
+        public static void CreateSolver(string name, bool removeComments, string inheritsFrom = null)
         {
-            GenerateScript(name, GetTemplate(ScriptType.Solver, removeComments), GetPath("Solvers"), ScriptType.Solver);
+            GenerateScript(name, GetTemplate(ScriptType.Solver, removeComments), GetPath("Solvers"), ScriptType.Solver, virtualToOverride: inheritsFrom != null);
         }
 
-        private static void GenerateScript(string name, string template, string path, ScriptType type, bool isPartial = false, string inheritsFrom = null)
+        private static void GenerateScript(string name, string template, string path, ScriptType type, bool isPartial = false, string inheritsFrom = null, bool virtualToOverride = false)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -72,7 +72,16 @@ namespace UnityMVC
             
             if (inheritsFrom != null)
             {
-                ChangeInheritance(ref templateStr, type, inheritsFrom);
+                ApplyInheritance(ref templateStr, type, inheritsFrom);
+            }
+
+            if (virtualToOverride)
+            {
+                ChangeVirtualToOverride(ref templateStr);
+            }
+            else
+            {
+                RemoveNewKeywork(ref templateStr);
             }
             
             if (type == ScriptType.View)
@@ -115,9 +124,20 @@ namespace UnityMVC
             AssetDatabase.Refresh();
         }
 
-        private static void ChangeInheritance(ref string from, ScriptType type, string to)
+        private static void ApplyInheritance(ref string from, ScriptType type, string to)
         {
             from = from.Replace($": {type}", $": {to}");
+        }
+
+        private static void ChangeVirtualToOverride(ref string str)
+        {
+            str = str.Replace($"virtual", $"override");
+            str = str.Replace("/*new*/", "new");
+        }
+
+        private static void RemoveNewKeywork(ref string str)
+        {
+            str = str.Replace(" /*new*/", "");
         }
 
         private static void WriteFile(string path, string str)

@@ -1,23 +1,22 @@
-﻿using System;
+using System;
 using UnityMVC.Events;
 
 namespace UnityMVC.Events
 {
-    public class MVCComponentTemplateEvents
+    public class InheritedViewEvents
     {
-        // Add your actions and events here
-        public Action onCreated;
-        public Action onDestroyed;
+        // Add events here
+        public Action<View.View> onViewDestroyed;
     }
 }
 
-public partial class MVCComponentTemplate
+public partial class InheritedView
 {
-    private ViewTemplate _view => _baseView as ViewTemplate;
+    private InheritedController _controller;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public /*new*/ MVCComponentTemplateEvents Events => _events;
-    private MVCComponentTemplateEvents _events = new MVCComponentTemplateEvents();
+    public new InheritedViewEvents Events => _events;
+    private InheritedViewEvents _events = new InheritedViewEvents();
     
     // Start your code here
     protected override void SolveDependencies()
@@ -25,12 +24,12 @@ public partial class MVCComponentTemplate
         // Awake calls this method. Solve your dependencies here.
     }
     
-    protected override void RegisterEvents()
+    protected override void RegisterControllerEvents()
     {
         // otherObject.EventName += MyMethod;
     }
-    
-    protected override void UnregisterEvents()
+
+    protected override void UnregisterControllerEvents()
     {
         // otherObject.EventName -= MyMethod;
     }

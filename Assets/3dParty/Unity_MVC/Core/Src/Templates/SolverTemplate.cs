@@ -12,7 +12,7 @@ namespace UnityMVC.Events
 public class SolverTemplate : Solver
 {
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public SolverTemplateEvents Events => _events;
+    public /*new*/ SolverTemplateEvents Events => _events;
     private SolverTemplateEvents _events = new SolverTemplateEvents();
     
     // Start your code here

@@ -3,7 +3,7 @@ using UnityMVC.Events;
 
 namespace UnityMVC.Events
 {
-    public class ControllerTemplateEvents
+    public class BaseControllerEvents
     {
         // Add events here
         public Action<UnityMVC.Controller.Controller> onControllerInitialized;
@@ -11,13 +11,13 @@ namespace UnityMVC.Events
     }
 }
 
-public partial class ControllerTemplate
+public partial class BaseController
 {
-    private ViewTemplate _view;
+    private BaseView _view;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public /*new*/ ControllerTemplateEvents Events => _events;
-    private ControllerTemplateEvents _events = new ControllerTemplateEvents();
+    public BaseControllerEvents Events => _events;
+    private BaseControllerEvents _events = new BaseControllerEvents();
     
     // Start your code here
     protected override void SolveDependencies()

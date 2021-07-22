@@ -15,7 +15,7 @@ public partial class ViewTemplate
     private ControllerTemplate _controller;
     
     // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public ViewTemplateEvents Events => _events;
+    public /*new*/ ViewTemplateEvents Events => _events;
     private ViewTemplateEvents _events = new ViewTemplateEvents();
     
     // Start your code here
