@@ -26,7 +26,7 @@ namespace UnityMVC
         private int _viewTypeIndex;
         private List<string> _componentTypes = new List<string>();
         private int _componentTypeIndex;
-        private List<string> _containerrTypes = new List<string>();
+        private List<string> _containerTypes = new List<string>();
         private int _containerTypeIndex;
         private List<string> _loaderTypes = new List<string>();
         private int _loaderTypeIndex;
@@ -156,7 +156,7 @@ namespace UnityMVC
             GUILayout.Space(7);
 
             ContainerButton();
-            SingleTypesDropdown(ref _containerTypeIndex, _containerrTypes);
+            SingleTypesDropdown(ref _containerTypeIndex, _containerTypes);
             GUILayout.Space(7);
             
             LoaderAndSolverButtons();
@@ -210,7 +210,7 @@ namespace UnityMVC
             UpdateTypesList(ref _controllerTypes, typeof(Controller.Controller));
             UpdateTypesList(ref _viewTypes, typeof(View.View));
             UpdateTypesList(ref _componentTypes, typeof(MVCComponent));
-            UpdateTypesList(ref _containerrTypes, typeof(Container));
+            UpdateTypesList(ref _containerTypes, typeof(Container));
             UpdateTypesList(ref _loaderTypes, typeof(Loader));
             UpdateTypesList(ref _solverTypes, typeof(Solver));
             ResetAllTypeIndexes();
@@ -294,15 +294,18 @@ namespace UnityMVC
             LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
+            
             if (GUILayout.Button("Create View", GUILayout.Width(_btnWidth)))
             {
-                MVCCodeGenerator.CreateView(_baseName, _data.editorData.removeComments);
+                string inheritance = _viewTypeIndex == 0? null : _viewTypes[_viewTypeIndex];
+                MVCCodeGenerator.CreateView(_baseName, _data.editorData.removeComments, inheritance);
                 OnCreatedFile();
             }
 
             if (GUILayout.Button("Create Controller", GUILayout.Width(_btnWidth)))
             {
-                MVCCodeGenerator.CreateController(_baseName, _data.editorData.removeComments);
+                string inheritance = _controllerTypeIndex == 0? null : _controllerTypes[_controllerTypeIndex];
+                MVCCodeGenerator.CreateController(_baseName, _data.editorData.removeComments, inheritance);
                 OnCreatedFile();
             }
 
@@ -314,12 +317,13 @@ namespace UnityMVC
             LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
+            
             if (GUILayout.Button("Create View / Controller", GUILayout.Width(_btnWidth * 2)))
             {
-                string controllerBase = _controllerAndViewTypeIndex == 0? null : _controllerTypes[_controllerAndViewTypeIndex];
-                string viewBase = _controllerAndViewTypeIndex == 0? null : _viewTypes[_controllerAndViewTypeIndex];
+                string controller = _controllerAndViewTypeIndex == 0? null : _controllerTypes[_controllerAndViewTypeIndex];
+                string view = _controllerAndViewTypeIndex == 0? null : _viewTypes[_controllerAndViewTypeIndex];
                 
-                MVCCodeGenerator.CreateViewAndController(_baseName, _data.editorData.removeComments, controllerBase, viewBase);
+                MVCCodeGenerator.CreateViewAndController(_baseName, _data.editorData.removeComments, controller, view);
                 
                 OnCreatedFile();
             }
@@ -332,9 +336,11 @@ namespace UnityMVC
             LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
+            
             if (GUILayout.Button("Create Component", GUILayout.Width(_btnWidth * 2)))
             {
-                MVCCodeGenerator.CreateComponent(_baseName, _data.editorData.removeComments);
+                string inheritance = _componentTypeIndex == 0? null : _componentTypes[_componentTypeIndex];
+                MVCCodeGenerator.CreateComponent(_baseName, _data.editorData.removeComments, inheritance);
                 OnCreatedFile();
             }
 
@@ -346,11 +352,15 @@ namespace UnityMVC
             LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
+            
             if (GUILayout.Button("Create Loader / Solver / Container", GUILayout.Width(_btnWidth * 2)))
             {
-                MVCCodeGenerator.CreateContainer(_baseName, _data.editorData.removeComments);
-                MVCCodeGenerator.CreateLoader(_baseName, _data.editorData.removeComments);
-                MVCCodeGenerator.CreateSolver(_baseName, _data.editorData.removeComments);
+                string loader = _loaderSolverAndContainerIntex == 0? null : _loaderTypes[_loaderSolverAndContainerIntex];
+                string solver = _loaderSolverAndContainerIntex == 0? null : _solverTypes[_loaderSolverAndContainerIntex];
+                string container = _loaderSolverAndContainerIntex == 0? null : _containerTypes[_loaderSolverAndContainerIntex];
+                MVCCodeGenerator.CreateContainer(_baseName, _data.editorData.removeComments, container);
+                MVCCodeGenerator.CreateLoader(_baseName, _data.editorData.removeComments, loader);
+                MVCCodeGenerator.CreateSolver(_baseName, _data.editorData.removeComments, solver);
                 OnCreatedFile();
             }
 
@@ -362,9 +372,11 @@ namespace UnityMVC
             LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
+            
             if (GUILayout.Button("Create Container", GUILayout.Width(_btnWidth * 2)))
             {
-                MVCCodeGenerator.CreateContainer(_baseName, _data.editorData.removeComments);
+                string inheritance = _containerTypeIndex == 0? null : _containerTypes[_containerTypeIndex];
+                MVCCodeGenerator.CreateContainer(_baseName, _data.editorData.removeComments, inheritance);
                 OnCreatedFile();
             }
 
@@ -376,15 +388,18 @@ namespace UnityMVC
             LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
+            
             if (GUILayout.Button("Create Loader", GUILayout.Width(_btnWidth)))
             {
-                MVCCodeGenerator.CreateLoader(_baseName, _data.editorData.removeComments);
+                string inheritance = _loaderTypeIndex == 0? null : _loaderTypes[_loaderTypeIndex];
+                MVCCodeGenerator.CreateLoader(_baseName, _data.editorData.removeComments, inheritance);
                 OnCreatedFile();
             }
-
+            
             if (GUILayout.Button("Create Solver", GUILayout.Width(_btnWidth)))
             {
-                MVCCodeGenerator.CreateSolver(_baseName, _data.editorData.removeComments);
+                string inheritance = _solverTypeIndex == 0? null : _solverTypes[_solverTypeIndex];
+                MVCCodeGenerator.CreateSolver(_baseName, _data.editorData.removeComments, inheritance);
                 OnCreatedFile();
             }
 
