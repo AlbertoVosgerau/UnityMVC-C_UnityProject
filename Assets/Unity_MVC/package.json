@@ -10,6 +10,6 @@
   "dependencies": {},
   "repository": {
     "type": "git",
-    "url": "git@github.com:AlbertoVosgerau/Unity_MVC.git#release"
+    "url": "https://github.com/AlbertoVosgerau/Unity_MVC.git#release"
   }
 }
