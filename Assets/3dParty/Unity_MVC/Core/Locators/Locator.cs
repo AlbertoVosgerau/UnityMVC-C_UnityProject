@@ -44,7 +44,7 @@ namespace UnityMVC.Locator
             }
             catch (Exception e)
             {
-                throw new Exception($"Controller {typeof(U)} already present");
+                throw new Exception($"Controller {typeof(U)} already present. Message:\n{e.Message}");
             }
         }
 
