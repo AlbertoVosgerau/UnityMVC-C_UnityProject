@@ -18,7 +18,6 @@ public partial class ViewTemplate : View
     {
         RegisterControllerEvents();
         StartCoroutine(LateStartRoutine());
-        ControllerStart();
     }
     protected override void InternalOnDestroy()
     {
