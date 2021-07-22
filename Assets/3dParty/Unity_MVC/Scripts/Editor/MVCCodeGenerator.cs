@@ -19,22 +19,22 @@ namespace UnityMVC
     }
     public class MVCCodeGenerator
     {
-        public static void CreateView(string name, bool removeComments)
+        public static void CreateView(string name, bool removeComments, string inheritsFrom = null)
         {
             GenerateScript(name, GetTemplate(ScriptType.View, removeComments), GetPath("Views"), ScriptType.View);
-            GenerateScript(name, GetTemplate(ScriptType.View, removeComments, true), GetPath("Views"), ScriptType.View, true);
+            GenerateScript(name, GetTemplate(ScriptType.View, removeComments, true), GetPath("Views"), ScriptType.View, true, inheritsFrom);
         }
 
-        public static void CreateController(string name, bool removeComments)
+        public static void CreateController(string name, bool removeComments, string inheritsFrom = null)
         {
             GenerateScript(name, GetTemplate(ScriptType.Controller, removeComments), GetPath("Controllers"), ScriptType.Controller);
-            GenerateScript(name, GetTemplate(ScriptType.Controller, removeComments,true), GetPath("Controllers"), ScriptType.Controller, true);
+            GenerateScript(name, GetTemplate(ScriptType.Controller, removeComments,true), GetPath("Controllers"), ScriptType.Controller, true, inheritsFrom);
         }
         
-        public static void CreateViewAndController(string name, bool removeComments)
+        public static void CreateViewAndController(string name, bool removeComments, string controllerInheritsFrom = null, string viewInheritsFrom = null)
         {
-            CreateView(name, removeComments);
-            CreateController(name, removeComments);
+            CreateController(name, removeComments, controllerInheritsFrom);
+            CreateView(name, removeComments, viewInheritsFrom);
         }
         public static void CreateComponent(string name, bool removeComments)
         {
@@ -57,7 +57,7 @@ namespace UnityMVC
             GenerateScript(name, GetTemplate(ScriptType.Solver, removeComments), GetPath("Solvers"), ScriptType.Solver);
         }
 
-        private static void GenerateScript(string name, string template, string path, ScriptType type, bool isPartial = false)
+        private static void GenerateScript(string name, string template, string path, ScriptType type, bool isPartial = false, string inheritsFrom = null)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -69,6 +69,12 @@ namespace UnityMVC
             string templateStr = template;
             string typeStr = type.ToString();
             templateStr = templateStr.Replace($"{typeStr}Template", $"{name}{typeStr}");
+            
+            if (inheritsFrom != null)
+            {
+                ChangeInheritance(ref templateStr, type, inheritsFrom);
+            }
+            
             if (type == ScriptType.View)
             {
                 templateStr = templateStr.Replace($"ControllerTemplate", $"{name}Controller");
@@ -107,6 +113,11 @@ namespace UnityMVC
                 Debug.Log($"{typeStr} {filePath} created!");
             }
             AssetDatabase.Refresh();
+        }
+
+        private static void ChangeInheritance(ref string from, ScriptType type, string to)
+        {
+            from = from.Replace($": {type}", $": {to}");
         }
 
         private static void WriteFile(string path, string str)
