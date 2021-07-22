@@ -1,7 +1,8 @@
-namespace UnityMVC
+namespace UnityMVC.Model
 {
-    public class Solver
+    public abstract class Solver
     {
-    
+        protected abstract void RegisterEvents();
+        protected abstract void UnregisterEvents();
     }
 }

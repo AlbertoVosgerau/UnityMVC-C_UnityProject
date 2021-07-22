@@ -1,6 +1,8 @@
-namespace UnityMVC
+namespace UnityMVC.Model
 {
-    public class Container
+    public abstract class Container
     {
+        protected abstract void RegisterEvents();
+        protected abstract void UnregisterEvents();
     }
 }

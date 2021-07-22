@@ -1,20 +1,29 @@
-using UnityMVC;
-public class ContainerTemplate : Container
-{
-    protected LoaderTemplate Loader
-    {
-        get
-        {
-            if (_loader != null)
-            {
-                return _loader;
-            }
+using UnityMVC.Events;
 
-            _loader = MVC.Loaders.Get<LoaderTemplate>();
-            return _loader;
-        }
+namespace UnityMVC.Events
+{
+    public class ContainerTemplateEvents
+    {
+        // Add events here
     }
-    protected LoaderTemplate _loader;
-    
+}
+
+public partial class ContainerTemplate
+{
+    private LoaderTemplate _loader;
+
+    // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
+    public /*new*/ ContainerTemplateEvents Events => _events;
+    private ContainerTemplateEvents _events = new ContainerTemplateEvents();
+
     // Start your code here
+    protected override void RegisterEvents()
+    {
+        // otherObject.EventName += MyMethod;
+    }
+
+    protected override void UnregisterEvents()
+    {
+        // otherObject.EventName -= MyMethod;
+    }
 }

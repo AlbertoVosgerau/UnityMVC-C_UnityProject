@@ -1,17 +1,29 @@
-using UnityMVC;
-public class LoaderTemplate : Loader
+using UnityMVC.Events;
+
+namespace UnityMVC.Events
 {
-    protected SolverTemplate Solver
+    public class LoaderTemplateEvents
     {
-        get
-        {
-            if (_solver != null)
-            {
-                return _solver;
-            }
-            _solver = MVC.Solvers.Get<SolverTemplate>();
-            return _solver;
-        }
+        // Add events here
     }
-    protected SolverTemplate _solver;
+}
+
+public partial class LoaderTemplate
+{
+    private SolverTemplate _solver;
+    
+    // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
+    public /*new*/ LoaderTemplateEvents Events => _events;
+    private LoaderTemplateEvents _events = new LoaderTemplateEvents();
+    
+    // Start your code here
+    protected override void RegisterEvents()
+    {
+        // otherObject.EventName += MyMethod;
+    }
+    
+    protected override void UnregisterEvents()
+    {
+        // otherObject.EventName -= MyMethod;
+    }
 }

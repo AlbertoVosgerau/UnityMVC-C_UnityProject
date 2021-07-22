@@ -1,53 +1,51 @@
-﻿using UnityMVC;
-public class ViewTemplate : View
+﻿using System;
+using UnityMVC.Events;
+
+namespace UnityMVC.Events
+{
+    public class ViewTemplateEvents
+    {
+        // Add events here
+        public Action<View.View> onViewDestroyed;
+    }
+}
+
+public partial class ViewTemplate
 {
     private ControllerTemplate _controller;
-    protected override void LocateController()
+    
+    // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
+    public /*new*/ ViewTemplateEvents Events => _events;
+    private ViewTemplateEvents _events = new ViewTemplateEvents();
+    
+    // Start your code here
+    protected override void SolveDependencies()
     {
-        _controller = MVC.Controllers.Get<ControllerTemplate>();
+        // Awake calls this method. Solve your dependencies here.
     }
     
     protected override void RegisterControllerEvents()
     {
-        
+        // otherObject.EventName += MyMethod;
     }
 
     protected override void UnregisterControllerEvents()
     {
-
-    }
-    private void StartController()
-    {
-        _controller.SetView(this);
-        _controller.OnViewStart();
-    }
-    
-    // Start your code here
-    
-    protected override void Awake()
-    {
-        base.Awake();
+        // otherObject.EventName -= MyMethod;
     }
 
-    protected override void Start()
+    protected override void StartMVC()
     {
-        base.Start();
-        StartController();
+        // Add your code here
     }
 
-    protected void Update()
+    protected override void LateStartMVC()
     {
-        _controller.OnViewUpdate();
+        // Add your code here
     }
 
-    protected override void OnDestroy()
+    protected override void UpdateMVC()
     {
-        base.OnDestroy();
-        _controller.OnViewDestroy();
-    }
-
-    protected override void SolveDependencies()
-    {
-        // Solve private dependencies
+        // Add your code here
     }
 }
