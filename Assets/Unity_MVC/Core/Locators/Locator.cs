@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
-namespace UnityMVC
+namespace UnityMVC.Locator
 {
     public class Locator<T> where T: class
     {
@@ -13,6 +14,10 @@ namespace UnityMVC
         }
         protected U Create<U>() where U : class, T, new()
         {
+            if (Has<U>())
+            {
+                Debug.LogException(new Exception("Controller already present"));
+            }
             return new U();
         }
     
@@ -22,7 +27,7 @@ namespace UnityMVC
             {
                 Initialize();
             }
-            return _dictionary.ContainsKey(typeof(U));
+            return _dictionary.Keys.Any(x => x.IsAssignableFrom(typeof(U)) || x.IsSubclassOf(typeof(U)) || x.BaseType == typeof(U).BaseType);
         }
     
         public U Get<U>() where U : class, T, new()
@@ -32,7 +37,15 @@ namespace UnityMVC
                 _dictionary[typeof(U)] = Create<U>();
                 return _dictionary[typeof(U)] as U;
             }
-            return _dictionary.OfType<U>().Any() as U;
+
+            try
+            {
+                return _dictionary[typeof(U)] as U;
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Controller {typeof(U)} already present. Message:\n{e.Message}");
+            }
         }
 
         public void Remove(T t)
