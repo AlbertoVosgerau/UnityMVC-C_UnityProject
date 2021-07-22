@@ -13,7 +13,9 @@ namespace UnityMVC
     {
         private string _baseName = "";
         private float _btnWidth = 150;
+        
         private UnityMVCData _data;
+        
         private List<string> _controllerAndViewTypes = new List<string>();
         private int _controllerAndViewTypeIndex;
         private List<string> _loaderSolverAndContainerTypes = new List<string>();
@@ -46,50 +48,126 @@ namespace UnityMVC
 
         void OnGUI()
         {
-            GUILayout.Label("Create MVC Script", EditorStyles.boldLabel);
-            GUILayout.Space(20);
             SetMVCData();
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            EditorGUI.BeginChangeCheck();
-            _data.editorData.scriptsFolder = EditorGUILayout.TextField("Create in Assets/",_data.editorData.scriptsFolder, GUILayout.Width(_btnWidth*2));
-            if (EditorGUI.EndChangeCheck())
-            {
-                OnChangedValue();
-            }
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Space(10);
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            _baseName = EditorGUILayout.TextField("Base File Name", _baseName, GUILayout.Width(_btnWidth*2));
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-            GUILayout.BeginVertical();
-            GUILayout.Space(5);
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            EditorGUI.BeginChangeCheck();
-            _data.editorData.removeComments = GUILayout.Toggle(_data.editorData.removeComments, " Remove comments from generated code", GUILayout.Width(_btnWidth*2));
-            if (EditorGUI.EndChangeCheck())
-            {
-                OnChangedValue();
-            }
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Space(20);
-            ViewAndController();
-            GUILayout.Space(20);
-            Component();
-            GUILayout.Space(20);
-            LoaderSolverAndContainer();
-            GUILayout.EndVertical();
-            Footer();
+            BuildInspector();
         }
 
+        private void BuildInspector()
+        {
+            Header();
+            GUILayout.Space(20);
+            
+            CreateAssetAtArea();
+            GUILayout.Space(10);
+            
+            BaseFileNameArea();
+            
+            GUILayout.BeginVertical();
+            GUILayout.Space(5);
+            
+            RemoveCommentsFromGeneratedCodeArea();
+            GUILayout.Space(20);
+            
+            ViewAndControllerArea();
+            GUILayout.Space(20);
+            
+            ComponentArea();
+            GUILayout.Space(20);
+            
+            LoaderSolverAndContainerArea();
+            GUILayout.EndVertical();
+            
+            Footer();
+        }
+        
+        private static void Header()
+        {
+            GUILayout.Label("Create MVC Script", EditorStyles.boldLabel);
+        }
         private void Footer()
         {
             RegionFooter("Created by Alberto Vosgerau Neto\n\nFeel free to change this in any way you wish ;)\nQuestions and suggestions:\n\nalberto@argames.com.br\n\nWill add documentation link soon, I promise!\n\nHappy coding!");
+        }
+
+        
+        private void CreateAssetAtArea()
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            EditorGUI.BeginChangeCheck();
+            _data.editorData.scriptsFolder = EditorGUILayout.TextField("Create in Assets/", _data.editorData.scriptsFolder,
+                GUILayout.Width(_btnWidth * 2));
+            if (EditorGUI.EndChangeCheck())
+            {
+                OnChangedValue();
+            }
+
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+        }
+        private void BaseFileNameArea()
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            _baseName = EditorGUILayout.TextField("Base File Name", _baseName, GUILayout.Width(_btnWidth * 2));
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+        }
+        private void RemoveCommentsFromGeneratedCodeArea()
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            EditorGUI.BeginChangeCheck();
+            _data.editorData.removeComments = GUILayout.Toggle(_data.editorData.removeComments,
+                " Remove comments from generated code", GUILayout.Width(_btnWidth * 2));
+            if (EditorGUI.EndChangeCheck())
+            {
+                OnChangedValue();
+            }
+
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void ViewAndControllerArea()
+        {
+            RegionHeader("View and Controller");
+
+            ViewAndControllerButton();
+            SingleTypesDropdown(ref _controllerAndViewTypeIndex, _controllerAndViewTypes);
+            GUILayout.Space(10);
+
+            ViewAndControllerButtons();
+            DoubleTypesDropwn(ref _viewTypeIndex, _viewTypes, ref _controllerTypeIndex, _controllerTypes);
+        }
+        private void ComponentArea()
+        {
+            RegionHeader("Component");
+            
+            ComponentButton();
+            SingleTypesDropdown(ref _componentTypeIndex, _componentTypes);
+        }
+        private void LoaderSolverAndContainerArea()
+        {
+            RegionHeader("Model");
+            
+            LoaderSolverAndContainerButton();
+            SingleTypesDropdown(ref _loaderSolverAndContainerIntex, _loaderSolverAndContainerTypes);
+            GUILayout.Space(7);
+
+            ContainerButton();
+            SingleTypesDropdown(ref _containerTypeIndex, _containerrTypes);
+            GUILayout.Space(7);
+            
+            LoaderAndSolverButtons();
+            DoubleTypesDropwn(ref  _loaderTypeIndex, _loaderTypes, ref _solverTypeIndex, _solverTypes);
+        }
+
+
+        private void SetMVCData()
+        {
+            _data = MVCCodeGenerator.GetMVCData();
+            _data.LoadData(MVCCodeGenerator.GetMVCDataPath());
         }
 
         private void OnChangedValue()
@@ -125,7 +203,6 @@ namespace UnityMVC
             }
             return objects;
         }
-
         private void UpdateAllTypes()
         {
             UpdateTypesList(ref _controllerAndViewTypes, typeof(Controller.Controller), " - View");
@@ -138,7 +215,6 @@ namespace UnityMVC
             UpdateTypesList(ref _solverTypes, typeof(Solver));
             ResetAllTypeIndexes();
         }
-
         private void ResetAllTypeIndexes()
         {
             _controllerAndViewTypeIndex = 0;
@@ -154,16 +230,28 @@ namespace UnityMVC
             types.Clear();
             types = GetTypesList(type, suffix);
         }
-
         private void TypesListDropdown(ref int index, List<string> types, float sizeMultiplier = 1)
         {
             index = EditorGUILayout.Popup(index, types.ToArray(), GUILayout.Width(_btnWidth * sizeMultiplier));
         }
-
-        private void SetMVCData()
+        private void SingleTypesDropdown(ref int index, List<string> types)
         {
-            _data = MVCCodeGenerator.GetMVCData();
-            _data.LoadData(MVCCodeGenerator.GetMVCDataPath());
+            LabelInheritFrom();
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            TypesListDropdown(ref index, types, 2);
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        private void DoubleTypesDropwn(ref int index1, List<string> types1, ref int index2, List<string> types2)
+        {
+            LabelInheritFrom();
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            TypesListDropdown(ref _viewTypeIndex, _viewTypes);
+            TypesListDropdown(ref _controllerTypeIndex, _controllerTypes);
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
         }
 
         private void RegionHeader(string header)
@@ -175,7 +263,6 @@ namespace UnityMVC
             GUILayout.EndHorizontal();
             GUILayout.Space(3);
         }
-        
         private void RegionFooter(string str)
         {
             GUILayout.Space(15);
@@ -185,7 +272,6 @@ namespace UnityMVC
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
-
         private void SimpleLabel(string str)
         {
             EditorGUILayout.BeginHorizontal();
@@ -194,60 +280,19 @@ namespace UnityMVC
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
         }
-
-        private void CreateLabel()
+        private void LabelCreate()
         {
             SimpleLabel("Create:");
         }
-
-        private void InheritsFromLabel()
+        private void LabelInheritFrom()
         {
             SimpleLabel("That inherits from:");
         }
 
-        private void SingleTypesDropdown(ref int index, List<string> types)
+
+        private void ViewAndControllerButtons()
         {
-            InheritsFromLabel();
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            TypesListDropdown(ref index, types, 2);
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-        }
-
-        private void DoubleTypesDropwn(ref int index1, List<string> types1, ref int index2, List<string> types2)
-        {
-            InheritsFromLabel();
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            TypesListDropdown(ref _viewTypeIndex, _viewTypes);
-            TypesListDropdown(ref _controllerTypeIndex, _controllerTypes);
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-        }
-
-        private void ViewAndController()
-        {
-            RegionHeader("View and Controller");
-
-            
-            CreateLabel();
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Create View / Controller", GUILayout.Width(_btnWidth*2)))
-            {
-                MVCCodeGenerator.CreateViewAndController(_baseName, _data.editorData.removeComments);
-                OnCreatedFile();
-            }
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-            SingleTypesDropdown(ref _controllerAndViewTypeIndex, _controllerAndViewTypes);
-            GUILayout.Space(10);
-            
-            
-
-            
-            CreateLabel();
+            LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create View", GUILayout.Width(_btnWidth)))
@@ -255,20 +300,33 @@ namespace UnityMVC
                 MVCCodeGenerator.CreateView(_baseName, _data.editorData.removeComments);
                 OnCreatedFile();
             }
+
             if (GUILayout.Button("Create Controller", GUILayout.Width(_btnWidth)))
             {
                 MVCCodeGenerator.CreateController(_baseName, _data.editorData.removeComments);
                 OnCreatedFile();
             }
+
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-            DoubleTypesDropwn(ref _viewTypeIndex, _viewTypes, ref _controllerTypeIndex, _controllerTypes);
         }
-        private void Component()
+        private void ViewAndControllerButton()
         {
-            RegionHeader("Component");
-            
-            CreateLabel();
+            LabelCreate();
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Create View / Controller", GUILayout.Width(_btnWidth * 2)))
+            {
+                MVCCodeGenerator.CreateViewAndController(_baseName, _data.editorData.removeComments);
+                OnCreatedFile();
+            }
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        private void ComponentButton()
+        {
+            LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create Component", GUILayout.Width(_btnWidth * 2)))
@@ -276,15 +334,13 @@ namespace UnityMVC
                 MVCCodeGenerator.CreateComponent(_baseName, _data.editorData.removeComments);
                 OnCreatedFile();
             }
+
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-            SingleTypesDropdown(ref _componentTypeIndex, _componentTypes);
         }
-        private void LoaderSolverAndContainer()
+        private void LoaderSolverAndContainerButton()
         {
-            RegionHeader("Model");
-            
-            CreateLabel();
+            LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create Loader / Solver / Container", GUILayout.Width(_btnWidth * 2)))
@@ -294,14 +350,13 @@ namespace UnityMVC
                 MVCCodeGenerator.CreateSolver(_baseName, _data.editorData.removeComments);
                 OnCreatedFile();
             }
+
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-            
-            SingleTypesDropdown(ref _loaderSolverAndContainerIntex, _loaderSolverAndContainerTypes);
-            
-            GUILayout.Space(7);
-            
-            CreateLabel();
+        }
+        private void ContainerButton()
+        {
+            LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Create Container", GUILayout.Width(_btnWidth * 2)))
@@ -309,27 +364,29 @@ namespace UnityMVC
                 MVCCodeGenerator.CreateContainer(_baseName, _data.editorData.removeComments);
                 OnCreatedFile();
             }
+
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-            SingleTypesDropdown(ref _containerTypeIndex, _containerrTypes);
-            
-            GUILayout.Space(7);
+        }
+        private void LoaderAndSolverButtons()
+        {
+            LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Create Loader",GUILayout.Width(_btnWidth)))
+            if (GUILayout.Button("Create Loader", GUILayout.Width(_btnWidth)))
             {
                 MVCCodeGenerator.CreateLoader(_baseName, _data.editorData.removeComments);
                 OnCreatedFile();
             }
-            
-            if (GUILayout.Button("Create Solver",GUILayout.Width(_btnWidth)))
+
+            if (GUILayout.Button("Create Solver", GUILayout.Width(_btnWidth)))
             {
                 MVCCodeGenerator.CreateSolver(_baseName, _data.editorData.removeComments);
                 OnCreatedFile();
             }
+
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-            DoubleTypesDropwn(ref  _loaderTypeIndex, _loaderTypes, ref _solverTypeIndex, _solverTypes);
         }
     }
 }
