@@ -36,7 +36,7 @@ namespace UnityMVC
             CreateController(name, removeComments, controllerInheritsFrom);
             CreateView(name, removeComments, viewInheritsFrom);
         }
-        public static void CreateComponent(string name, bool removeComments, string view = null, string inheritsFrom = null)
+        public static void CreateComponent(string name, bool removeComments, string view, string inheritsFrom = null)
         {
             GenerateScript(name, GetTemplate(ScriptType.MVCComponent, removeComments), GetPath("Components"), ScriptType.MVCComponent, view, virtualToOverride: inheritsFrom != null);
             GenerateScript(name, GetTemplate(ScriptType.MVCComponent,removeComments,  true), GetPath("Components", true), ScriptType.MVCComponent, view,true, inheritsFrom, inheritsFrom != null);

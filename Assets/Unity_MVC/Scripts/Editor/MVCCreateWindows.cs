@@ -355,7 +355,7 @@ namespace UnityMVC
             if (GUILayout.Button("Create Component", GUILayout.Width(_btnWidth * 2)))
             {
                 string inheritance = _componentTypeIndex == 0? null : _componentTypes[_componentTypeIndex];
-                MVCCodeGenerator.CreateComponent(_baseName, _data.editorData.removeComments, inheritance);
+                MVCCodeGenerator.CreateComponent(_baseName, _data.editorData.removeComments, _componentViewTypes[_componentViewIndex],inheritance);
                 OnCreatedFile();
             }
 
