@@ -33,6 +33,9 @@ namespace UnityMVC
         private int _loaderTypeIndex;
         private List<string> _solverTypes = new List<string>();
         private int _solverTypeIndex;
+        
+        private List<string> _componentViewTypes = new List<string>();
+        private int _componentViewIndex;
 
         [MenuItem("Unity MVC/Open Creation Window")]
         private static void Init()
@@ -73,10 +76,13 @@ namespace UnityMVC
             
             ViewAndControllerArea();
             GUILayout.Space(20);
-            
-            ComponentArea();
-            GUILayout.Space(20);
-            
+
+            if (_componentViewTypes.Count > 0)
+            {
+                ComponentArea();
+                GUILayout.Space(20);
+            }
+
             LoaderSolverAndContainerArea();
             GUILayout.EndVertical();
             
@@ -98,8 +104,7 @@ namespace UnityMVC
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             EditorGUI.BeginChangeCheck();
-            _data.editorData.scriptsFolder = EditorGUILayout.TextField("Create in Assets/", _data.editorData.scriptsFolder,
-                GUILayout.Width(_btnWidth * 2));
+            _data.editorData.scriptsFolder = EditorGUILayout.TextField("Create in Assets/", _data.editorData.scriptsFolder,GUILayout.Width(_btnWidth * 2));
             if (EditorGUI.EndChangeCheck())
             {
                 OnChangedValue();
@@ -141,14 +146,14 @@ namespace UnityMVC
             GUILayout.Space(10);
 
             ViewAndControllerButtons();
-            DoubleTypesDropwn(ref _viewTypeIndex, _viewTypes, ref _controllerTypeIndex, _controllerTypes);
+            DoubleTypesDropdown(ref _viewTypeIndex, _viewTypes, ref _controllerTypeIndex, _controllerTypes);
         }
         private void ComponentArea()
         {
             RegionHeader("Component");
             
             ComponentButton();
-            SingleTypesDropdown(ref _componentTypeIndex, _componentTypes);
+            CustomSingleTypesDropdown(ref _componentTypeIndex, _componentTypes, "and inherits from:");
         }
         private void LoaderSolverAndContainerArea()
         {
@@ -163,7 +168,7 @@ namespace UnityMVC
             GUILayout.Space(7);
             
             LoaderAndSolverButtons();
-            DoubleTypesDropwn(ref  _loaderTypeIndex, _loaderTypes, ref _solverTypeIndex, _solverTypes);
+            DoubleTypesDropdown(ref  _loaderTypeIndex, _loaderTypes, ref _solverTypeIndex, _solverTypes);
         }
 
 
@@ -183,10 +188,13 @@ namespace UnityMVC
             UpdateAllTypes();
         }
 
-        public static List<string> GetTypesList(Type objectType, string suffix)
+        public static List<string> GetTypesList(Type objectType, bool addFirstItem, string suffix)
         {
             List<string> objects = new List<string>();
-            objects.Add("Base");
+            if (addFirstItem)
+            {
+                objects.Add("Base");
+            }
             foreach (Type type in Assembly.GetAssembly(objectType).GetTypes()
                 .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(objectType) && !myType.Name.Contains("Template")))
             {
@@ -208,14 +216,15 @@ namespace UnityMVC
         }
         private void UpdateAllTypes()
         {
-            UpdateTypesList(ref _controllerAndViewTypes, typeof(Controller.Controller), " - View");
-            UpdateTypesList(ref  _loaderSolverAndContainerTypes, typeof(Loader), " - Solver - Container");
+            UpdateTypesList(ref _controllerAndViewTypes, typeof(Controller.Controller), suffix: " - View");
+            UpdateTypesList(ref  _loaderSolverAndContainerTypes, typeof(Loader), suffix: " - Solver - Container");
             UpdateTypesList(ref _controllerTypes, typeof(Controller.Controller));
             UpdateTypesList(ref _viewTypes, typeof(View.View));
             UpdateTypesList(ref _componentTypes, typeof(MVCComponent));
             UpdateTypesList(ref _containerTypes, typeof(Container));
             UpdateTypesList(ref _loaderTypes, typeof(Loader));
             UpdateTypesList(ref _solverTypes, typeof(Solver));
+            UpdateTypesList(ref _componentViewTypes, typeof(View.View), false);
             ResetAllTypeIndexes();
         }
         private void ResetAllTypeIndexes()
@@ -228,31 +237,41 @@ namespace UnityMVC
             _solverTypeIndex = 0;
             _viewTypeIndex = 0;
         }
-        private void UpdateTypesList(ref List<string> types, Type type, string suffix = "")
+        private void UpdateTypesList(ref List<string> types, Type type, bool addFirstItem = true, string suffix = "")
         {
             types.Clear();
-            types = GetTypesList(type, suffix);
+            types = GetTypesList(type, addFirstItem, suffix);
         }
         private void TypesListDropdown(ref int index, List<string> types, float sizeMultiplier = 1)
         {
             index = EditorGUILayout.Popup(index, types.ToArray(), GUILayout.Width(_btnWidth * sizeMultiplier));
         }
-        private void SingleTypesDropdown(ref int index, List<string> types)
+        private void SingleTypesDropdown(ref int index, List<string> types, int multiplier = 2)
         {
             LabelInheritFrom();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            TypesListDropdown(ref index, types, 2);
+            TypesListDropdown(ref index, types, multiplier);
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
-        private void DoubleTypesDropwn(ref int index1, List<string> types1, ref int index2, List<string> types2)
+        private void DoubleTypesDropdown(ref int index1, List<string> types1, ref int index2, List<string> types2)
         {
             LabelInheritFrom();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             TypesListDropdown(ref index1, types1);
             TypesListDropdown(ref index2, types2);
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+
+        private void CustomSingleTypesDropdown(ref int index, List<string> types, string label, int multiplier = 2)
+        {
+            SimpleLabel(label);
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            TypesListDropdown(ref index, types, multiplier);
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
@@ -283,10 +302,6 @@ namespace UnityMVC
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
         }
-        private void LabelCreate()
-        {
-            SimpleLabel("Create:");
-        }
         private void LabelInheritFrom()
         {
             SimpleLabel("That inherits from:");
@@ -294,7 +309,6 @@ namespace UnityMVC
 
         private void ViewAndControllerButtons()
         {
-            LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
@@ -317,7 +331,6 @@ namespace UnityMVC
         }
         private void ViewAndControllerButton()
         {
-            LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
@@ -336,7 +349,6 @@ namespace UnityMVC
         }
         private void ComponentButton()
         {
-            LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
@@ -349,10 +361,10 @@ namespace UnityMVC
 
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+            CustomSingleTypesDropdown(ref _componentViewIndex, _componentViewTypes, "That references:");
         }
         private void LoaderSolverAndContainerButton()
         {
-            LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
@@ -372,7 +384,6 @@ namespace UnityMVC
         }
         private void ContainerButton()
         {
-            LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
@@ -388,7 +399,6 @@ namespace UnityMVC
         }
         private void LoaderAndSolverButtons()
         {
-            LabelCreate();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
