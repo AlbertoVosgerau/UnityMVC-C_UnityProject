@@ -8,8 +8,9 @@ using UnityEngine;
 namespace UnityMVC
 {
     #if UNITY_EDITOR
-    enum ScriptType
+    public enum ScriptType
     {
+        MVCApplication,
         View,
         Controller,
         MVCComponent,
@@ -19,9 +20,14 @@ namespace UnityMVC
     }
     public class MVCCodeGenerator
     {
+        public static void CreateApplication(string name)
+        {
+            GenerateScript(name, GetTemplate(ScriptType.MVCApplication, true), GetPath("Application"), ScriptType.MVCApplication);
+        }
+        
         public static void CreateView(string name, bool removeComments, string inheritsFrom = null)
         {
-            GenerateScript(name, GetTemplate(ScriptType.View, removeComments), GetPath("Views"), ScriptType.View, virtualToOverride: inheritsFrom != null);
+            GenerateScript(name, GetTemplate(ScriptType.View, removeComments), GetPath("Views"), ScriptType.View, inheritsFrom: inheritsFrom, virtualToOverride: inheritsFrom != null);
             GenerateScript(name, GetTemplate(ScriptType.View, removeComments, true), GetPath("Views"), ScriptType.View, null, true, inheritsFrom, inheritsFrom != null);
         }
 
@@ -38,7 +44,7 @@ namespace UnityMVC
         }
         public static void CreateComponent(string name, bool removeComments, string view, string inheritsFrom = null)
         {
-            GenerateScript(name, GetTemplate(ScriptType.MVCComponent, removeComments), GetPath("Components"), ScriptType.MVCComponent, view, virtualToOverride: inheritsFrom != null);
+            GenerateScript(name, GetTemplate(ScriptType.MVCComponent, removeComments), GetPath("Components"), ScriptType.MVCComponent, view, inheritsFrom: inheritsFrom, virtualToOverride: inheritsFrom != null);
             GenerateScript(name, GetTemplate(ScriptType.MVCComponent,removeComments,  true), GetPath("Components", true), ScriptType.MVCComponent, view,true, inheritsFrom, inheritsFrom != null);
         }
         public static void CreateContainer(string name, bool removeComments, string inheritsFrom = null)
@@ -57,7 +63,13 @@ namespace UnityMVC
             GenerateScript(name, GetTemplate(ScriptType.Solver, removeComments), GetPath("Solvers"), ScriptType.Solver, virtualToOverride: inheritsFrom != null);
         }
 
-        private static void GenerateScript(string name, string template, string path, ScriptType type, string view = null, bool isPartial = false, string inheritsFrom = null, bool virtualToOverride = false)
+        public static void UpdatePartial(ScriptType type, string name, string baseType, string path, string view)
+        {
+            string template = GetTemplate(type, true, true);
+            GenerateScript(name, template, path, type, isPartial: true, inheritsFrom: baseType, overrideFile: true, view: view);
+        }
+
+        private static void GenerateScript(string name, string template, string path, ScriptType type, string view = null, bool isPartial = false, string inheritsFrom = null, bool virtualToOverride = false, bool overrideFile = false)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -69,10 +81,18 @@ namespace UnityMVC
             string templateStr = template;
             string typeStr = type.ToString();
             templateStr = templateStr.Replace($"{typeStr}Template", $"{name}{typeStr}");
-            
+
             if (inheritsFrom != null)
             {
-                ApplyInheritance(ref templateStr, type, inheritsFrom);
+                if (isPartial)
+                {
+                    ApplyInheritanceToPartial(ref templateStr, type, inheritsFrom);
+                }
+                else
+                {
+                    //ApplyInheritanceToClass(ref templateStr, type, inheritsFrom);
+                    ApplyInheritanceToModel(ref templateStr, name,type, inheritsFrom);
+                }
             }
 
             if (virtualToOverride)
@@ -83,10 +103,12 @@ namespace UnityMVC
             {
                 RemoveNewKeywork(ref templateStr);
             }
-            
+
             if (type == ScriptType.View)
             {
                 templateStr = templateStr.Replace($"ControllerTemplate", $"{name}Controller");
+                templateStr = templateStr.Replace($"ViewTemplateModel", $"{name}ViewModel");
+                
             }
             if (type == ScriptType.Controller)
             {
@@ -94,11 +116,15 @@ namespace UnityMVC
             }
             if (type == ScriptType.MVCComponent)
             {
-                templateStr = templateStr.Replace($"ComponentTemplateEvents", $"{name}ComponentEvents");
+                templateStr = templateStr.Replace($"MVCComponentTemplateModel", $"{name}ComponentModel");
+                
                 if (view != null)
                 {
                     templateStr = templateStr.Replace("ViewTemplate", view);
+                    string simpleViewName = view.Replace("View", "");
+                    templateStr = templateStr.Replace($"ControllerTemplate", $"{simpleViewName}Controller");
                 }
+               
             }
             if (type == ScriptType.Container)
             {
@@ -108,6 +134,9 @@ namespace UnityMVC
             {
                 templateStr = templateStr.Replace($"SolverTemplate", $"{name}Solver");
             }
+
+            templateStr = templateStr.Replace($"ControllerTemplateEvents", $"{name}ControllerEvents");
+            
             string directoryPath = path;
             string filePath = isPartial? $"{directoryPath}/{name}{typeStr}Partial.cs" : $"{directoryPath}/{name}{typeStr}.cs";
 
@@ -116,7 +145,7 @@ namespace UnityMVC
                 Directory.CreateDirectory(directoryPath);
             }
 
-            if (!File.Exists(filePath))
+            if (!File.Exists(filePath) || overrideFile)
             {
                 WriteFile(filePath, templateStr);
                 Debug.Log($"{typeStr} {filePath} created!");
@@ -124,9 +153,19 @@ namespace UnityMVC
             AssetDatabase.Refresh();
         }
 
-        private static void ApplyInheritance(ref string from, ScriptType type, string to)
+        private static void ApplyInheritanceToPartial(ref string from, ScriptType type, string to)
         {
             from = from.Replace($": {type}", $": {to}");
+        }
+        
+        private static void ApplyInheritanceToClass(ref string from, ScriptType type, string to)
+        {
+            from = from.Replace($"{type}Model", $"{type}Model : {to}Model");
+        }
+        
+        private static void ApplyInheritanceToModel(ref string from, string name, ScriptType type, string to)
+        {
+            from = from.Replace($"MVCModel", $"{to}Model");
         }
 
         private static void ChangeVirtualToOverride(ref string str)
@@ -170,7 +209,7 @@ namespace UnityMVC
             string templateName = isPartial? $"{type.ToString()}TemplatePartial" : $"{type.ToString()}Template";
             string[] assets = AssetDatabase.FindAssets(templateName);
             string path = AssetDatabase.GUIDToAssetPath(assets[0]);
-            string str = File.ReadAllText(path);
+            string str = File.ReadAllText(path);    
 
             if (removeComments)
             {
@@ -182,8 +221,9 @@ namespace UnityMVC
         private static String StringWithoutComments(string str)
         {
             string[] lines = str.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-            var removedCommentsStr = lines.Where(x => !x.Contains("//")).ToArray();
+            var removedCommentsStr = lines.Where(x => !x.Contains("//") || x.Contains("////")).ToArray();
             str = String.Join("\n", removedCommentsStr);
+            str = str.Replace("////", "//");
             return str;
         }
         private static string GetPath(string type, bool isPartial = false)

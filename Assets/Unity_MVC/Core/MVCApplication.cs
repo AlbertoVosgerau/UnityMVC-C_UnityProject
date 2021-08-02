@@ -2,7 +2,7 @@ using UnityMVC.Locator;
 
 namespace UnityMVC
 {
-    public class MVCApplication
+    public partial class MVCApplication
     {
         public static ControllerLocator Controllers => _controllers;
         private static ControllerLocator _controllers = new ControllerLocator();

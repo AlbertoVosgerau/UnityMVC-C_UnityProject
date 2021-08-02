@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,22 +8,23 @@ namespace UnityMVC.Component
 {
     public abstract class MVCComponent : MonoBehaviour
     {
-        public string View => _view.gameObject.name;
-        protected View.View _view;
+        public View.View OwnerView => BaseOwnerView;
+        protected View.View BaseOwnerView;
         public UnityEngine.Component Owner => _owner;
         protected UnityEngine.Component _owner;
         
         [SerializeField] private List<UnityEngine.Component> _unityComponents;
+        public abstract Type GetViewType();
         public abstract void SetView(View.View view);
         protected virtual void OnViewWasSet(View.View view)
         {
-            
+            BaseOwnerView = view;
         }
         public virtual void SetOwner(UnityEngine.Component owner)
         {
             _owner = owner;
         }
-        
+
         protected abstract void RegisterEvents();
         protected abstract void UnregisterEvents();
         protected abstract void SolveDependencies();
@@ -33,44 +35,44 @@ namespace UnityMVC.Component
         private void Awake()
         {
             SolveDependencies();
-            AwakeMVC();
+            MVCAwake();
         }
         private void Start()
         {
             InternalStart();
             StartCoroutine(LateStartRoutine());
-            StartMVC();
+            MVCStart();
         }
         private void Update()
         {
-            UpdateMVC();
+            MVCUpdate();
         }
         private void OnEnable()
         {
-            OnEnableMVC();
+            MVCOnEnable();
         }
         private void OnDisable()
         {
-            OnDisableMVC();
+            MVCOnDisable();
         }
         private void OnDestroy()
         {
-            OnDestroyMVC();
+            MVCOnDestroy();
             InternalOnDestroy();
         }
 
-        protected virtual void AwakeMVC() {}
-        protected virtual void StartMVC() {}
-        protected virtual void UpdateMVC() {}
-        protected virtual void LateStartMVC() {}
-        protected virtual void OnEnableMVC() {}
-        protected virtual void OnDisableMVC() {}
-        protected virtual void OnDestroyMVC() {}
+        protected virtual void MVCAwake() {}
+        protected virtual void MVCStart() {}
+        protected virtual void MVCUpdate() {}
+        protected virtual void MVCLateStart() {}
+        protected virtual void MVCOnEnable() {}
+        protected virtual void MVCOnDisable() {}
+        protected virtual void MVCOnDestroy() {}
 
         protected IEnumerator LateStartRoutine()
         {
             yield return null;
-            LateStartMVC();
+            MVCLateStart();
         }
         
         public void RegisterComponent(UnityEngine.Component component)

@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityMVC.Component;
 
 namespace UnityMVC.View
@@ -27,48 +25,48 @@ namespace UnityMVC.View
             LocateController();
             SolveDependencies();
             InternalAwake();
-            AwakeMVC();
+            MVCAwake();
         }
         private void Start()
         {
             InternalStart();
             ControllerStart();
-            StartMVC();
+            MVCStart();
         }
         private void Update()
         {
             ControllerUpdate();
-            UpdateMVC();
+            MVCUpdate();
         }
         private void OnEnable()
         {
             ControllerOnEnable();
-            OnEnableMVC();
+            MVCOnEnable();
         }
         private void OnDisable()
         {
             ControllerOnDisable();
-            OnDisableMVC();
+            MVCOnDisable();
         }
         private void OnDestroy()
         {
             ControllerOnDestroy();
-            OnDestroyMVC();
+            MVCOnDestroy();
         }
 
-        protected virtual void AwakeMVC() {}
-        protected virtual void StartMVC() {}
-        protected virtual void UpdateMVC() {}
-        protected virtual void LateStartMVC() {}
-        protected virtual void OnEnableMVC() {}
-        protected virtual void OnDisableMVC() {}
-        protected virtual void OnDestroyMVC() {}
+        protected virtual void MVCAwake() {}
+        protected virtual void MVCStart() {}
+        protected virtual void MVCUpdate() {}
+        protected virtual void MVCLateStart() {}
+        protected virtual void MVCOnEnable() {}
+        protected virtual void MVCOnDisable() {}
+        protected virtual void MVCOnDestroy() {}
 
         protected abstract void ControllerStart();
         protected IEnumerator LateStartRoutine()
         {
             yield return null;
-            LateStartMVC();
+            MVCLateStart();
         }
 
         protected abstract void ControllerUpdate();
@@ -78,21 +76,19 @@ namespace UnityMVC.View
         
         private void SolveComponents()
         {
-            InitializeComponentsList();
-            GetComponents();
+            GetComponents<MVCComponent>(true);
             SetViewOnComponents();
         }
-
-        private void InitializeComponentsList()
+        private void GetComponents <T>(bool includeHidden = true) where T : MVCComponent
         {
-            foreach (MVCComponent component in _MVCComponents)
+            List<MVCComponent> localList = new List<MVCComponent>(GetComponentsInChildren<T>(includeHidden));
+            foreach (MVCComponent component in localList)
             {
-                _MVCComponents.Add(component);
+                if (!_MVCComponents.Contains(component) && component.GetViewType() == GetType())
+                {
+                    _MVCComponents.Add(component);
+                }
             }
-        }
-        private void GetComponents()
-        {
-            _MVCComponents = GetComponentsInChildren<MVCComponent>().ToList();
         }
         private void SetViewOnComponents()
         {
@@ -114,7 +110,7 @@ namespace UnityMVC.View
         {
             T newComponent = gameObject.AddComponent<T>();
             RegisterComponentToView(newComponent);
-            return newComponent as T;
+            return newComponent;
         }
         public T GetMVCComponent<T>() where T : MVCComponent
         {

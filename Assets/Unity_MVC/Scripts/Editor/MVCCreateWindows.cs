@@ -14,6 +14,10 @@ namespace UnityMVC
         private string _baseName = "";
         private float _btnWidth = 150;
         private Vector2 _scrollPosition = new Vector2(0,0);
+        private int _currentTab = 0;
+        private string[] _tabs = new[] {"Controllers and Views", "Components", "Models"};
+        private int _currentPath = 0;
+        private List<string> _dataPaths;
         
         private UnityMVCData _data;
         
@@ -36,8 +40,9 @@ namespace UnityMVC
         
         private List<string> _componentViewTypes = new List<string>();
         private int _componentViewIndex;
+        private bool _hasApplication = false;
 
-        [MenuItem("Unity MVC/Open Creation Window")]
+        [MenuItem("Unity MVC/Open Creation Window", priority = 0)]
         private static void Init()
         {
             MVCCreateWindows window = (MVCCreateWindows)GetWindow(typeof(MVCCreateWindows));
@@ -47,13 +52,26 @@ namespace UnityMVC
 
         private void OnEnable()
         {
+            _hasApplication = HasApplication();
+            //SolveDatapaths();
+            SetMVCData();
             UpdateAllTypes();
+        }
+
+        private void SolveDatapaths()
+        {
+            _dataPaths = AssetDatabase.GetAllAssetPaths().ToList();
+            foreach (string path in _dataPaths)
+            {
+                List<string> foldersList = path.Split('/', '\\').ToList();
+                foldersList.Remove(foldersList.Last());
+                String.Join(path, foldersList);
+            }
         }
 
         void OnGUI()
         {
-            SetMVCData();
-            _scrollPosition = GUILayout.BeginScrollView(_scrollPosition, false, true);
+            _scrollPosition = GUILayout.BeginScrollView(_scrollPosition, false, true,GUIStyle.none, GUI.skin.verticalScrollbar);
             BuildInspector();
             GUILayout.EndScrollView();
         }
@@ -70,28 +88,63 @@ namespace UnityMVC
             
             GUILayout.BeginVertical();
             GUILayout.Space(5);
-            
-            RemoveCommentsFromGeneratedCodeArea();
-            GUILayout.Space(20);
-            
-            ViewAndControllerArea();
-            GUILayout.Space(20);
 
-            if (_componentViewTypes.Count > 0)
+            if (!_hasApplication)
             {
-                ComponentArea();
+                GUILayout.Space(15);
+                CreateApplicationArea();
+            }
+            else
+            {
+                RemoveCommentsFromGeneratedCodeArea();
                 GUILayout.Space(20);
+                Tabs();
             }
 
-            LoaderSolverAndContainerArea();
+            //Footer();
             GUILayout.EndVertical();
-            
-            Footer();
         }
-        
+
         private static void Header()
         {
             GUILayout.Label("Create MVC Script", EditorStyles.boldLabel);
+        }
+        
+        private void CreateApplicationArea()
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+                        
+            if (GUILayout.Button($"Create MVCApplication", GUILayout.Width(_btnWidth * 2)))
+            {
+                MVCCodeGenerator.CreateApplication(_baseName);
+                OnCreatedFile();
+            }
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+
+        private void Tabs()
+        {
+            _currentTab = GUILayout.Toolbar(_currentTab, _tabs);
+
+            GUILayout.Space(20);
+            switch (_currentTab)
+            {
+                case 0:
+                    ViewAndControllerArea();
+                    break;
+                case 1:
+                    if (_componentViewTypes.Count > 0)
+                    {
+                        ComponentArea();
+                    }
+                    break;
+                case 2:
+                    LoaderSolverAndContainerArea();
+                    break;
+            }
         }
         private void Footer()
         {
@@ -186,11 +239,13 @@ namespace UnityMVC
         private void OnCreatedFile()
         {
             UpdateAllTypes();
+            _hasApplication = HasApplication();
         }
 
         public static List<string> GetTypesList(Type objectType, bool addFirstItem, string suffix)
         {
             List<string> objects = new List<string>();
+            objects.Add("Select a Class...");
             if (addFirstItem)
             {
                 objects.Add("Base");
@@ -312,16 +367,26 @@ namespace UnityMVC
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
-            if (GUILayout.Button("Create View", GUILayout.Width(_btnWidth)))
+            if (GUILayout.Button($"Create {_baseName}View", GUILayout.Width(_btnWidth)))
             {
-                string inheritance = _viewTypeIndex == 0? null : _viewTypes[_viewTypeIndex];
+                if (_viewTypeIndex == 0)
+                {
+                    ShowClassSelectionDialog();
+                    return;
+                }
+                string inheritance = _viewTypeIndex == 1? null : _viewTypes[_viewTypeIndex];
                 MVCCodeGenerator.CreateView(_baseName, _data.editorData.removeComments, inheritance);
                 OnCreatedFile();
             }
 
-            if (GUILayout.Button("Create Controller", GUILayout.Width(_btnWidth)))
+            if (GUILayout.Button($"Create {_baseName}Controller", GUILayout.Width(_btnWidth)))
             {
-                string inheritance = _controllerTypeIndex == 0? null : _controllerTypes[_controllerTypeIndex];
+                if (_controllerTypeIndex == 0)
+                {
+                    ShowClassSelectionDialog();
+                    return;
+                }
+                string inheritance = _controllerTypeIndex == 1? null : _controllerTypes[_controllerTypeIndex];
                 MVCCodeGenerator.CreateController(_baseName, _data.editorData.removeComments, inheritance);
                 OnCreatedFile();
             }
@@ -334,10 +399,15 @@ namespace UnityMVC
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
-            if (GUILayout.Button("Create View / Controller", GUILayout.Width(_btnWidth * 2)))
+            if (GUILayout.Button($"Create {_baseName}View / {_baseName}Controller", GUILayout.Width(_btnWidth * 2)))
             {
-                string controller = _controllerAndViewTypeIndex == 0? null : _controllerTypes[_controllerAndViewTypeIndex];
-                string view = _controllerAndViewTypeIndex == 0? null : _viewTypes[_controllerAndViewTypeIndex];
+                if (_controllerAndViewTypeIndex == 0 || _controllerAndViewTypeIndex == 0)
+                {
+                    ShowClassSelectionDialog();
+                    return;
+                }
+                string controller = _controllerAndViewTypeIndex == 1? null : _controllerTypes[_controllerAndViewTypeIndex];
+                string view = _controllerAndViewTypeIndex == 1? null : _viewTypes[_controllerAndViewTypeIndex];
                 
                 MVCCodeGenerator.CreateViewAndController(_baseName, _data.editorData.removeComments, controller, view);
                 
@@ -352,9 +422,14 @@ namespace UnityMVC
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
-            if (GUILayout.Button("Create Component", GUILayout.Width(_btnWidth * 2)))
+            if (GUILayout.Button($"Create {_baseName}Component", GUILayout.Width(_btnWidth * 2)))
             {
-                string inheritance = _componentTypeIndex == 0? null : _componentTypes[_componentTypeIndex];
+                if (_componentTypeIndex == 0)
+                {
+                    ShowClassSelectionDialog();
+                    return;
+                }
+                string inheritance = _componentTypeIndex == 1? null : _componentTypes[_componentTypeIndex];
                 MVCCodeGenerator.CreateComponent(_baseName, _data.editorData.removeComments, _componentViewTypes[_componentViewIndex],inheritance);
                 OnCreatedFile();
             }
@@ -368,11 +443,16 @@ namespace UnityMVC
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
-            if (GUILayout.Button("Create Loader / Solver / Container", GUILayout.Width(_btnWidth * 2)))
+            if (GUILayout.Button($"Create {_baseName}Loader/{_baseName}Solver/{_baseName}Container", GUILayout.Width(_btnWidth * 2)))
             {
-                string loader = _loaderSolverAndContainerIntex == 0? null : _loaderTypes[_loaderSolverAndContainerIntex];
-                string solver = _loaderSolverAndContainerIntex == 0? null : _solverTypes[_loaderSolverAndContainerIntex];
-                string container = _loaderSolverAndContainerIntex == 0? null : _containerTypes[_loaderSolverAndContainerIntex];
+                if (_loaderSolverAndContainerIntex == 0 || _loaderSolverAndContainerIntex == 0 || _loaderSolverAndContainerIntex == 0)
+                {
+                    ShowClassSelectionDialog();
+                    return;
+                }
+                string loader = _loaderSolverAndContainerIntex == 1? null : _loaderTypes[_loaderSolverAndContainerIntex];
+                string solver = _loaderSolverAndContainerIntex == 1? null : _solverTypes[_loaderSolverAndContainerIntex];
+                string container = _loaderSolverAndContainerIntex == 1? null : _containerTypes[_loaderSolverAndContainerIntex];
                 MVCCodeGenerator.CreateContainer(_baseName, _data.editorData.removeComments, container);
                 MVCCodeGenerator.CreateLoader(_baseName, _data.editorData.removeComments, loader);
                 MVCCodeGenerator.CreateSolver(_baseName, _data.editorData.removeComments, solver);
@@ -387,9 +467,14 @@ namespace UnityMVC
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
-            if (GUILayout.Button("Create Container", GUILayout.Width(_btnWidth * 2)))
+            if (GUILayout.Button($"Create {_baseName}Container", GUILayout.Width(_btnWidth * 2)))
             {
-                string inheritance = _containerTypeIndex == 0? null : _containerTypes[_containerTypeIndex];
+                if (_containerTypeIndex == 0)
+                {
+                    ShowClassSelectionDialog();
+                    return;
+                }
+                string inheritance = _containerTypeIndex == 1? null : _containerTypes[_containerTypeIndex];
                 MVCCodeGenerator.CreateContainer(_baseName, _data.editorData.removeComments, inheritance);
                 OnCreatedFile();
             }
@@ -402,22 +487,57 @@ namespace UnityMVC
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
-            if (GUILayout.Button("Create Loader", GUILayout.Width(_btnWidth)))
+            if (GUILayout.Button($"Create {_baseName}Loader", GUILayout.Width(_btnWidth)))
             {
-                string inheritance = _loaderTypeIndex == 0? null : _loaderTypes[_loaderTypeIndex];
+                if (_loaderTypeIndex == 0)
+                {
+                    ShowClassSelectionDialog();
+                    return;
+                }
+                string inheritance = _loaderTypeIndex == 1? null : _loaderTypes[_loaderTypeIndex];
                 MVCCodeGenerator.CreateLoader(_baseName, _data.editorData.removeComments, inheritance);
                 OnCreatedFile();
             }
             
-            if (GUILayout.Button("Create Solver", GUILayout.Width(_btnWidth)))
+            if (GUILayout.Button($"Create {_baseName}Solver", GUILayout.Width(_btnWidth)))
             {
-                string inheritance = _solverTypeIndex == 0? null : _solverTypes[_solverTypeIndex];
+                if (_solverTypeIndex == 0)
+                {
+                    ShowClassSelectionDialog();
+                    return;
+                }
+                string inheritance = _solverTypeIndex == 1? null : _solverTypes[_solverTypeIndex];
                 MVCCodeGenerator.CreateSolver(_baseName, _data.editorData.removeComments, inheritance);
                 OnCreatedFile();
             }
 
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+        }
+
+        private void ShowClassSelectionDialog()
+        {
+            EditorUtility.DisplayDialog("Invalid operation", "Please, select the reference or inheritance class for your new script.", "Ok!");
+        }
+
+        private bool HasApplication()
+        {
+            List<string> assets = AssetDatabase.FindAssets("MVCApplication").ToList();
+
+            List<string> paths = new List<string>();
+
+            for (int i = 0; i < assets.Count; i++)
+            {
+                paths.Add(AssetDatabase.GUIDToAssetPath(assets[i]));
+            }
+            
+            string path = paths.FirstOrDefault(x => !x.Contains("Unity_MVC/") && !x.Contains("Unity_MVC\\"));
+
+            if (paths == null || path == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

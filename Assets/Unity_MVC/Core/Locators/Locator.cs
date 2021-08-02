@@ -27,7 +27,7 @@ namespace UnityMVC.Locator
             {
                 Initialize();
             }
-            return _dictionary.Keys.Any(x => x.IsAssignableFrom(typeof(U)) || x.IsSubclassOf(typeof(U)) || x.BaseType == typeof(U).BaseType);
+            return _dictionary.Keys.Any(x => x.IsAssignableFrom(typeof(U)) || x.IsSubclassOf(typeof(U)) || x is U);
         }
     
         public U Get<U>() where U : class, T, new()

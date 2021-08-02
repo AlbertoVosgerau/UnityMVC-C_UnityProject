@@ -22,43 +22,49 @@ namespace UnityMVC.Controller
         public void OnViewAwake()
         {
             SolveDependencies();
-            AwakeMVC();
+            InternalAwake();
+            RegisterEvents();
+            MVCAwake();
         }
         public void OnViewStart()
         {
             CoroutineHelper.StartCoroutine(this,LateStartRoutine());
-            StartMVC();
+            MVCStart();
         }
-        public virtual void OnViewUpdate()
+        
+        public void OnViewUpdate()
         {
-            UpdateMVC();
+            MVCUpdate();
         }
+        
         public void OnViewOnEnable()
         {
-            OnEnableMVC();
+            MVCOnEnable();
         }
         public void OnViewOnDisable()
         {
-            OnDisableMVC();
+            MVCOnDisable();
         }
         public void OnViewDestroy()
         {
-            OnDestroyMVC();
+            UnregisterEvents();
+            MVCOnDestroy();
             CoroutineHelper.StoppAllCoroutinesFromSender(this);
+            InternalOnDestroy();
         }
         protected IEnumerator LateStartRoutine()
         {
             yield return null;
-            LateStartMVC();
+            MVCLateStart();
         }
         
-        protected virtual void AwakeMVC() {}
-        protected virtual void StartMVC() {}
-        protected virtual void UpdateMVC() {}
-        protected virtual void OnEnableMVC() {}
-        protected virtual void OnDisableMVC() {}
-        protected virtual void OnDestroyMVC() {}
-        protected virtual void LateStartMVC()
+        protected virtual void MVCAwake() {}
+        protected virtual void MVCStart() {}
+        protected virtual void MVCUpdate() {}
+        protected virtual void MVCOnEnable() {}
+        protected virtual void MVCOnDisable() {}
+        protected virtual void MVCOnDestroy() {}
+        protected virtual void MVCLateStart()
         {
         }
     }

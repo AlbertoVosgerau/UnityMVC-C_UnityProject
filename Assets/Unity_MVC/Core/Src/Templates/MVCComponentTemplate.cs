@@ -1,24 +1,25 @@
-﻿using System;
-using UnityMVC.Events;
+﻿using UnityMVC.Events;
 
 namespace UnityMVC.Events
 {
-    public class MVCComponentTemplateEvents
+    public partial class ControllerTemplateEvents
     {
         // Add your actions and events here
-        public Action onCreated;
-        public Action onDestroyed;
+    }
+}
+
+namespace UnityMVC.Model
+{
+    public class MVCComponentTemplateModel : MVCModel
+    {
+        // Add data here
     }
 }
 
 public partial class MVCComponentTemplate
 {
-    private new ViewTemplate _view;
-    
-    // Access Events from here. Please, use Observer pattern, people who uses Observer patterns are nice people.
-    public /*new*/ MVCComponentTemplateEvents Events => _events;
-    private MVCComponentTemplateEvents _events = new MVCComponentTemplateEvents();
-    
+    //// MVC properties available: View, Events and Data
+
     // Start your code here
     protected override void SolveDependencies()
     {
@@ -34,18 +35,23 @@ public partial class MVCComponentTemplate
     {
         // otherObject.EventName -= MyMethod;
     }
-
-    protected override void StartMVC()
+    
+    protected override void MVCAwake()
     {
         // Add your code here
     }
 
-    protected override void LateStartMVC()
+    protected override void MVCStart()
     {
         // Add your code here
     }
 
-    protected override void UpdateMVC()
+    protected override void MVCLateStart()
+    {
+        // Add your code here
+    }
+
+    protected override void MVCUpdate()
     {
         // Add your code here
     }
