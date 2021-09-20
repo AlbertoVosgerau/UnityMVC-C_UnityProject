@@ -125,6 +125,10 @@ namespace UnityMVC.Editor
                     ApplyInheritanceToModel(ref templateStr, name,type, inheritsFrom);
                 }
             }
+            else
+            {
+                templateStr = templateStr.Replace($"/*NEW*/", $"");
+            }
 
             if (virtualToOverride)
             {
