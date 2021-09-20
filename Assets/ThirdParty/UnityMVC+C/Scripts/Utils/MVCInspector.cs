@@ -2,13 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 using UnityMVC.Component;
 
 namespace UnityMVC.Editor
 {
 
+    public class MVCDataDependencies
+    {
+        public MVCInspectorData controllers;
+        public MVCInspectorData views;
+        public MVCInspectorData mvcComponents;
+        public MVCInspectorData mvcComponentGroups;
+        public MVCInspectorData unityComponents;
+    }
+
     public class MVCInspectorData
     {
+        public Type src;
         public List<MVCInspectorDataTypeResult> results = new List<MVCInspectorDataTypeResult>();
     }
 
@@ -19,9 +30,26 @@ namespace UnityMVC.Editor
     }
     public class MVCInspector
     {
+        public static MVCDataDependencies GetDependenciesList()
+        {
+            MVCDataDependencies data = new MVCDataDependencies();
+
+            data.controllers = GetDependencies(typeof(Controller.Controller));
+            data.views = GetDependencies(typeof(View.View));
+            data.unityComponents = GetDependencies(typeof(UnityComponent.UnityComponent));
+            data.mvcComponentGroups = GetDependencies(typeof(MVCComponentGroup));
+
+            var mvcComponents = GetDependencies(typeof(MVCComponent));
+            //mvcComponents.results = mvcComponents.results.Where(x => !(x is MVCComponentGroup)).ToList();
+            data.unityComponents = mvcComponents;
+
+            return data;
+        }
+        
         public static MVCInspectorData GetDependencies(Type requiredType)
         {
             MVCInspectorData data = new MVCInspectorData();
+            data.src = requiredType;
 
             List<Type> controllers = Assembly.GetAssembly(requiredType).GetTypes().ToList();
             
@@ -35,36 +63,10 @@ namespace UnityMVC.Editor
             {
                 MVCInspectorDataTypeResult result = new MVCInspectorDataTypeResult();
                 result.type = type;
-                result.dependenciesRoot = GetControllerDependencies(type);
+                result.dependenciesRoot = GetFields(type, requiredType);
                 data.results.Add(result);
             }
-
             return data;
-        }
-        
-        
-
-        public static List<FieldInfo> GetControllerDependencies(Type target)
-        {
-            return GetFields(target, typeof(Controller.Controller));
-        }
-    
-        private static List<FieldInfo> GetComponentGroupDependencies(Type target)
-        {
-            return GetFields(target, typeof(MVCComponentGroup));
-        }
-        
-        private static List<FieldInfo> GetComponentDependencies(Type target)
-        {
-            return GetFields(target, typeof(MVCComponentGroup));
-        }
-        private static List<FieldInfo> GetViewDependencies(Type target)
-        {
-            return GetFields(target, typeof(MVCComponentGroup));
-        }
-        private static List<FieldInfo> GetUnityComponentDependencies(Type target)
-        {
-            return GetFields(target, typeof(MVCComponentGroup));
         }
 
         private static List<FieldInfo> GetFields(Type target, Type srcType)
@@ -88,11 +90,25 @@ namespace UnityMVC.Editor
             {
                 if (filteredTypes.Contains(field.FieldType))
                 {
-                    dependencies.Add(field);
+                    if (IsMVC(field.FieldType))
+                    {
+                        dependencies.Add(field);
+                    }
                 }
             }
 
             return dependencies;
         }
+
+        private static bool IsMVC(Type type)
+        {
+            bool isController = type.BaseType == typeof(Controller.Controller);
+            bool isView = type.BaseType == typeof(View.View);
+            bool isMvcComponent = type.BaseType == typeof(MVCComponent);
+            bool isUnityComponent = type.BaseType == typeof(UnityComponent.UnityComponent);
+
+            return isController || isView || isMvcComponent || isUnityComponent;
+        }
     }
+    
 }

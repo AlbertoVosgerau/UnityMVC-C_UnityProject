@@ -55,11 +55,7 @@ namespace UnityMVC.Editor
         private int _moduleIndex;
         private List<UnityMVCModuleModel> _modules = new List<UnityMVCModuleModel>();
 
-        private MVCInspectorData _controllersDependencies;
-        private MVCInspectorData _viewDependencies;
-        private MVCInspectorData _mvcComponentDependencies;
-        private MVCInspectorData _unityComponentDependencies;
-        
+        private MVCDataDependencies _dependenciesList;
 
         private List<string> _componentViewTypes = new List<string>();
         private int _componentViewIndex;
@@ -86,10 +82,7 @@ namespace UnityMVC.Editor
 
         private void UpdateDependencies()
         {
-            _controllersDependencies = MVCInspector.GetDependencies(typeof(Controller.Controller));
-            _viewDependencies = MVCInspector.GetDependencies(typeof(View.View));
-            _mvcComponentDependencies = MVCInspector.GetDependencies(typeof(MVCComponent));
-            _unityComponentDependencies = MVCInspector.GetDependencies(typeof(UnityComponent.UnityComponent));
+            _dependenciesList = MVCInspector.GetDependenciesList();
         }
 
         private void SolveDatapaths()
@@ -409,14 +402,19 @@ namespace UnityMVC.Editor
             GUILayout.Label($"Still a work in progress.", GUILayout.Width(_btnWidth * 2));
             GUILayout.Space(20);
             
-            DependencyFeedback(_controllersDependencies, MessageType.Info);
-            DependencyFeedback(_mvcComponentDependencies, MessageType.Info);
-            DependencyFeedback(_viewDependencies, MessageType.Warning);
-            DependencyFeedback(_unityComponentDependencies, MessageType.Warning);
+            DependencyFeedback(_dependenciesList.controllers, MessageType.Info);
+            DependencyFeedback(_dependenciesList.mvcComponentGroups, MessageType.Info);
+            DependencyFeedback(_dependenciesList.views, MessageType.Warning);
+            DependencyFeedback(_dependenciesList.mvcComponents, MessageType.Warning);
+            DependencyFeedback(_dependenciesList.unityComponents, MessageType.Warning);
         }
 
         private void DependencyFeedback(MVCInspectorData data, MessageType messageType)
         {
+            if (data == null || data.results == null)
+            {
+                return;
+            }
             foreach (var dependency in data.results)
             {
                 GUILayout.Label($"{dependency.type.Name} depends on:", GUILayout.Width(_btnWidth * 2));
