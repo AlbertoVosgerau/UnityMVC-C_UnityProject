@@ -94,6 +94,7 @@ namespace UnityMVC.Editor
             string typeStr = type.ToString();
             templateStr = templateStr.Replace($"{typeStr}Template", $"{name}{typeStr}");
             templateStr = SolveBaseMethods(templateStr, inheritsFrom == null);
+            
 
             if (nameSpace != null)
             {
@@ -108,6 +109,8 @@ namespace UnityMVC.Editor
 
             if (inheritsFrom != null)
             {
+                templateStr = templateStr.Replace($"/*NEW*/", $"new");
+                
                 if (type == ScriptType.UnityComponent)
                 {
                     ApplyInheritanceToUnityComponent(ref templateStr, inheritsFrom);

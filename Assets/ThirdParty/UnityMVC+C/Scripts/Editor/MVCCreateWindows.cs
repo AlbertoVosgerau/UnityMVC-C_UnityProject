@@ -146,6 +146,13 @@ namespace UnityMVC.Editor
 
         private void MainTabs()
         {
+            if (_modules.Count == 0)
+            {
+                NoModuleFoundArea();
+                ModuleWizardArea();
+                return;
+            }
+            
             _mainTabIntex = GUILayout.Toolbar(_mainTabIntex, _mainTabs);
             
             GUILayout.Space(10);
@@ -198,12 +205,23 @@ namespace UnityMVC.Editor
             }
         }
 
+        private void NoModuleFoundArea()
+        {
+            GUILayout.Space(10);
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.LabelField("No module found. Please create your first module!", GUILayout.Width(_btnWidth * 2));
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(10);
+        }
+
         private void ModuleWizardArea()
         {
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             EditorGUI.BeginChangeCheck();
-            GUILayout.Label(new GUIContent($"Modules path: Assets/{_modulePath}", $"Assets/{_modulePath}"), GUILayout.Width(_btnWidth + 165));
+            GUILayout.Label(new GUIContent($"Modules path: Assets/{_modulePath}", $"Assets/{_modulePath}"), GUILayout.Width(_btnWidth + 185));
             if (EditorGUI.EndChangeCheck())
             {
                 OnChangedValue();
@@ -241,8 +259,7 @@ namespace UnityMVC.Editor
             _newModuleName = EditorGUILayout.TextField("Module name:", _newModuleName, GUILayout.Width(_btnWidth * 2));
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
-            
-            
+
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             _newNamespace = EditorGUILayout.TextField("Namespace", _newNamespace, GUILayout.Width(_btnWidth * 2));
