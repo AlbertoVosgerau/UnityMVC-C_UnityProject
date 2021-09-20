@@ -54,7 +54,8 @@ namespace UnityMVC.Editor
 
         private int _moduleIndex;
         private List<UnityMVCModuleModel> _modules = new List<UnityMVCModuleModel>();
-        
+
+        private MVCInspectorData _controllersDependencies;
         private List<string> _componentViewTypes = new List<string>();
         private int _componentViewIndex;
         private bool _hasApplication = false;
@@ -75,6 +76,12 @@ namespace UnityMVC.Editor
             _modulePath = UnityMVCResources.Data.modulesRelativePath;
             UnityMVCModuleData.GetAllModules();
             UpdateAllTypes();
+            UpdateDependencies();
+        }
+
+        private void UpdateDependencies()
+        {
+            _controllersDependencies = MVCInspector.UpdateControllersDependencies();
         }
 
         private void SolveDatapaths()
@@ -391,11 +398,18 @@ namespace UnityMVC.Editor
         
         private void InspectorArea()
         {
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.LabelField("Not implemented yet. Will contain dependency inspector", GUILayout.Width(_btnWidth * 2));
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
+            GUILayout.Label($"Still a work in progress.", GUILayout.Width(_btnWidth * 2));
+            GUILayout.Space(20);
+
+            foreach (var dependency in _controllersDependencies.results)
+            {
+                GUILayout.Label($"{dependency.type.Name} depends on:", GUILayout.Width(_btnWidth * 2));
+                foreach (var value in dependency.dependenciesRoot)
+                {
+                    GUILayout.Label($"{value.FieldType}", GUILayout.Width(_btnWidth * 2));
+                }
+                GUILayout.Space(20);
+            }
         }
         
         private void NamespacePrefixArea()
@@ -503,6 +517,7 @@ namespace UnityMVC.Editor
         {
             UnityMVCResources.LoadData();
             UpdateAllTypes();
+            UpdateDependencies();
             _hasApplication = HasApplication();
         }
 
