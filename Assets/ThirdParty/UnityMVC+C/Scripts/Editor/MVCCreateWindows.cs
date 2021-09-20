@@ -406,7 +406,7 @@ namespace UnityMVC.Editor
                 GUILayout.Label($"{dependency.type.Name} depends on:", GUILayout.Width(_btnWidth * 2));
                 foreach (var value in dependency.dependenciesRoot)
                 {
-                    GUILayout.Label($"{value.FieldType}", GUILayout.Width(_btnWidth * 2));
+                    GUILayout.Label($"{value.FieldType} on variable {value.Name}", GUILayout.Width(_btnWidth * 2));
                 }
                 GUILayout.Space(20);
             }
