@@ -56,6 +56,11 @@ namespace UnityMVC.Editor
         private List<UnityMVCModuleModel> _modules = new List<UnityMVCModuleModel>();
 
         private MVCInspectorData _controllersDependencies;
+        private MVCInspectorData _viewDependencies;
+        private MVCInspectorData _mvcComponentDependencies;
+        private MVCInspectorData _unityComponentDependencies;
+        
+
         private List<string> _componentViewTypes = new List<string>();
         private int _componentViewIndex;
         private bool _hasApplication = false;
@@ -81,7 +86,10 @@ namespace UnityMVC.Editor
 
         private void UpdateDependencies()
         {
-            _controllersDependencies = MVCInspector.UpdateControllersDependencies();
+            _controllersDependencies = MVCInspector.GetDependencies(typeof(Controller.Controller));
+            _viewDependencies = MVCInspector.GetDependencies(typeof(View.View));
+            _mvcComponentDependencies = MVCInspector.GetDependencies(typeof(MVCComponent));
+            _unityComponentDependencies = MVCInspector.GetDependencies(typeof(UnityComponent.UnityComponent));
         }
 
         private void SolveDatapaths()
@@ -400,13 +408,21 @@ namespace UnityMVC.Editor
         {
             GUILayout.Label($"Still a work in progress.", GUILayout.Width(_btnWidth * 2));
             GUILayout.Space(20);
+            
+            DependencyFeedback(_controllersDependencies, MessageType.Info);
+            DependencyFeedback(_mvcComponentDependencies, MessageType.Info);
+            DependencyFeedback(_viewDependencies, MessageType.Warning);
+            DependencyFeedback(_unityComponentDependencies, MessageType.Warning);
+        }
 
-            foreach (var dependency in _controllersDependencies.results)
+        private void DependencyFeedback(MVCInspectorData data, MessageType messageType)
+        {
+            foreach (var dependency in data.results)
             {
                 GUILayout.Label($"{dependency.type.Name} depends on:", GUILayout.Width(_btnWidth * 2));
                 foreach (var value in dependency.dependenciesRoot)
                 {
-                    GUILayout.Label($"{value.FieldType} on variable {value.Name}", GUILayout.Width(_btnWidth * 2));
+                    EditorGUILayout.HelpBox($"{value.FieldType} on variable {value.Name}", messageType);
                 }
                 GUILayout.Space(20);
             }

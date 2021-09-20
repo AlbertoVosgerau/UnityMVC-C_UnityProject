@@ -19,12 +19,10 @@ namespace UnityMVC.Editor
     }
     public class MVCInspector
     {
-        public static MVCInspectorData UpdateControllersDependencies()
+        public static MVCInspectorData GetDependencies(Type requiredType)
         {
             MVCInspectorData data = new MVCInspectorData();
 
-            Type requiredType = typeof(Controller.Controller);
-            
             List<Type> controllers = Assembly.GetAssembly(requiredType).GetTypes().ToList();
             
             List<Type> filteredTypes = controllers.Where(x =>
@@ -43,18 +41,33 @@ namespace UnityMVC.Editor
 
             return data;
         }
+        
+        
 
         public static List<FieldInfo> GetControllerDependencies(Type target)
         {
-            return GetDependencies(target, typeof(Controller.Controller));
+            return GetFields(target, typeof(Controller.Controller));
         }
     
         private static List<FieldInfo> GetComponentGroupDependencies(Type target)
         {
-            return GetDependencies(target, typeof(MVCComponentGroup));
+            return GetFields(target, typeof(MVCComponentGroup));
+        }
+        
+        private static List<FieldInfo> GetComponentDependencies(Type target)
+        {
+            return GetFields(target, typeof(MVCComponentGroup));
+        }
+        private static List<FieldInfo> GetViewDependencies(Type target)
+        {
+            return GetFields(target, typeof(MVCComponentGroup));
+        }
+        private static List<FieldInfo> GetUnityComponentDependencies(Type target)
+        {
+            return GetFields(target, typeof(MVCComponentGroup));
         }
 
-        public static List<FieldInfo> GetDependencies(Type target, Type srcType)
+        private static List<FieldInfo> GetFields(Type target, Type srcType)
         {
             List<FieldInfo> dependencies = new List<FieldInfo>();
             List<Type> types = Assembly.GetAssembly(srcType).GetTypes().ToList();
@@ -66,6 +79,7 @@ namespace UnityMVC.Editor
                 !x.Name.Contains("Template") &&
                 x.Namespace != target.Namespace &&
                 !(x.Name.Contains($"{target.Name}Events") && x.Namespace.Contains($"MVC.Events")) &&
+                !(x.Name.Contains($"{target.Name}Model") && x.Namespace.Contains($"MVC.Model")) &&
                 x != target).ToList();
 
             List<FieldInfo> fields = target.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic).ToList();
