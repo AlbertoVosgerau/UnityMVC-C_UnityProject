@@ -114,6 +114,22 @@ namespace UnityMVC.Editor
         {
             GUILayout.Space(10);
             
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Label("Let's create your MVC+C Project!", GUILayout.Width(_btnWidth * 2));
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            GUILayout.Label("Create the base name for your project below.", GUILayout.Width(_btnWidth * 2));
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            
+            GUILayout.Space(10);
+
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
@@ -121,10 +137,25 @@ namespace UnityMVC.Editor
             
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+            
+            GUILayout.Space(10);
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Label($"This will create the project structure and your {_projectName}MVCApplication.", GUILayout.Width(_btnWidth * 2));
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Label($"It will be found under _Project/Commons/Application/Scripts.", GUILayout.Width(_btnWidth * 2));
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            
+            GUILayout.Space(10);
 
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-
             _projectName = _projectName.Replace(" ", "");
             
 
