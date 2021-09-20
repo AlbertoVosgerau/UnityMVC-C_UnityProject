@@ -32,7 +32,7 @@ public class MVCMenu : EditorWindow
         }
     }
 
-    [MenuItem("Unity MVC+C/Update Folder Structure", priority = 300)]
+    //[MenuItem("Unity MVC+C/Update Folder Structure", priority = 300)]
     private static void CreateFolderStructure()
     {
         MVCFolderStructure.SetupProjectFolder();
