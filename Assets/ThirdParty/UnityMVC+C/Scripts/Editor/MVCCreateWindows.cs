@@ -543,7 +543,9 @@ namespace UnityMVC.Editor
                 GUILayout.Label($"{dependency.type.Name} depends on:", GUILayout.Width(_btnWidth * 2));
                 foreach (var value in dependency.dependenciesRoot)
                 {
-                    EditorGUILayout.HelpBox($"{value.FieldType} on variable {value.Name}", messageType);
+                    char[] separators = new char[] { '.' };
+                    string[] name = value.FieldType.ToString().Split(separators);
+                    EditorGUILayout.HelpBox($"{name.Last()} on variable {value.Name}", messageType);
                 }
                 GUILayout.Space(20);
             }
