@@ -19,7 +19,20 @@ namespace UnityMVC.Editor
 
     public class MVCInspectorData
     {
-        public Type src;
+        public int ItemsCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (MVCInspectorDataTypeResult result in results)
+                {
+                    count += result.dependenciesRoot.Count;
+                }
+
+                return count;
+            }
+        }
+        
         public List<MVCInspectorDataTypeResult> results = new List<MVCInspectorDataTypeResult>();
     }
 
@@ -30,33 +43,33 @@ namespace UnityMVC.Editor
     }
     public class MVCInspector
     {
-        public static MVCDataDependencies GetDependenciesList()
+        public static MVCDataDependencies GetDependenciesList(string nameSpaceFilter)
         {
             MVCDataDependencies data = new MVCDataDependencies();
 
-            data.controllers = GetDependencies(typeof(Controller.Controller));
-            data.views = GetDependencies(typeof(View.View));
-            data.unityComponents = GetDependencies(typeof(UnityComponent.UnityComponent));
-            data.mvcComponentGroups = GetDependencies(typeof(MVCComponentGroup));
+            data.controllers = GetDependencies(typeof(Controller.Controller), nameSpaceFilter);
+            data.views = GetDependencies(typeof(View.View), nameSpaceFilter);
+            data.unityComponents = GetDependencies(typeof(UnityComponent.UnityComponent), nameSpaceFilter);
+            data.mvcComponentGroups = GetDependencies(typeof(MVCComponentGroup), nameSpaceFilter);
 
-            var mvcComponents = GetDependencies(typeof(MVCComponent));
-            //mvcComponents.results = mvcComponents.results.Where(x => !(x is MVCComponentGroup)).ToList();
-            data.unityComponents = mvcComponents;
+            var mvcComponents = GetDependencies(typeof(MVCComponent), nameSpaceFilter);
+            mvcComponents.results = mvcComponents.results.Where(x => !(x.type == typeof(MVCComponentGroup))).ToList();
+            data.mvcComponents = mvcComponents;
 
             return data;
         }
         
-        public static MVCInspectorData GetDependencies(Type requiredType)
+        public static MVCInspectorData GetDependencies(Type requiredType, string nameSpaceFilter)
         {
             MVCInspectorData data = new MVCInspectorData();
-            data.src = requiredType;
 
             List<Type> controllers = Assembly.GetAssembly(requiredType).GetTypes().ToList();
-            
+
             List<Type> filteredTypes = controllers.Where(x =>
                 x.IsClass &&
                 !x.IsAbstract &&
                 x.IsSubclassOf(requiredType) &&
+                x.Namespace == nameSpaceFilter &&
                 !x.Name.Contains("Template")).ToList();
 
             foreach (Type type in filteredTypes)
