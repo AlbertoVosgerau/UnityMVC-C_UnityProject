@@ -405,7 +405,7 @@ namespace UnityMVC.Editor
         
         private void InspectorArea()
         {
-            GUILayout.Label($"Dependency inspector. Maps external dependencies of the modules", GUILayout.Width(_btnWidth * 2));
+            GUILayout.Label($"Dependency inspector. Maps MVC+C modules that depends on each other", GUILayout.Width(_btnWidth * 2));
             GUILayout.Space(20);
 
             for (int i = 0; i < _dependenciesList.Count; i++)
@@ -428,31 +428,44 @@ namespace UnityMVC.Editor
 
                 var icon = DependenciesAreOk(dependencyInfo)? EditorGUIUtility.IconContent("d_winbtn_mac_max") : EditorGUIUtility.IconContent("d_console.warnicon.sml");
 
-                string text = $"{classesCount.ToString("00")} classes and {dependenciesCount.ToString("00")} dependencies - {name}";
+                string text = $"{classesCount.ToString("00")} MVC+C classes and {dependenciesCount.ToString("00")} MVC+C dependencies - {name}";
                 
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(5);
                 GUILayout.Label(icon, GUIStyle.none);
-                _dependenciesFoldout[i] = EditorGUILayout.Foldout(_dependenciesFoldout[i],  text);
-                
-                if (_dependenciesFoldout[i])
+                if (dependenciesCount == 0)
                 {
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Space(-55);
-                    GUILayout.BeginVertical();
-                    GUILayout.Space(25);
-                    bool controllersOk = ControllerDependenciesAreOk(dependencyInfo.controllers);
-                    MessageType controllerMessage = controllersOk? MessageType.Info : MessageType.Warning;
-                    DependencyFeedback(dependencyInfo.controllers, controllerMessage);
-                    DependencyFeedback(dependencyInfo.mvcComponentGroups, MessageType.Info);
-                    DependencyFeedback(dependencyInfo.views, MessageType.Warning);
-                    DependencyFeedback(dependencyInfo.mvcComponents, MessageType.Warning);
-                    DependencyFeedback(dependencyInfo.unityComponents, MessageType.Warning);
-                    GUILayout.EndVertical();
-                    GUILayout.FlexibleSpace();
-                    GUILayout.FlexibleSpace();
-                    GUILayout.EndHorizontal();
+                    GUILayout.Label($"   {text}");
                 }
+                else
+                {
+                    _dependenciesFoldout[i] = EditorGUILayout.Foldout(_dependenciesFoldout[i], text);
+                    
+                    if (_dependenciesFoldout[i] && dependenciesCount > 0)
+                    {
+                        GUILayout.BeginHorizontal();
+                        GUILayout.Space(-55);
+                        GUILayout.BeginVertical();
+                        GUILayout.Space(25);
+                        bool controllersOk = ControllerDependenciesAreOk(dependencyInfo.controllers);
+                        MessageType controllerMessage = controllersOk? MessageType.Info : MessageType.Warning;
+                        DependencyFeedback(dependencyInfo.controllers, controllerMessage);
+                    
+                        bool componentGroupsOk = MVCComponentsDependenciesAreOk(dependencyInfo.mvcComponentGroups);
+                        MessageType componentGroupsMessage = componentGroupsOk? MessageType.Info : MessageType.Warning;
+                        DependencyFeedback(dependencyInfo.mvcComponentGroups, componentGroupsMessage);
+                    
+                        DependencyFeedback(dependencyInfo.views, MessageType.Warning);
+                        DependencyFeedback(dependencyInfo.mvcComponents, MessageType.Warning);
+                        DependencyFeedback(dependencyInfo.unityComponents, MessageType.Warning);
+                        GUILayout.EndVertical();
+                        GUILayout.FlexibleSpace();
+                        GUILayout.FlexibleSpace();
+                        GUILayout.EndHorizontal();
+                    }
+                }
+                
+                
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
 
@@ -482,14 +495,36 @@ namespace UnityMVC.Editor
             return true;
         }
 
+        private bool MVCComponentsDependenciesAreOk(MVCInspectorData data)
+        {
+            foreach (var dependency in data.results)
+            {
+                if (dependency.dependenciesRoot.Count == 0)
+                {
+                    return true;
+                }
+                
+                foreach (var value in dependency.dependenciesRoot)
+                {
+                    if (value.FieldType.BaseType != typeof(MVCComponent))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         private bool DependenciesAreOk(MVCDataDependencies info)
         {
             bool controllerDependenciesAreOk = ControllerDependenciesAreOk(info.controllers);
+            bool cgAreOk = MVCComponentsDependenciesAreOk(info.mvcComponentGroups);
             bool viewsAreOk = info.views.ItemsCount == 0;
             bool componentsAreOk = info.mvcComponents.ItemsCount == 0;
             bool unityComponentsAreOk = info.unityComponents.ItemsCount == 0;
 
-            return controllerDependenciesAreOk && viewsAreOk && componentsAreOk && unityComponentsAreOk;
+            return cgAreOk && controllerDependenciesAreOk && viewsAreOk && componentsAreOk && unityComponentsAreOk;
         }
 
         private bool CheckIfHasDependency(MVCDataDependencies dependencies)
@@ -541,6 +576,7 @@ namespace UnityMVC.Editor
                 }
                 
                 GUILayout.Label($"{dependency.type.Name} depends on:", GUILayout.Width(_btnWidth * 2));
+
                 foreach (var value in dependency.dependenciesRoot)
                 {
                     char[] separators = new char[] { '.' };
