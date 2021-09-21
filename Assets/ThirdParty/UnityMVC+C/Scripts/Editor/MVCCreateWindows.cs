@@ -536,7 +536,7 @@ namespace UnityMVC.Editor
             {
                 if (dependency.dependenciesRoot.Count == 0)
                 {
-                    GUILayout.Label($"{dependency.type.Name} has no dependency", GUILayout.Width(_btnWidth * 2));
+                    //GUILayout.Label($"{dependency.type.Name} has no dependency", GUILayout.Width(_btnWidth * 2));
                     return;
                 }
                 

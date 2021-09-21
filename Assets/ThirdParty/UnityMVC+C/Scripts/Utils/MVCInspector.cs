@@ -53,7 +53,7 @@ namespace UnityMVC.Editor
             data.mvcComponentGroups = GetDependencies(typeof(MVCComponentGroup), nameSpaceFilter);
 
             var mvcComponents = GetDependencies(typeof(MVCComponent), nameSpaceFilter);
-            mvcComponents.results = mvcComponents.results.Where(x => !(x.type == typeof(MVCComponentGroup))).ToList();
+            mvcComponents.results = mvcComponents.results.Where(x => x.type.ToString() == typeof(MVCComponentGroup).ToString()).ToList();
             data.mvcComponents = mvcComponents;
 
             return data;
