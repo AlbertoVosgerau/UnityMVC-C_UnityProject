@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.Graphs;
 using UnityEngine;
 using UnityMVC.Component;
 using UnityMVC.Model;
@@ -429,22 +430,25 @@ namespace UnityMVC.Editor
                 var icon = DependenciesAreOk(dependencyInfo)? EditorGUIUtility.IconContent("d_winbtn_mac_max") : EditorGUIUtility.IconContent("d_console.warnicon.sml");
 
                 string text = $"<b>{name} Module</b>:  {classesCount.ToString("00")} MVC+C classes and {dependenciesCount.ToString("00")} MVC+C dependencies";
-                
-                GUIStyle style = new GUIStyle();
-                style.richText = true;
-                style.normal.textColor =new Color(0.8f, 0.8f, 0.8f);
-                
-                
+
+
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(5);
                 GUILayout.Label(icon, GUIStyle.none);
                 if (dependenciesCount == 0)
                 {
-                    EditorGUILayout.LabelField($"   {text}", style);
+                    GUIStyle textStyle = new GUIStyle();
+                    textStyle.richText = true;
+                    textStyle.normal.textColor =new Color(0.8f, 0.8f, 0.8f);
+                    EditorGUILayout.LabelField($"   {text}", textStyle);
                 }
                 else
                 {
-                    _dependenciesFoldout[i] = EditorGUILayout.Foldout(_dependenciesFoldout[i], $"    {text}", style);
+                    GUIStyle foldoutStyle = new GUIStyle("Foldout");
+                    foldoutStyle.richText = true;
+                    foldoutStyle.normal.textColor =new Color(0.8f, 0.8f, 0.8f);
+                    
+                    _dependenciesFoldout[i] = EditorGUILayout.Foldout(_dependenciesFoldout[i], text, foldoutStyle);
                     
                     if (_dependenciesFoldout[i] && dependenciesCount > 0)
                     {
