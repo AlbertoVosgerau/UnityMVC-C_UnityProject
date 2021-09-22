@@ -5,7 +5,7 @@ namespace UnityMVC.Controller
 {
     public abstract class Controller
     {
-        internal abstract void SetView(View.View view);
+        public abstract void SetView(View.View view);
         public abstract View.View GetView();
         public abstract bool IsActive();
         protected void DontDestroyOnLoad(View.View view)
@@ -23,35 +23,35 @@ namespace UnityMVC.Controller
         protected abstract void RegisterEvents();
         protected abstract void UnregisterEvents();
 
-        internal void OnViewAwake()
+        public void OnViewAwake()
         {
             SolveDependencies();
             InternalAwake();
             RegisterEvents();
             MVCAwake();
         }
-        internal void OnViewStart()
+        public void OnViewStart()
         {
             CoroutineHelper.StartCoroutine(this,LateStartRoutine());
             MVCStart();
         }
         
-        internal void OnViewUpdate()
+        public void OnViewUpdate()
         {
             MVCUpdate();
         }
         
-        internal void OnViewOnEnable()
+        public void OnViewOnEnable()
         {
             InternalOnEnable();
             MVCOnEnable();
         }
-        internal void OnViewOnDisable()
+        public void OnViewOnDisable()
         {
             InternalOnDisable();
             MVCOnDisable();
         }
-        internal void OnViewDestroy()
+        public void OnViewDestroy()
         {
             UnregisterEvents();
             MVCOnDestroy();

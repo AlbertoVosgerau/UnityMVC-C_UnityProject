@@ -428,7 +428,7 @@ namespace UnityMVC.Editor
 
                 var icon = DependenciesAreOk(dependencyInfo)? EditorGUIUtility.IconContent("d_winbtn_mac_max") : EditorGUIUtility.IconContent("d_console.warnicon.sml");
 
-                string text = $"{classesCount.ToString("00")} MVC+C classes and {dependenciesCount.ToString("00")} MVC+C dependencies - {name}";
+                string text = $"{name} Module:  {classesCount.ToString("00")} MVC+C classes and {dependenciesCount.ToString("00")} MVC+C dependencies";
                 
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(5);
@@ -705,21 +705,14 @@ namespace UnityMVC.Editor
                 objects.Add("Base");
             }
 
-            List<Type> types = Assembly.GetAssembly(objectType).GetTypes().ToList();
+            List<Type> types = MVCReflectionUtil.GetTypes(objectType, namespaceFilter);
             
             if (types == null || types.Count == 0)
             {
                 return objects;
             }
 
-            List<Type> filteredTypes = types.Where(x =>
-                x.IsClass &&
-                !x.IsAbstract &&
-                x.IsSubclassOf(objectType) &&
-                !x.Name.Contains("Template") &&
-                x.Namespace.Contains(namespaceFilter)).ToList();
-
-            foreach (Type type in filteredTypes)
+            foreach (Type type in types)
             {
                 string str = $"{type.Name}{suffix}";
                 objects.Add(str);
@@ -727,39 +720,10 @@ namespace UnityMVC.Editor
             
             return objects;
         }
-        
-        public static List<string> GetTNamespacesList(Type objectType)
-        {
-            List<string> objects = new List<string>();
-            
-            List<Type> types = Assembly.GetAssembly(objectType).GetTypes().ToList();
-            
-            if (types == null || types.Count == 0)
-            {
-                return objects;
-            }
-
-            List<Type> filteredTypes = types.Where(x =>
-                x.IsClass &&
-                !x.IsAbstract &&
-                x.IsSubclassOf(objectType) &&
-                !x.Name.Contains("Template")).ToList();
-
-
-            foreach (Type type in filteredTypes)
-            {
-                string str = $"{type.Namespace}";
-                if (objects.Contains(str))
-                {
-                    continue;
-                }
-                objects.Add(str);
-            }
-            return objects;
-        }
-        
         private void UpdateAllTypes()
         {
+            MVCReflectionUtil.UpdateData();
+            
             UpdateTypesList(ref _controllerAndViewTypes, typeof(Controller.Controller),_namespace, suffix: " - View");
             UpdateTypesList(ref  _loaderSolverAndContainerTypes, typeof(Loader), _namespace, suffix: " - Solver - Container");
             UpdateTypesList(ref _controllerTypes, typeof(Controller.Controller), _namespace);

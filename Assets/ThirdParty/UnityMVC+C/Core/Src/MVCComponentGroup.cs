@@ -23,7 +23,7 @@ namespace UnityMVC.Component
             return false;
         }
 
-        internal override void SetView(View.View view)
+        public override void SetView(View.View view)
         {
         }
 

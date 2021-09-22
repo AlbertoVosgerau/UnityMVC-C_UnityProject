@@ -303,6 +303,15 @@ namespace UnityMVC.Editor
             Directory.CreateDirectory(prefabsFolder);
             Directory.CreateDirectory(scriptsFolder);
             Directory.CreateDirectory(scenesFolder);
+            
+            string assemblyDefinitionTemplate = GetAssemblyDefinitionTemplate();
+            string GUID = GetMVCAssemblyDefinitionGUID();
+            string assemblyDefinitionPath = $"{scriptsFolder}/{newModuleName}.asmdef";
+
+            string assemblyDefinition = assemblyDefinitionTemplate.Replace("/*NAME*/", $"{newModuleName}");
+            assemblyDefinition = assemblyDefinition.Replace("/*GUID/", GUID);
+            
+            MVCFileUtil.WriteFile(assemblyDefinitionPath, assemblyDefinition);
 
             UnityMVCModuleModel newModule =  UnityMVCModuleData.GenerateModuleMetadata(absolutePath, newModuleName, newNamespace);
             UnityMVCResources.Data.currentModule = newModule;
@@ -310,6 +319,23 @@ namespace UnityMVC.Editor
             CreateViewAndController(newNamespace, newModuleName, true);
             return newModule;
         }
+        
+        private static string GetMVCAssemblyDefinitionGUID()
+        {
+            string[] asset = AssetDatabase.FindAssets("UnityMVC.C");
+            var GUID = asset[0];
+            return GUID;
+        }
+        
+        private static string GetAssemblyDefinitionTemplate()
+        {
+            string templateName = "AssemblyDefinitionTemplate";
+            string[] assets = AssetDatabase.FindAssets(templateName);
+            string path = AssetDatabase.GUIDToAssetPath(assets[0]);
+            string str = File.ReadAllText(path);
+            
+            return str;
+        }
     }
-    #endif
+#endif
 }

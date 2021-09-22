@@ -111,16 +111,16 @@ namespace UnityMVC.View
                 component.SetView(this);
             }
         }
-        internal void RegisterComponentToView(MVCComponent mvcComponent)
+        public void RegisterComponentToView(MVCComponent mvcComponent)
         {
             _MVCComponents.Add(mvcComponent);
         }
-        internal void UnregisterComponentFromView(MVCComponent mvcComponent)
+        public void UnregisterComponentFromView(MVCComponent mvcComponent)
         {
             _MVCComponents.Remove(mvcComponent);
         }
         
-        internal T AddMVCComponent<T>(GameObject gameObject) where T : MVCComponent, new()
+        public T AddMVCComponent<T>(GameObject gameObject) where T : MVCComponent, new()
         {
             T newComponent = gameObject.AddComponent<T>();
             RegisterComponentToView(newComponent);
