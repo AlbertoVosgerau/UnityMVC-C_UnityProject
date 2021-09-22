@@ -428,14 +428,17 @@ namespace UnityMVC.Editor
 
                 var icon = DependenciesAreOk(dependencyInfo)? EditorGUIUtility.IconContent("d_winbtn_mac_max") : EditorGUIUtility.IconContent("d_console.warnicon.sml");
 
-                string text = $"{name} Module:  {classesCount.ToString("00")} MVC+C classes and {dependenciesCount.ToString("00")} MVC+C dependencies";
+                string text = $"<b>{name} Module</b>:  {classesCount.ToString("00")} MVC+C classes and {dependenciesCount.ToString("00")} MVC+C dependencies";
                 
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(5);
                 GUILayout.Label(icon, GUIStyle.none);
                 if (dependenciesCount == 0)
                 {
-                    GUILayout.Label($"   {text}");
+                    GUIStyle style = new GUIStyle();
+                    style.richText = true;
+                    style.normal.textColor =new Color(0.8f, 0.8f, 0.8f);
+                    EditorGUILayout.LabelField($"   {text}", style);
                 }
                 else
                 {
