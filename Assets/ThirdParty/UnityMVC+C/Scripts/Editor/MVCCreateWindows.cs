@@ -590,6 +590,9 @@ namespace UnityMVC.Editor
                 {
                     char[] separators = new char[] { '.' };
                     string[] name = value.FieldType.ToString().Split(separators);
+                    var helpBoxStyle = EditorStyles.helpBox;
+                    helpBoxStyle.fontSize = 13;
+
                     EditorGUILayout.HelpBox($"{name.Last()} on variable {value.Name}", messageType);
                 }
                 GUILayout.Space(20);
