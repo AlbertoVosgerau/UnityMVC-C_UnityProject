@@ -101,11 +101,6 @@ namespace UnityMVC.Editor
                 templateStr = templateStr.Replace("/*<NAMESPACE>*/", $"namespace {nameSpace}\n{{");
                 templateStr = templateStr.Replace("/*}*/", $"}}");
             }
-            
-            if (removeComments)
-            {
-                templateStr = StringWithoutComments(templateStr);
-            }
 
             if (inheritsFrom != null)
             {
@@ -151,6 +146,19 @@ namespace UnityMVC.Editor
                     string inheritance = inheritsFrom.Replace("View", "");
                     templateStr = templateStr.Replace($"ControllerTemplate", $"{inheritance}Controller");
                     templateStr = templateStr.Replace($"ViewTemplateModel", $"{inheritance}ViewModel");
+
+                    char[] filters = new[] {'#'};
+                    List<string> eventsFilter = templateStr.Split(filters).ToList();
+                    for (int i = 0; i < eventsFilter.Count; i++)
+                    {
+                        if (eventsFilter[i].Contains("namespace UnityMVC.Events"))
+                        {
+                            eventsFilter.Remove(eventsFilter[i]);
+                            break;
+                        }
+                    }
+
+                    templateStr = string.Join("", eventsFilter);
                 }
                 
             }
@@ -190,6 +198,11 @@ namespace UnityMVC.Editor
             }
 
             templateStr = templateStr.Replace($"ControllerTemplateEvents", $"{name}ControllerEvents");
+
+            if (removeComments)
+            {
+                templateStr = StringWithoutComments(templateStr);
+            }
             
             string directoryPath = path;
             string filePath = isPartial? $"{directoryPath}/{name}{typeStr}Partial.cs" : $"{directoryPath}/{name}{typeStr}.cs";
