@@ -115,7 +115,7 @@ namespace UnityMVC.Editor
                 {
                     ApplyInheritanceToUnityComponent(ref templateStr, inheritsFrom);
                 }
-                
+
                 if (isPartial)
                 {
                     ApplyInheritanceToPartial(ref templateStr, type, inheritsFrom);
@@ -141,8 +141,17 @@ namespace UnityMVC.Editor
 
             if (type == ScriptType.View)
             {
-                templateStr = templateStr.Replace($"ControllerTemplate", $"{name}Controller");
-                templateStr = templateStr.Replace($"ViewTemplateModel", $"{name}ViewModel");
+                if(inheritsFrom == null)
+                {
+                    templateStr = templateStr.Replace($"ControllerTemplate", $"{name}Controller");
+                    templateStr = templateStr.Replace($"ViewTemplateModel", $"{name}ViewModel");
+                }
+                else
+                {
+                    string inheritance = inheritsFrom.Replace("View", "");
+                    templateStr = templateStr.Replace($"ControllerTemplate", $"{inheritance}Controller");
+                    templateStr = templateStr.Replace($"ViewTemplateModel", $"{inheritance}ViewModel");
+                }
                 
             }
             if (type == ScriptType.Controller)
