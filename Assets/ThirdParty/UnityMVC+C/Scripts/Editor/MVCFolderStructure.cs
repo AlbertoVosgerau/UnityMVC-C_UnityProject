@@ -11,10 +11,10 @@ namespace UnityMVC.Editor
         public static string ScriptsFolder => $"{ProjectFolder}/Scripts";
         public static string ScenesFolder => $"{ProjectFolder}/Scenes";
         public static string PrefabsFolder => $"{ProjectFolder}/Prefabs";
-        public static string CommonsFolder => $"{ProjectFolder}/Commons";
-        public static string CommonsModules => $"{ProjectFolder}/Commons/Modules";
-        public static string CommonsPrefabsFolder => $"{ProjectFolder}/Commons/Prefabs";
-        public static string CommonsScriptsFolder => $"{ProjectFolder}/Commons/Scripts";
+        public static string CommonFolder => $"{ProjectFolder}/Common";
+        public static string CommonsModules => $"{ProjectFolder}/Modules";
+        public static string CommonsPrefabsFolder => $"{CommonFolder}Prefabs";
+        public static string CommonsScriptsFolder => $"{CommonFolder}Scripts";
         public static string ApplicationFolder => $"{ProjectFolder}/Application/Scripts/Application";
         public static string ModulesFolder => $"{ProjectFolder}/Modules";
     
@@ -26,7 +26,7 @@ namespace UnityMVC.Editor
                    Directory.Exists(ScriptsFolder) &&
                    Directory.Exists(ScenesFolder) &&
                    Directory.Exists(PrefabsFolder) &&
-                   Directory.Exists(CommonsFolder) &&
+                   Directory.Exists(CommonFolder) &&
                    Directory.Exists(CommonsModules) &&
                    Directory.Exists(CommonsPrefabsFolder) &&
                    Directory.Exists(CommonsScriptsFolder) &&
@@ -64,9 +64,9 @@ namespace UnityMVC.Editor
                 Directory.CreateDirectory(PrefabsFolder);
             }
         
-            if(!Directory.Exists(CommonsFolder))
+            if(!Directory.Exists(CommonFolder))
             {
-                Directory.CreateDirectory(CommonsFolder);
+                Directory.CreateDirectory(CommonFolder);
             }
         
             if(!Directory.Exists(CommonsModules))
