@@ -63,9 +63,9 @@ namespace UnityMVC.Editor
         {
             MVCInspectorData data = new MVCInspectorData();
 
-            List<Type> controllers = Assembly.GetAssembly(requiredType).GetTypes().ToList();
+            List<Type> types = MVCReflectionUtil.GetTypes(requiredType);
 
-            List<Type> filteredTypes = controllers.Where(x =>
+            List<Type> filteredTypes = types.Where(x =>
                 x.IsClass &&
                 !x.IsAbstract &&
                 x.IsSubclassOf(requiredType) &&
@@ -85,8 +85,7 @@ namespace UnityMVC.Editor
         private static List<FieldInfo> GetFields(Type target, Type srcType)
         {
             List<FieldInfo> dependencies = new List<FieldInfo>();
-            List<Type> types = Assembly.GetAssembly(srcType).GetTypes().ToList();
-
+            List<Type> types = MVCReflectionUtil.GetTypes(srcType);
 
             List<Type> filteredTypes = types.Where(x =>
                 x.IsClass &&

@@ -16,7 +16,7 @@ namespace UnityMVC.Component
         [SerializeField] private List<UnityEngine.Component> _unityComponents;
         public abstract Type GetViewType();
         public abstract bool IsActive();
-        internal abstract void SetView(View.View view);
+        public abstract void SetView(View.View view);
         protected virtual void OnViewWasSet(View.View view)
         {
             BaseOwnerView = view;
@@ -88,11 +88,11 @@ namespace UnityMVC.Component
             MVCLateStart();
         }
         
-        internal void RegisterComponent(UnityEngine.Component component)
+        public void RegisterComponent(UnityEngine.Component component)
         {
             _unityComponents.Add(component);
         }
-        internal void UnregisterComponent(UnityEngine.Component component)
+        public void UnregisterComponent(UnityEngine.Component component)
         {
             _unityComponents.Remove(component);
         }

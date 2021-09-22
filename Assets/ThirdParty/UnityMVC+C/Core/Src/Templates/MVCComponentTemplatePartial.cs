@@ -31,7 +31,7 @@ using UnityMVC.View;
             return isActive && viewExists;
         }
         
-        internal override void SetView(View view)
+        public override void SetView(View view)
         {
             BaseOwnerView = view as ViewTemplate;
             OnViewWasSet(BaseOwnerView);

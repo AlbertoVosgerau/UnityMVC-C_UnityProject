@@ -14,7 +14,7 @@ using UnityMVC.View;
         public /*NEW*/ ControllerTemplateEvents Events => _events;
         private readonly ControllerTemplateEvents _events = new ControllerTemplateEvents();
         
-        internal override void SetView(View view)
+        public override void SetView(View view)
         {
             if (_view != null)
             {

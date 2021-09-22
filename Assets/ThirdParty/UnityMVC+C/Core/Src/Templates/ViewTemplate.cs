@@ -1,5 +1,5 @@
 ﻿using System;
-
+//#=
 namespace UnityMVC.Events
 {
     public partial class ControllerTemplateEvents
@@ -10,6 +10,7 @@ namespace UnityMVC.Events
         public Action<View.View> onViewDestroyed;
     }
 }
+//#
 
 namespace UnityMVC.Model
 {

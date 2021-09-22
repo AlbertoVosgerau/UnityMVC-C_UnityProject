@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.Graphs;
 using UnityEngine;
 using UnityMVC.Component;
 using UnityMVC.Model;
@@ -428,18 +429,26 @@ namespace UnityMVC.Editor
 
                 var icon = DependenciesAreOk(dependencyInfo)? EditorGUIUtility.IconContent("d_winbtn_mac_max") : EditorGUIUtility.IconContent("d_console.warnicon.sml");
 
-                string text = $"{classesCount.ToString("00")} MVC+C classes and {dependenciesCount.ToString("00")} MVC+C dependencies - {name}";
-                
+                string text = $"<b>{name} Module</b>:  {classesCount.ToString("00")} MVC+C classes and {dependenciesCount.ToString("00")} MVC+C dependencies";
+
+
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(5);
                 GUILayout.Label(icon, GUIStyle.none);
                 if (dependenciesCount == 0)
                 {
-                    GUILayout.Label($"   {text}");
+                    GUIStyle textStyle = new GUIStyle();
+                    textStyle.richText = true;
+                    textStyle.normal.textColor =new Color(0.8f, 0.8f, 0.8f);
+                    EditorGUILayout.LabelField($"   {text}", textStyle);
                 }
                 else
                 {
-                    _dependenciesFoldout[i] = EditorGUILayout.Foldout(_dependenciesFoldout[i], text);
+                    GUIStyle foldoutStyle = new GUIStyle("Foldout");
+                    foldoutStyle.richText = true;
+                    foldoutStyle.normal.textColor =new Color(0.8f, 0.8f, 0.8f);
+                    
+                    _dependenciesFoldout[i] = EditorGUILayout.Foldout(_dependenciesFoldout[i], text, foldoutStyle);
                     
                     if (_dependenciesFoldout[i] && dependenciesCount > 0)
                     {
@@ -581,6 +590,9 @@ namespace UnityMVC.Editor
                 {
                     char[] separators = new char[] { '.' };
                     string[] name = value.FieldType.ToString().Split(separators);
+                    var helpBoxStyle = EditorStyles.helpBox;
+                    helpBoxStyle.fontSize = 13;
+
                     EditorGUILayout.HelpBox($"{name.Last()} on variable {value.Name}", messageType);
                 }
                 GUILayout.Space(20);
@@ -705,21 +717,14 @@ namespace UnityMVC.Editor
                 objects.Add("Base");
             }
 
-            List<Type> types = Assembly.GetAssembly(objectType).GetTypes().ToList();
+            List<Type> types = MVCReflectionUtil.GetTypes(objectType, namespaceFilter);
             
             if (types == null || types.Count == 0)
             {
                 return objects;
             }
 
-            List<Type> filteredTypes = types.Where(x =>
-                x.IsClass &&
-                !x.IsAbstract &&
-                x.IsSubclassOf(objectType) &&
-                !x.Name.Contains("Template") &&
-                x.Namespace.Contains(namespaceFilter)).ToList();
-
-            foreach (Type type in filteredTypes)
+            foreach (Type type in types)
             {
                 string str = $"{type.Name}{suffix}";
                 objects.Add(str);
@@ -727,39 +732,10 @@ namespace UnityMVC.Editor
             
             return objects;
         }
-        
-        public static List<string> GetTNamespacesList(Type objectType)
-        {
-            List<string> objects = new List<string>();
-            
-            List<Type> types = Assembly.GetAssembly(objectType).GetTypes().ToList();
-            
-            if (types == null || types.Count == 0)
-            {
-                return objects;
-            }
-
-            List<Type> filteredTypes = types.Where(x =>
-                x.IsClass &&
-                !x.IsAbstract &&
-                x.IsSubclassOf(objectType) &&
-                !x.Name.Contains("Template")).ToList();
-
-
-            foreach (Type type in filteredTypes)
-            {
-                string str = $"{type.Namespace}";
-                if (objects.Contains(str))
-                {
-                    continue;
-                }
-                objects.Add(str);
-            }
-            return objects;
-        }
-        
         private void UpdateAllTypes()
         {
+            MVCReflectionUtil.UpdateData();
+            
             UpdateTypesList(ref _controllerAndViewTypes, typeof(Controller.Controller),_namespace, suffix: " - View");
             UpdateTypesList(ref  _loaderSolverAndContainerTypes, typeof(Loader), _namespace, suffix: " - Solver - Container");
             UpdateTypesList(ref _controllerTypes, typeof(Controller.Controller), _namespace);

@@ -101,11 +101,6 @@ namespace UnityMVC.Editor
                 templateStr = templateStr.Replace("/*<NAMESPACE>*/", $"namespace {nameSpace}\n{{");
                 templateStr = templateStr.Replace("/*}*/", $"}}");
             }
-            
-            if (removeComments)
-            {
-                templateStr = StringWithoutComments(templateStr);
-            }
 
             if (inheritsFrom != null)
             {
@@ -115,7 +110,7 @@ namespace UnityMVC.Editor
                 {
                     ApplyInheritanceToUnityComponent(ref templateStr, inheritsFrom);
                 }
-                
+
                 if (isPartial)
                 {
                     ApplyInheritanceToPartial(ref templateStr, type, inheritsFrom);
@@ -141,8 +136,30 @@ namespace UnityMVC.Editor
 
             if (type == ScriptType.View)
             {
-                templateStr = templateStr.Replace($"ControllerTemplate", $"{name}Controller");
-                templateStr = templateStr.Replace($"ViewTemplateModel", $"{name}ViewModel");
+                if(inheritsFrom == null)
+                {
+                    templateStr = templateStr.Replace($"ControllerTemplate", $"{name}Controller");
+                    templateStr = templateStr.Replace($"ViewTemplateModel", $"{name}ViewModel");
+                }
+                else
+                {
+                    string inheritance = inheritsFrom.Replace("View", "");
+                    templateStr = templateStr.Replace($"ControllerTemplate", $"{inheritance}Controller");
+                    templateStr = templateStr.Replace($"ViewTemplateModel", $"{inheritance}ViewModel");
+
+                    char[] filters = new[] {'#'};
+                    List<string> eventsFilter = templateStr.Split(filters).ToList();
+                    for (int i = 0; i < eventsFilter.Count; i++)
+                    {
+                        if (eventsFilter[i].Contains("namespace UnityMVC.Events"))
+                        {
+                            eventsFilter.Remove(eventsFilter[i]);
+                            break;
+                        }
+                    }
+
+                    templateStr = string.Join("", eventsFilter);
+                }
                 
             }
             if (type == ScriptType.Controller)
@@ -181,6 +198,11 @@ namespace UnityMVC.Editor
             }
 
             templateStr = templateStr.Replace($"ControllerTemplateEvents", $"{name}ControllerEvents");
+
+            if (removeComments)
+            {
+                templateStr = StringWithoutComments(templateStr);
+            }
             
             string directoryPath = path;
             string filePath = isPartial? $"{directoryPath}/{name}{typeStr}Partial.cs" : $"{directoryPath}/{name}{typeStr}.cs";
@@ -303,6 +325,15 @@ namespace UnityMVC.Editor
             Directory.CreateDirectory(prefabsFolder);
             Directory.CreateDirectory(scriptsFolder);
             Directory.CreateDirectory(scenesFolder);
+            
+            string assemblyDefinitionTemplate = GetAssemblyDefinitionTemplate();
+            string GUID = GetMVCAssemblyDefinitionGUID();
+            string assemblyDefinitionPath = $"{scriptsFolder}/{newModuleName}.asmdef";
+
+            string assemblyDefinition = assemblyDefinitionTemplate.Replace("/*NAME*/", $"{newModuleName}");
+            assemblyDefinition = assemblyDefinition.Replace("/*GUID/", GUID);
+            
+            MVCFileUtil.WriteFile(assemblyDefinitionPath, assemblyDefinition);
 
             UnityMVCModuleModel newModule =  UnityMVCModuleData.GenerateModuleMetadata(absolutePath, newModuleName, newNamespace);
             UnityMVCResources.Data.currentModule = newModule;
@@ -310,6 +341,23 @@ namespace UnityMVC.Editor
             CreateViewAndController(newNamespace, newModuleName, true);
             return newModule;
         }
+        
+        private static string GetMVCAssemblyDefinitionGUID()
+        {
+            string[] asset = AssetDatabase.FindAssets("UnityMVC.C");
+            var GUID = asset[0];
+            return GUID;
+        }
+        
+        private static string GetAssemblyDefinitionTemplate()
+        {
+            string templateName = "AssemblyDefinitionTemplate";
+            string[] assets = AssetDatabase.FindAssets(templateName);
+            string path = AssetDatabase.GUIDToAssetPath(assets[0]);
+            string str = File.ReadAllText(path);
+            
+            return str;
+        }
     }
-    #endif
+#endif
 }
