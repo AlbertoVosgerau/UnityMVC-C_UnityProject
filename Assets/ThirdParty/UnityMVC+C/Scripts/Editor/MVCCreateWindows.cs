@@ -430,19 +430,21 @@ namespace UnityMVC.Editor
 
                 string text = $"<b>{name} Module</b>:  {classesCount.ToString("00")} MVC+C classes and {dependenciesCount.ToString("00")} MVC+C dependencies";
                 
+                GUIStyle style = new GUIStyle();
+                style.richText = true;
+                style.normal.textColor =new Color(0.8f, 0.8f, 0.8f);
+                
+                
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(5);
                 GUILayout.Label(icon, GUIStyle.none);
                 if (dependenciesCount == 0)
                 {
-                    GUIStyle style = new GUIStyle();
-                    style.richText = true;
-                    style.normal.textColor =new Color(0.8f, 0.8f, 0.8f);
                     EditorGUILayout.LabelField($"   {text}", style);
                 }
                 else
                 {
-                    _dependenciesFoldout[i] = EditorGUILayout.Foldout(_dependenciesFoldout[i], text);
+                    _dependenciesFoldout[i] = EditorGUILayout.Foldout(_dependenciesFoldout[i], $"    {text}", style);
                     
                     if (_dependenciesFoldout[i] && dependenciesCount > 0)
                     {
