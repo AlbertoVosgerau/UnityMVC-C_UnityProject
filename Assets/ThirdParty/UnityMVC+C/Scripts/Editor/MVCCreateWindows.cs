@@ -1079,7 +1079,6 @@ namespace UnityMVC.Editor
         
         private void UnityComponentButton()
         {
-            
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
@@ -1104,7 +1103,7 @@ namespace UnityMVC.Editor
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             
-            CustomSingleTypesDropdown(ref _unityComponentIndex, _unityComponentTypes, "That references:");
+            CustomSingleTypesDropdown(ref _unityComponentIndex, _unityComponentTypes, "That inherits from:");
         }
         
         private void ShowInvalidPathDialog()
