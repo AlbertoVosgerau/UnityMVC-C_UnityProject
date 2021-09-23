@@ -151,7 +151,7 @@ namespace UnityMVC.Editor
                     List<string> eventsFilter = templateStr.Split(filters).ToList();
                     for (int i = 0; i < eventsFilter.Count; i++)
                     {
-                        if (eventsFilter[i].Contains("namespace UnityMVC.Events"))
+                        if (eventsFilter[i].Contains("public Action<View.View> onViewEnabled;"))
                         {
                             eventsFilter.Remove(eventsFilter[i]);
                             break;
