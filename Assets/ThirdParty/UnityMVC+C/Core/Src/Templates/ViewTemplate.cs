@@ -1,16 +1,17 @@
 ﻿using System;
-//#=
+
 namespace UnityMVC.Events
 {
     public partial class ControllerTemplateEvents
     {
         // Add events here
+        //#=
         public Action<View.View> onViewEnabled;
         public Action<View.View> onViewDisabled;
         public Action<View.View> onViewDestroyed;
+        //#
     }
 }
-//#
 
 namespace UnityMVC.Model
 {
