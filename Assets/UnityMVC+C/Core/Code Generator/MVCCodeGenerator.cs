@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityMVC.Editor;
+using UnityMVC.Utils;
 
 namespace UnityMVC.CodeGenerator
 {
@@ -321,6 +322,8 @@ namespace UnityMVC.CodeGenerator
             Debug.Log($"Creating module at {absolutePath}");
             string scriptsFolder = $"{absolutePath}/Scripts";
             string testsFolder = $"{absolutePath}/Scripts/Tests";
+            string playModeFolder = $"{absolutePath}/Scripts/Tests/PlayMode";
+            string editModeFolder = $"{absolutePath}/Scripts/Tests/EditMode";
             string prefabsFolder = $"{absolutePath}/Prefabs";
             string scenesFolder = $"{absolutePath}/Scenes";
 
@@ -329,14 +332,12 @@ namespace UnityMVC.CodeGenerator
             Directory.CreateDirectory(scriptsFolder);
             Directory.CreateDirectory(scenesFolder);
             Directory.CreateDirectory(testsFolder);
+            Directory.CreateDirectory(playModeFolder);
+            Directory.CreateDirectory(editModeFolder);
             
-            string assemblyDefinitionTemplate = GetModuleAssemblyDefinitionTemplate();
-            string GUID = GetMVCAssemblyDefinitionGUID();
-            string assemblyDefinitionPath = $"{scriptsFolder}/{newModuleName}.asmdef";
-            List<string> guids = new List<string>() {GUID};
-            
-            CreateAssemblyDefinition(assemblyDefinitionPath, assemblyDefinitionTemplate, newModuleName, guids);
-            
+            CreateModuleAssemblyDefinition(scriptsFolder, newModuleName);
+            CreatePlayModeAssemblyDefinition(playModeFolder, $"PlayMode{newModuleName}Test", newModuleName);
+            CreateEditorModeAssemblyDefinition(editModeFolder, $"EditMode{newModuleName}Test", newModuleName);
 
             UnityMVCModuleModel newModule =  UnityMVCModuleData.GenerateModuleMetadata(absolutePath, newModuleName, newNamespace);
             UnityMVCResources.Data.currentModule = newModule;
@@ -345,18 +346,53 @@ namespace UnityMVC.CodeGenerator
             return newModule;
         }
 
+        private static void CreateModuleAssemblyDefinition(string path, string name)
+        {
+            string assemblyDefinitionTemplate = GetModuleAssemblyDefinitionTemplate();
+            string GUID = MVCAssetDatabaseUtil.GetAssetGUID("MVC.C");
+            string assemblyDefinitionPath = $"{path}/{name}.asmdef";
+            List<string> guids = new List<string>() {GUID};
+            
+            CreateAssemblyDefinition(assemblyDefinitionPath, assemblyDefinitionTemplate, name, guids);
+        }
+        
+        private static void CreatePlayModeAssemblyDefinition(string path, string name, string referenceAssembly)
+        {
+            string assemblyDefinitionTemplate = GetPlayModeAssemblyDefinitionTemplate();
+            string MvcGUID = MVCAssetDatabaseUtil.GetAssetGUID("MVC.C");
+            string referenceAssemlyGUID = MVCAssetDatabaseUtil.GetAssetGUID($"{referenceAssembly}");
+            string assemblyDefinitionPath = $"{path}/{name}.asmdef";
+            List<string> guids = new List<string>() {MvcGUID, referenceAssemlyGUID};
+            
+            CreateAssemblyDefinition(assemblyDefinitionPath, assemblyDefinitionTemplate, name, guids);
+        }
+        
+        private static void CreateEditorModeAssemblyDefinition(string path, string name, string referenceAssembly)
+        {
+            string assemblyDefinitionTemplate = GetEditorTestAssemblyDefinitionTemplate();
+            string MvcGUID = MVCAssetDatabaseUtil.GetAssetGUID("MVC.C");
+            string referenceAssemlyGUID = MVCAssetDatabaseUtil.GetAssetGUID($"{referenceAssembly}");
+            string assemblyDefinitionPath = $"{path}/{name}.asmdef";
+            List<string> guids = new List<string>() {MvcGUID, referenceAssemlyGUID};
+            
+            CreateAssemblyDefinition(assemblyDefinitionPath, assemblyDefinitionTemplate, name, guids);
+        }
+
         private static void CreateAssemblyDefinition(string path, string template, string name, List<string> guids)
         {
             for (int i = 0; i < guids.Count; i++)
             {
                 guids[i] = GetGUIDLine(guids[i]);
             }
+
+            guids.RemoveAll(x => string.IsNullOrWhiteSpace(x));
             
             string allGuids = string.Join(",", guids);
-            
+            allGuids = allGuids.Replace(",\"GUID:\"\"", "");
+            allGuids = allGuids.Replace(",\"GUID:\"", "");
+                
             string str = template.Replace("/*NAME*/", name);
-            Debug.Log($"STR is {str}");
-            str = template.Replace("/*GUID*/", $"{allGuids}");
+            str = str.Replace("/*GUID*/", $"{allGuids}");
             
             MVCFileUtil.WriteFile(path, str);
         }
@@ -365,14 +401,7 @@ namespace UnityMVC.CodeGenerator
         {
             return $"\"GUID:{guid}\"";
         }
-        
-        private static string GetMVCAssemblyDefinitionGUID()
-        {
-            string[] asset = AssetDatabase.FindAssets("UnityMVC.C");
-            var GUID = asset[0];
-            return GUID;
-        }
-        
+
         private static string GetModuleAssemblyDefinitionTemplate()
         {
             string templateName = "ModuleAssemblyDefinitionTemplate";
@@ -383,7 +412,7 @@ namespace UnityMVC.CodeGenerator
             return str;
         }
         
-        private static string GetPlayTestAssemblyDefinitionTemplate()
+        private static string GetPlayModeAssemblyDefinitionTemplate()
         {
             string templateName = "PlayTestAssemblyDefinitionTemplate";
             string[] assets = AssetDatabase.FindAssets(templateName);

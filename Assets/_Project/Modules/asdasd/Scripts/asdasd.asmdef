@@ -2,8 +2,7 @@
     "name": "asdasd",
     "rootNamespace": "",
     "references": [
-        "GUID:d455f17496f913747a2155f7f914f5d6",
-        "GUID:d8b63aba1907145bea998dd612889d6b"
+        "GUID:d455f17496f913747a2155f7f914f5d6"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

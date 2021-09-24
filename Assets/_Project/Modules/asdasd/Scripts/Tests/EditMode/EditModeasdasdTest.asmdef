@@ -1,12 +1,14 @@
 {
-    "name": "/*NAME*/",
+    "name": "EditModeasdasdTest",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-	/*GUID*/
+        "GUID:d455f17496f913747a2155f7f914f5d6","GUID:8bb6dc023ca323744a4d2159f7f1646a"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,

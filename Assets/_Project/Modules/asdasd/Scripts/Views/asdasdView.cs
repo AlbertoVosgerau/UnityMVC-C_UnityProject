@@ -17,7 +17,7 @@ namespace UnityMVC.Model
     }
 }
 
-namespace asdasdsa
+namespace dasdasdsda
 {
     public partial class asdasdView
     {

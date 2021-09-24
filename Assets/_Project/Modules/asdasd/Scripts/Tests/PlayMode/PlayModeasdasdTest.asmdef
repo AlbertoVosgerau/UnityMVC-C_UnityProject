@@ -1,10 +1,10 @@
 {
-    "name": "/*NAME*/",
+    "name": "PlayModeasdasdTest",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-	/*GUID*/
+	"GUID:d455f17496f913747a2155f7f914f5d6"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

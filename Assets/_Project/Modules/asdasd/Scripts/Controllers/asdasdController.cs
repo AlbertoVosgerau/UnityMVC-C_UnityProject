@@ -9,7 +9,7 @@ namespace UnityMVC.Events
     }
 }
 
-namespace asdasdsa
+namespace dasdasdsda
 {
     public partial class asdasdController
     {
