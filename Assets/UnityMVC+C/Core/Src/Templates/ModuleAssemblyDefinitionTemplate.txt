@@ -2,7 +2,7 @@
     "name": "/*NAME*/",
     "rootNamespace": "",
     "references": [
-        "GUID:/*GUID/"
+        /*GUID*/
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

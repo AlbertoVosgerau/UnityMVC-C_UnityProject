@@ -12,7 +12,7 @@ namespace UnityMVC.Editor
         public string CurrentScriptsFolder => currentModule == null? Application.dataPath : $"{modulesRelativePath}/{currentModule.moduleName}/Scripts";
         
         public UnityMVCModuleModel currentModule;
-
+        
         public string modulesRelativePath;
         public bool removeComments;
     }
@@ -26,7 +26,7 @@ namespace UnityMVC.Editor
         {
             if (!PlayerPrefs.HasKey(UnityMVCDataModel.MODULES_RELATIVE_PATH_VARIABLE))
             {
-                PlayerPrefs.SetString(UnityMVCDataModel.MODULES_RELATIVE_PATH_VARIABLE, String.Empty);
+                PlayerPrefs.SetString(UnityMVCDataModel.MODULES_RELATIVE_PATH_VARIABLE, MVCFolderStructure.ModulesFolder);
             }
             if (!PlayerPrefs.HasKey(UnityMVCDataModel.REMOVECOMMENTS_VARIABLE))
             {
