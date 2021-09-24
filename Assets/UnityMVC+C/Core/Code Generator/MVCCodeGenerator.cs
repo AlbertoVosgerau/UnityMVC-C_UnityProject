@@ -35,6 +35,7 @@ namespace UnityMVC.CodeGenerator
             CreateCoreAssemblyDefinition(MVCFolderStructure.CommonFolder, $"{name}.Common");
             CreatePlayModeAssemblyDefinition(MVCFolderStructure.CommonsPlayModeFolder, $"{name}.CommonPlayModeTest");
             CreateEditorModeAssemblyDefinition(MVCFolderStructure.CommonsEditModeFolder, $"{name}.CommonEditModeTest");
+            AssetDatabase.Refresh();
         }
         
         public static void CreateView(string nameSpace, string name, bool removeComments, string inheritsFrom = null)
