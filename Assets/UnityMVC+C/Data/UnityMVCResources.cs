@@ -26,7 +26,7 @@ namespace UnityMVC.Editor
         {
             if (!PlayerPrefs.HasKey(UnityMVCDataModel.MODULES_RELATIVE_PATH_VARIABLE))
             {
-                PlayerPrefs.SetString(UnityMVCDataModel.MODULES_RELATIVE_PATH_VARIABLE, String.Empty);
+                PlayerPrefs.SetString(UnityMVCDataModel.MODULES_RELATIVE_PATH_VARIABLE, MVCFolderStructure.ModulesFolder);
             }
             if (!PlayerPrefs.HasKey(UnityMVCDataModel.REMOVECOMMENTS_VARIABLE))
             {
