@@ -219,6 +219,7 @@ namespace UnityMVC.Editor
             GUILayout.BeginVertical();
 
             ToggableFolder("_Project", 0);
+            ToggableFolder("3D Models", 1);
             ToggableFolder("Application", 1);
             ToggableFolder("Scripts", 2);
             ToggableFolder("Common", 1);
@@ -234,6 +235,9 @@ namespace UnityMVC.Editor
             ToggableFolder("Tests", 2);
             ToggableFolder("EditMode", 3);
             ToggableFolder("PlayMode", 3);
+            ToggableFolder("Resources", 1);
+            ToggableFolder("Textures", 1);
+            ToggableFolder("UI", 1);
             
             ToggableFolder("ThirdParty", 0);
 
