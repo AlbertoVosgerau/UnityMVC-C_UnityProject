@@ -64,6 +64,37 @@ namespace UnityMVC.Editor
         private int _componentViewIndex;
         private bool _hasApplication = false;
 
+        private bool _createProjectFolder = true;
+        private bool _create3dModelsFolder = false;
+        private bool _createAudioFolder = false;
+        private bool _createResourcesFolder = false;
+        private bool _createTexturesFolder = false;
+        private bool _createUIFolder = false;
+        private bool _createThirdPartyFolder = true;
+        // ToggableFolder("_Project", 0);
+        // ToggableFolder("3D Models", 1);
+        // ToggableFolder("Application", 1);
+        // ToggableFolder("Audio", 1);
+        // ToggableFolder("Scripts", 2);
+        // ToggableFolder("Common", 1);
+        // ToggableFolder("Prefabs", 2);
+        // ToggableFolder("Scripts", 2);
+        // ToggableFolder("Tests", 3);
+        // ToggableFolder("EditMode", 4);
+        // ToggableFolder("PlayMode", 4);
+        // ToggableFolder("Modules", 1);
+        // ToggableFolder("Prefabs", 1);
+        // ToggableFolder("Scenes", 1);
+        // ToggableFolder("Scripts", 1);
+        // ToggableFolder("Tests", 2);
+        // ToggableFolder("EditMode", 3);
+        // ToggableFolder("PlayMode", 3);
+        // ToggableFolder("Resources", 1);
+        // ToggableFolder("Textures", 1);
+        // ToggableFolder("UI", 1);
+        //     
+        // ToggableFolder("ThirdParty", 0);
+
         [MenuItem("Unity MVC+C/Open Creation Window", priority = 0)]
         private static void Init()
         {
@@ -219,8 +250,9 @@ namespace UnityMVC.Editor
             GUILayout.BeginVertical();
 
             ToggableFolder("_Project", 0);
-            ToggableFolder("3D Models", 1);
+            ToggableFolder(ref _create3dModelsFolder,"3D Models", 1);
             ToggableFolder("Application", 1);
+            ToggableFolder(ref _createAudioFolder,"Audio", 1);
             ToggableFolder("Scripts", 2);
             ToggableFolder("Common", 1);
             ToggableFolder("Prefabs", 2);
@@ -235,21 +267,37 @@ namespace UnityMVC.Editor
             ToggableFolder("Tests", 2);
             ToggableFolder("EditMode", 3);
             ToggableFolder("PlayMode", 3);
-            ToggableFolder("Resources", 1);
-            ToggableFolder("Textures", 1);
-            ToggableFolder("UI", 1);
+            ToggableFolder(ref _createResourcesFolder,"Resources", 1);
+            ToggableFolder(ref _createTexturesFolder,"Textures", 1);
+            ToggableFolder(ref _createUIFolder,"UI", 1);
             
-            ToggableFolder("ThirdParty", 0);
+            ToggableFolder(ref _createThirdPartyFolder,"ThirdParty", 0);
 
             GUILayout.EndVertical();
         }
 
+        private void ToggableFolder(ref bool value, string name, int spacing)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Space(spacing * 20);
+
+            value = GUILayout.Toggle(value, name, GUILayout.Width(_btnWidth *2));
+            
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        
         private void ToggableFolder(string name, int spacing)
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             GUILayout.Space(spacing * 20);
-            GUILayout.Toggle(true, name, GUILayout.Width(_btnWidth *2));
+            GUIStyle style = new GUIStyle("Toggle");
+            style.fontStyle = FontStyle.Bold;
+
+            GUILayout.Toggle(true, name, style, GUILayout.Width(_btnWidth *2));
+            
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
