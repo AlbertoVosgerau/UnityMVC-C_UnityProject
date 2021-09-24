@@ -10,6 +10,8 @@ namespace UnityMVC.Editor
         public static string ThirdPartyFolder => $"{Application.dataPath}/ThirdParty";
         public static string ScriptsFolder => $"{ProjectFolder}/Scripts";
         public static string TestsFolder => $"{ProjectFolder}/Scripts/Tests";
+        public static string PlayModeFolder => $"{ProjectFolder}/Scripts/Tests/PlayMode";
+        public static string EditModeFolder => $"{ProjectFolder}/Scripts/Tests/EditMode";
         public static string ScenesFolder => $"{ProjectFolder}/Scenes";
         public static string PrefabsFolder => $"{ProjectFolder}/Prefabs";
         public static string CommonFolder => $"{ProjectFolder}/Common";
@@ -17,6 +19,8 @@ namespace UnityMVC.Editor
         public static string CommonsPrefabsFolder => $"{ProjectFolder}/Common/Prefabs";
         public static string CommonsScriptsFolder => $"{ProjectFolder}/Common/Scripts";
         public static string CommonsTestsFolder => $"{ProjectFolder}/Common/Scripts/Tests";
+        public static string CommonsPlayModeFolder => $"{ProjectFolder}/Common/Scripts/Tests/PlayMode";
+        public static string CommonsEditModeFolder => $"{ProjectFolder}/Common/Scripts/Tests/EditMode";
         public static string ApplicationFolder => $"{ProjectFolder}/Application/Scripts/Application";
         public static string ModulesFolder => $"{ProjectFolder}/Modules";
     
@@ -60,6 +64,16 @@ namespace UnityMVC.Editor
             {
                 Directory.CreateDirectory(TestsFolder);
             }
+            
+            if(!Directory.Exists(PlayModeFolder))
+            {
+                Directory.CreateDirectory(PlayModeFolder);
+            }
+            
+            if(!Directory.Exists(EditModeFolder))
+            {
+                Directory.CreateDirectory(EditModeFolder);
+            }
         
             if(!Directory.Exists(ScenesFolder))
             {
@@ -89,6 +103,16 @@ namespace UnityMVC.Editor
             if(!Directory.Exists(CommonsScriptsFolder))
             {
                 Directory.CreateDirectory(CommonsScriptsFolder);
+            }
+            
+            if(!Directory.Exists(CommonsPlayModeFolder))
+            {
+                Directory.CreateDirectory(CommonsPlayModeFolder);
+            }
+            
+            if(!Directory.Exists(CommonsEditModeFolder))
+            {
+                Directory.CreateDirectory(CommonsEditModeFolder);
             }
             
             if(!Directory.Exists(CommonsTestsFolder))

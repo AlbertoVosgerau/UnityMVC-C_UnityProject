@@ -12,7 +12,7 @@ namespace UnityMVC.Editor
         public string CurrentScriptsFolder => currentModule == null? Application.dataPath : $"{modulesRelativePath}/{currentModule.moduleName}/Scripts";
         
         public UnityMVCModuleModel currentModule;
-
+        
         public string modulesRelativePath;
         public bool removeComments;
     }
