@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityMVC.CodeGenerator;
 using UnityMVC.Component;
 
 namespace UnityMVC.Editor

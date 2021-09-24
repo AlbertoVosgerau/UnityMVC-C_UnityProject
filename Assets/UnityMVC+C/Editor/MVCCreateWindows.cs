@@ -6,6 +6,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEditor.Graphs;
 using UnityEngine;
+using UnityMVC.CodeGenerator;
 using UnityMVC.Component;
 using UnityMVC.Model;
 
@@ -698,6 +699,7 @@ namespace UnityMVC.Editor
         private void OnChangedValue()
         {
             UnityMVCResources.SaveAllData();
+            _modulePath = UnityMVCResources.Data.modulesRelativePath;
         }
 
         private void OnCreatedFile()

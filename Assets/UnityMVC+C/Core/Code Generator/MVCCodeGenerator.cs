@@ -4,8 +4,9 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityMVC.Editor;
 
-namespace UnityMVC.Editor
+namespace UnityMVC.CodeGenerator
 {
     #if UNITY_EDITOR
     public enum ScriptType
@@ -72,7 +73,7 @@ namespace UnityMVC.Editor
         
         public static void CreateSolver(string nameSpace, string name, bool removeComments, string inheritsFrom = null)
         {
-            GenerateScript(nameSpace,name, GetTemplate(ScriptType.Solver, removeComments), GetPath("Solvers"), ScriptType.Solver, removeComments, virtualToOverride: inheritsFrom != null);
+            GenerateScript(nameSpace,name, GetTemplate(ScriptType.Solver), GetPath("Solvers"), ScriptType.Solver, removeComments, virtualToOverride: inheritsFrom != null, isPartial:false);
         }
 
         public static void UpdatePartial(string nameSpace, ScriptType type, string name, string baseType, string path, string view)
@@ -264,6 +265,7 @@ namespace UnityMVC.Editor
         private static string GetTemplate(ScriptType type, bool isPartial = false)
         {
             string templateName = isPartial? $"{type.ToString()}TemplatePartial" : $"{type.ToString()}Template";
+            Debug.Log($"Looking for {templateName}");
             string[] assets = AssetDatabase.FindAssets(templateName);
             string path = AssetDatabase.GUIDToAssetPath(assets[0]);
             string str = File.ReadAllText(path);
@@ -318,6 +320,7 @@ namespace UnityMVC.Editor
             
             Debug.Log($"Creating module at {absolutePath}");
             string scriptsFolder = $"{absolutePath}/Scripts";
+            string testsFolder = $"{absolutePath}/Scripts/Tests";
             string prefabsFolder = $"{absolutePath}/Prefabs";
             string scenesFolder = $"{absolutePath}/Scenes";
 
@@ -325,21 +328,42 @@ namespace UnityMVC.Editor
             Directory.CreateDirectory(prefabsFolder);
             Directory.CreateDirectory(scriptsFolder);
             Directory.CreateDirectory(scenesFolder);
+            Directory.CreateDirectory(testsFolder);
             
-            string assemblyDefinitionTemplate = GetAssemblyDefinitionTemplate();
+            string assemblyDefinitionTemplate = GetModuleAssemblyDefinitionTemplate();
             string GUID = GetMVCAssemblyDefinitionGUID();
             string assemblyDefinitionPath = $"{scriptsFolder}/{newModuleName}.asmdef";
-
-            string assemblyDefinition = assemblyDefinitionTemplate.Replace("/*NAME*/", $"{newModuleName}");
-            assemblyDefinition = assemblyDefinition.Replace("/*GUID/", GUID);
+            List<string> guids = new List<string>() {GUID};
             
-            MVCFileUtil.WriteFile(assemblyDefinitionPath, assemblyDefinition);
+            CreateAssemblyDefinition(assemblyDefinitionPath, assemblyDefinitionTemplate, newModuleName, guids);
+            
 
             UnityMVCModuleModel newModule =  UnityMVCModuleData.GenerateModuleMetadata(absolutePath, newModuleName, newNamespace);
             UnityMVCResources.Data.currentModule = newModule;
             
             CreateViewAndController(newNamespace, newModuleName, true);
             return newModule;
+        }
+
+        private static void CreateAssemblyDefinition(string path, string template, string name, List<string> guids)
+        {
+            for (int i = 0; i < guids.Count; i++)
+            {
+                guids[i] = GetGUIDLine(guids[i]);
+            }
+            
+            string allGuids = string.Join(",", guids);
+            
+            string str = template.Replace("/*NAME*/", name);
+            Debug.Log($"STR is {str}");
+            str = template.Replace("/*GUID*/", $"{allGuids}");
+            
+            MVCFileUtil.WriteFile(path, str);
+        }
+
+        private static string GetGUIDLine(string guid)
+        {
+            return $"\"GUID:{guid}\"";
         }
         
         private static string GetMVCAssemblyDefinitionGUID()
@@ -349,9 +373,29 @@ namespace UnityMVC.Editor
             return GUID;
         }
         
-        private static string GetAssemblyDefinitionTemplate()
+        private static string GetModuleAssemblyDefinitionTemplate()
         {
-            string templateName = "AssemblyDefinitionTemplate";
+            string templateName = "ModuleAssemblyDefinitionTemplate";
+            string[] assets = AssetDatabase.FindAssets(templateName);
+            string path = AssetDatabase.GUIDToAssetPath(assets[0]);
+            string str = File.ReadAllText(path);
+            
+            return str;
+        }
+        
+        private static string GetPlayTestAssemblyDefinitionTemplate()
+        {
+            string templateName = "PlayTestAssemblyDefinitionTemplate";
+            string[] assets = AssetDatabase.FindAssets(templateName);
+            string path = AssetDatabase.GUIDToAssetPath(assets[0]);
+            string str = File.ReadAllText(path);
+            
+            return str;
+        }
+        
+        private static string GetEditorTestAssemblyDefinitionTemplate()
+        {
+            string templateName = "EditorTestAssemblyDefinitionTemplate";
             string[] assets = AssetDatabase.FindAssets(templateName);
             string path = AssetDatabase.GUIDToAssetPath(assets[0]);
             string str = File.ReadAllText(path);
