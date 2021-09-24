@@ -131,6 +131,7 @@ namespace UnityMVC.Editor
             GUILayout.Space(10);
             
             
+            
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             GUILayout.Label("Let's create your MVC+C Project!", GUILayout.Width(_btnWidth * 2));
@@ -186,7 +187,65 @@ namespace UnityMVC.Editor
                 MVCCodeGenerator.CreateApplication(_projectName);
                 OnCreatedFile();
             }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            
+            GUILayout.Space(15);
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Label($"The project {_projectName} will be created with the following folder structure", GUILayout.Width(_btnWidth * 2));
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            GUILayout.Space(15);
+            
+            GUILayout.BeginVertical();
 
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            
+            FoldersCreationArea();
+            
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+
+            GUILayout.EndVertical();
+
+            
+        }
+
+        private void FoldersCreationArea()
+        {
+            GUILayout.BeginVertical();
+
+            ToggableFolder("_Project", 0);
+            ToggableFolder("Application", 1);
+            ToggableFolder("Scripts", 2);
+            ToggableFolder("Common", 1);
+            ToggableFolder("Prefabs", 2);
+            ToggableFolder("Scripts", 2);
+            ToggableFolder("Tests", 3);
+            ToggableFolder("EditMode", 4);
+            ToggableFolder("PlayMode", 4);
+            ToggableFolder("Modules", 1);
+            ToggableFolder("Prefabs", 1);
+            ToggableFolder("Scenes", 1);
+            ToggableFolder("Scripts", 1);
+            ToggableFolder("Tests", 2);
+            ToggableFolder("EditMode", 3);
+            ToggableFolder("PlayMode", 3);
+            
+            ToggableFolder("ThirdParty", 0);
+
+            GUILayout.EndVertical();
+        }
+
+        private void ToggableFolder(string name, int spacing)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Space(spacing * 20);
+            GUILayout.Toggle(true, name, GUILayout.Width(_btnWidth *2));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
