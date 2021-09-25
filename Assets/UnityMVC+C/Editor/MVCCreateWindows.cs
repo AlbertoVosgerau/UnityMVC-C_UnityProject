@@ -927,6 +927,7 @@ namespace UnityMVC.Editor
             UpdateAllTypes();
             UpdateDependencies();
             _hasApplication = HasApplication();
+            AssetDatabase.Refresh();
         }
 
         public static List<string> GetTypesList(Type objectType, bool addFirstItem, string suffix, string namespaceFilter)
