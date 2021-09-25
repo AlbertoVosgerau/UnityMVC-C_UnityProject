@@ -37,7 +37,7 @@ namespace UnityMVC.CodeGenerator
             CreateEditorModeAssemblyDefinition(MVCFolderStructure.CommonsEditModeFolder, $"{name}.CommonEditModeTest");
             AssetDatabase.Refresh();
         }
-        
+
         public static void CreateView(string nameSpace, string name, bool removeComments, string inheritsFrom = null)
         {
             GenerateScript(nameSpace, name, GetTemplate(ScriptType.View), GetPath("Views"), ScriptType.View, removeComments,inheritsFrom: inheritsFrom, virtualToOverride: inheritsFrom != null);

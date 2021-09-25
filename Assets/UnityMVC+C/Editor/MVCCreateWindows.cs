@@ -16,7 +16,7 @@ namespace UnityMVC.Editor
     public class MVCCreateWindows : EditorWindow
     {
         private int _mainTabIntex = 0;
-        private string[] _mainTabs = new[] {"Module Wizard", "Code Generator", "Inspector", "Settings", "Help"};
+        private string[] _mainTabs = new[] {"Module Wizard", "Code Generator", "Inspector", "Help"};
 
         private string _newModuleName;
         private string _newNamespace;
@@ -194,6 +194,8 @@ namespace UnityMVC.Editor
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             
+            GUILayout.Space(5);
+            OptionsArea();
             GUILayout.Space(15);
             
             GUILayout.BeginHorizontal();
@@ -299,9 +301,6 @@ namespace UnityMVC.Editor
                     InspectorArea();
                     break;
                 case 3:
-                    SettingsArea();
-                    break;
-                case 4:
                     HelpArea();
                     break;
             }
@@ -419,7 +418,7 @@ namespace UnityMVC.Editor
             
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            RemoveCommentsFromGeneratedCodeArea();
+            OptionsArea();
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
             
@@ -488,7 +487,7 @@ namespace UnityMVC.Editor
             }
             else
             {
-                RemoveCommentsFromGeneratedCodeArea();
+                OptionsArea();
                 GUILayout.Space(20);
                 MVCTabs();
             }
@@ -506,8 +505,14 @@ namespace UnityMVC.Editor
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(20);
-            Checkbox(ref _generateAssemblyDefinition, "Generate Assembly Definitions", 0);
-            Checkbox(ref UnityMVCResources.Data.removeComments, "Remove comments from generated code", 0);
+            OptionsArea();
+        }
+
+        private void OptionsArea()
+        {
+            GUILayout.BeginVertical();
+            RemoveCommentsFromGeneratedCodeArea();
+            GUILayout.EndVertical();
         }
 
         private void CreateAssetAtArea()
@@ -749,12 +754,13 @@ namespace UnityMVC.Editor
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
         }
+
         private void RemoveCommentsFromGeneratedCodeArea()
         {
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             EditorGUI.BeginChangeCheck();
-            UnityMVCResources.Data.removeComments = GUILayout.Toggle(UnityMVCResources.Data.removeComments, " Remove comments from generated code", GUILayout.Width(_btnWidth * 2));
+            Checkbox(ref UnityMVCResources.Data.removeComments, " Remove comments from generated code", 0);
             UnityMVCResources.SaveAllData();
             if (EditorGUI.EndChangeCheck())
             {
