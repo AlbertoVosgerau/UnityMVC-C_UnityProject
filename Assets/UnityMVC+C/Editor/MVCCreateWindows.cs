@@ -64,8 +64,11 @@ namespace UnityMVC.Editor
         private int _componentViewIndex;
         private bool _hasApplication = false;
 
-        private bool _generateAssemblyDefinition = true;
+        int _scriptableObjectOrder = 0;
+        string _scriptableObjectFileName;
+        private string _scriptableObjectMenuName;
 
+        
         [MenuItem("Unity MVC+C/Open Creation Window", priority = 0)]
         private static void Init()
         {
@@ -337,20 +340,15 @@ namespace UnityMVC.Editor
                     }
                     break;
                 case 2:
-                    LoaderSolverAndContainerArea();
+                    ModelsArea();
                     break;
                 case 3:
                     UnityComponentArea();
                     break;
                 case 4:
-                    MiscArea();
+                    OtherArea();
                     break;
             }
-        }
-
-        private void MiscArea()
-        {
-            GUILayout.Label($"Will contain Interfaces, Enums and ScriptableObjects");
         }
 
         private void NoModuleFoundArea()
@@ -736,7 +734,7 @@ namespace UnityMVC.Editor
             GUILayout.FlexibleSpace();
             EditorGUI.BeginChangeCheck();
             List<string> names = _modules.Select(x => x.moduleName).ToList();
-            NamespacesDropdown(ref _moduleIndex, names);
+            ModulesDropdown(ref _moduleIndex, names);
             _namespace = _modules[_moduleIndex].moduleNamespace;
             UnityMVCResources.Data.currentModule = _modules[_moduleIndex];
             if (EditorGUI.EndChangeCheck())
@@ -773,7 +771,7 @@ namespace UnityMVC.Editor
 
         private void ViewAndControllerArea()
         {
-            HeaderCreate();
+            HeaderCreate("View/Controller");
 
             ViewAndControllerButton();
             SingleTypesDropdown(ref _controllerAndViewTypeIndex, _controllerAndViewTypes);
@@ -784,34 +782,133 @@ namespace UnityMVC.Editor
         }
         private void ComponentArea()
         {
-            HeaderCreate();
+            HeaderCreate("MVC Component");
             
             ComponentButton();
             CustomSingleTypesDropdown(ref _componentTypeIndex, _componentTypes, "and inherits from:");
         }
-        private void LoaderSolverAndContainerArea()
+        private void ModelsArea()
         {
-            HeaderCreate();
+            HeaderCreate("Loader, Solver and Controller");
             
             LoaderSolverAndContainerButton();
             SingleTypesDropdown(ref _loaderSolverAndContainerIntex, _loaderSolverAndContainerTypes);
             GUILayout.Space(7);
             
-            HeaderCreate();
+            HeaderCreate("Container");
             
             ContainerButton();
             SingleTypesDropdown(ref _containerTypeIndex, _containerTypes);
             GUILayout.Space(7);
             
-            HeaderCreate();
+            HeaderCreate("Loader and Solver");
             
             LoaderAndSolverButtons();
             DoubleTypesDropdown(ref  _loaderTypeIndex, _loaderTypes, ref _solverTypeIndex, _solverTypes);
         }
         
+        private void OtherArea()
+        {
+
+            CreateInterfaceButton();
+            CreateEnumButton();
+            CreateScriptableObjectButton();
+        }
+
+        private void CreateInterfaceButton()
+        {
+            HeaderCreate("Interface");
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button($"I{_baseName}", GUILayout.Width(_btnWidth * 2)))
+            {
+                if (String.IsNullOrEmpty(_namespace))
+                {
+                    ShowNameSpaceEmptyDialog();
+                    return;
+                }
+                
+                MVCCodeGenerator.CreateInterface(_namespace, _baseName, UnityMVCResources.Data.removeComments);
+                OnCreatedFile();
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        
+        private void CreateEnumButton()
+        {
+            GUILayout.Space(5);
+            HeaderCreate("Enum");
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button($"{_baseName}", GUILayout.Width(_btnWidth * 2)))
+            {
+                if (String.IsNullOrEmpty(_namespace))
+                {
+                    ShowNameSpaceEmptyDialog();
+                    return;
+                }
+                
+                MVCCodeGenerator.CreateEnum(_namespace, _baseName, UnityMVCResources.Data.removeComments);
+                OnCreatedFile();
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        
+        private void CreateScriptableObjectButton()
+        {
+            GUILayout.Space(5);
+            HeaderCreate("Scriptable Object");
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            int order = 0;
+            GUILayout.Label("Order: ");
+            order = EditorGUILayout.IntField(order, GUILayout.Width(40));
+            if (order < 0)
+            {
+                order = 0;
+            }
+            
+            GUILayout.Label("File Name: ");
+            _scriptableObjectFileName = EditorGUILayout.TextField(_scriptableObjectFileName, GUILayout.Width(100));
+
+            
+            GUILayout.Label("Menu Name: ");
+            _scriptableObjectMenuName = EditorGUILayout.TextField(_scriptableObjectMenuName, GUILayout.Width(100));
+            
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button($"{_baseName}ScriptableObject", GUILayout.Width(_btnWidth * 2)))
+            {
+                if (string.IsNullOrEmpty(_scriptableObjectFileName) || string.IsNullOrEmpty(_scriptableObjectMenuName))
+                {
+                    FileNameOrMenuNameNullDialog();
+                    return;
+                }
+                if (String.IsNullOrEmpty(_namespace))
+                {
+                    ShowNameSpaceEmptyDialog();
+                    return;
+                }
+                
+                MVCCodeGenerator.CreateScriptableObject(_namespace, $"{_baseName}ScriptableObject", order, _scriptableObjectFileName,_scriptableObjectMenuName, UnityMVCResources.Data.removeComments);
+                _scriptableObjectFileName = String.Empty;
+                _scriptableObjectMenuName = string.Empty;
+                OnCreatedFile();
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        
         private void UnityComponentArea()
         {
-            HeaderCreate();
+            HeaderCreate("Unity Component");
             
             UnityComponentButton();
             //SingleTypesDropdown(ref _loaderSolverAndContainerIntex, _loaderSolverAndContainerTypes);
@@ -899,11 +996,11 @@ namespace UnityMVC.Editor
             index = EditorGUILayout.Popup(label, index, types.ToArray(), GUILayout.Width(_btnWidth * sizeMultiplier));
         }
         
-        private void NamespacesDropdown(ref int index, List<string> types, int multiplier = 2)
+        private void ModulesDropdown(ref int index, List<string> types, int multiplier = 2)
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            TypesListDropdown(ref index, types, multiplier, "Namespace");
+            TypesListDropdown(ref index, types, multiplier, "Modules");
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
@@ -947,9 +1044,9 @@ namespace UnityMVC.Editor
             GUILayout.Space(3);
         }
 
-        private void HeaderCreate()
+        private void HeaderCreate(string label)
         {
-            RegionHeader("Create:");
+            RegionHeader($"Create {label}:");
         }
         private void RegionFooter(string str)
         {
@@ -1241,16 +1338,19 @@ namespace UnityMVC.Editor
 
         }
 
+        private void FileNameOrMenuNameNullDialog()
+        {
+            EditorUtility.DisplayDialog("Invalid operation", "Please, add File Name or Menu Name", "Ok!"); 
+        }
+
         private void ShowNameSpaceEmptyDialog()
         {
             EditorUtility.DisplayDialog("Invalid operation", "Please, add a namespace to your class.", "Ok!");
-
         }
         
         private void ShowModuleAlreadyExistsDialog()
         {
             EditorUtility.DisplayDialog("Invalid operation", "This module already exists. Please, go to MVC Code Generator tab", "Ok!");
-
         }
 
         private void ShowClassSelectionDialog()

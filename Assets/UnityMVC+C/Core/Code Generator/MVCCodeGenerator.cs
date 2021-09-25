@@ -20,7 +20,10 @@ namespace UnityMVC.CodeGenerator
         MVCComponentGroup,
         Container,
         Loader,
-        Solver
+        Solver,
+        Interface,
+        Enum,
+        ScriptableObject
     }
     public class MVCCodeGenerator
     {
@@ -83,6 +86,25 @@ namespace UnityMVC.CodeGenerator
         public static void CreateSolver(string nameSpace, string name, bool removeComments, string inheritsFrom = null)
         {
             GenerateScript(nameSpace,name, GetTemplate(ScriptType.Solver), GetPath("Solvers"), ScriptType.Solver, removeComments, virtualToOverride: inheritsFrom != null, isPartial:false);
+        }
+        
+        public static void CreateInterface(string nameSpace, string name, bool removeComments)
+        {
+            GenerateScript(nameSpace,name, GetTemplate(ScriptType.Interface), GetPath("Interfaces"), ScriptType.Interface, removeComments, virtualToOverride: false, isPartial:false);
+        }
+        
+        public static void CreateEnum(string nameSpace, string name, bool removeComments)
+        {
+            GenerateScript(nameSpace,name, GetTemplate(ScriptType.Enum), GetPath("Enums"), ScriptType.Enum, removeComments, virtualToOverride: false, isPartial:false);
+        }
+        
+        public static void CreateScriptableObject(string nameSpace, string name,int order, string filename, string menuName, bool removeComments)
+        {
+            string template = GetTemplate(ScriptType.ScriptableObject);
+            template = template.Replace("666", order.ToString());
+            template = template.Replace("{filename}", filename);
+            template = template.Replace("{menuname}", menuName);
+            GenerateScript(nameSpace,name, template, GetPath("ScriptableObjects"), ScriptType.ScriptableObject, removeComments, virtualToOverride: false, isPartial:false);
         }
 
         public static void UpdatePartial(string nameSpace, ScriptType type, string name, string baseType, string path, string view)
@@ -206,6 +228,21 @@ namespace UnityMVC.CodeGenerator
             {
                 templateStr = templateStr.Replace($"SolverTemplate", $"{name}Solver");
             }
+            
+            if (type == ScriptType.Interface)
+            {
+                templateStr = templateStr.Replace($"InterfaceTemplate", $"I{name}");
+            }
+
+            if (type == ScriptType.ScriptableObject)
+            {
+                templateStr = templateStr.Replace($"ScriptableObjectTemplate", $"{name}");
+            }
+            
+            if (type == ScriptType.Enum)
+            {
+                templateStr = templateStr.Replace($"EnumTemplate", $"{name}");
+            }
 
             templateStr = templateStr.Replace($"ControllerTemplateEvents", $"{name}ControllerEvents");
 
@@ -314,7 +351,14 @@ namespace UnityMVC.CodeGenerator
             {
                 return $"{assets}/Scripts/{type}";
             }
-            return $"{assets}/{UnityMVCResources.Data.CurrentScriptsFolder}/{type}";
+
+            string folderPath = $"{assets}/{UnityMVCResources.Data.CurrentScriptsFolder}/{type}";
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+
+            }
+            return folderPath;
         }
 
         public static UnityMVCModuleModel CreateModule(string modulePath, string newModuleName, string newNamespace)

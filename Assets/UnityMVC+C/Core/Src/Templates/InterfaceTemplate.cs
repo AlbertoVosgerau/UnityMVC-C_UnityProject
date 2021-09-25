@@ -1,0 +1,6 @@
+/*<NAMESPACE>*/
+    public interface InterfaceTemplate
+    {
+        
+    }
+/*}*/
