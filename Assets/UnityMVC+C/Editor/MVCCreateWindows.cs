@@ -30,7 +30,7 @@ namespace UnityMVC.Editor
         private float _btnWidth = 220;
         private Vector2 _scrollPosition = new Vector2(0,0);
         private int _currentMVCTab = 0;
-        private string[] _MVCtabs = new[] {"Controllers/Views", "MVCComponents", "Models", "UnityComponent"};
+        private string[] _MVCtabs = new[] {"Controllers/Views", "MVC Components", "Models", "UnityComponent", "Other"};
         private int _currentPath = 0;
         private List<string> _dataPaths;
         
@@ -301,7 +301,15 @@ namespace UnityMVC.Editor
                 case 3:
                     SettingsArea();
                     break;
+                case 4:
+                    HelpArea();
+                    break;
             }
+        }
+
+        private void HelpArea()
+        {
+            GUILayout.Label($"Will contain Help and documentation");
         }
 
         private void MVCTabs()
@@ -312,7 +320,7 @@ namespace UnityMVC.Editor
             GUIStyle style = new GUIStyle(GUI.skin.button);;
             style.fontSize = 2;
 
-            _currentMVCTab = GUILayout.Toolbar(_currentMVCTab, _MVCtabs, style, GUILayout.Width(_btnWidth *2) );
+            _currentMVCTab = GUILayout.Toolbar(_currentMVCTab, _MVCtabs, style );
             
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
@@ -335,7 +343,15 @@ namespace UnityMVC.Editor
                 case 3:
                     UnityComponentArea();
                     break;
+                case 4:
+                    MiscArea();
+                    break;
             }
+        }
+
+        private void MiscArea()
+        {
+            GUILayout.Label($"Will contain Interfaces, Enums and ScriptableObjects");
         }
 
         private void NoModuleFoundArea()
