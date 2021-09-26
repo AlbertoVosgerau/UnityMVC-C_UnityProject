@@ -5,6 +5,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityMVC.Component;
+using UnityMVC.Model;
 
 namespace UnityMVC.Inspector
 {
@@ -73,8 +74,9 @@ namespace UnityMVC.Inspector
             bool isView = type.BaseType == typeof(View.View);
             bool isMvcComponent = type.BaseType == typeof(MVCComponent);
             bool isUnityComponent = type.BaseType == typeof(UnityComponent.UnityComponent);
+            bool isScriptableObject = type.BaseType == typeof(MVCScriptableObject);
 
-            return isController || isView || isMvcComponent || isUnityComponent;
+            return isController || isView || isMvcComponent || isUnityComponent || isScriptableObject;
         }
     }
 }

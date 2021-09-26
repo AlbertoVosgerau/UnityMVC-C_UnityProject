@@ -16,6 +16,8 @@ namespace aaaa
     {
         // MVC properties available: View and Events
         private bbbbView asdasd;
+        private haha hasdas;
+        private MVCaaaaaScriptableObjectScriptableObject a;
 
         protected override void SolveDependencies()
         {

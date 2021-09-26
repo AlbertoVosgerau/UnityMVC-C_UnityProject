@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityMVC.Model;
 
 /*<NAMESPACE>*/
 
     [CreateAssetMenu(order = 666, fileName = "{filename}", menuName = "{menuname}")]
-    public class ScriptableObjectTemplate : ScriptableObject
+    public class ScriptableObjectTemplate : MVCScriptableObject
     {
         
     }
