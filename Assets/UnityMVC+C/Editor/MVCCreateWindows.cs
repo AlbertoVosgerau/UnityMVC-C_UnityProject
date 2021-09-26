@@ -548,7 +548,7 @@ namespace UnityMVC.Editor
 
                 string name = dependencyInfo.controllers.Results[0].type.Name.Replace("Controller", "");
 
-                var icon = dependencyInfo.IsOk? EditorGUIUtility.IconContent("d_winbtn_mac_max") : EditorGUIUtility.IconContent("d_console.warnicon.sml");
+                GUIContent icon = dependencyInfo.IsOk? EditorGUIUtility.IconContent("d_winbtn_mac_max") : EditorGUIUtility.IconContent("d_console.warnicon.sml");
 
                 string text = $"<b>{name} Module</b>:  {classesCount.ToString("00")} MVC+C classes and {dependenciesCount.ToString("00")} MVC+C dependencies";
 
@@ -610,6 +610,7 @@ namespace UnityMVC.Editor
                 }
                 
                 GUILayout.Label($"{dependency.type.Name} depends on:", GUILayout.Width(_btnWidth * 2));
+                GUILayout.Space(5);
 
                 for (int i = 0; i < dependency.fieldInfos.Count; i++)
                 {
@@ -617,14 +618,55 @@ namespace UnityMVC.Editor
                     MessageType message = dependency.MessageTypes[i];
                     char[] separators = new char[] { '.' };
                     string[] name = info.FieldType.ToString().Split(separators);
-                    var helpBoxStyle = EditorStyles.helpBox;
-                    helpBoxStyle.fontSize = 13;
+                    GUIStyle fakeHelpbox = new GUIStyle("HelpBox");
+                    fakeHelpbox.fontSize = 13;
+                    
+                    
+                    if (message == MessageType.Info)
+                    {
+                        GUIContent icon = new GUIContent($" {name.Last()} on variable {info.Name}", EditorGUIUtility.IconContent("d_winbtn_mac_max").image);
 
-                    EditorGUILayout.HelpBox($"{name.Last()} on variable {info.Name}", message);
+                        EditorGUILayout.LabelField(icon, fakeHelpbox);
+                    }
+                    else
+                    {
+                        string toolTip = InspectorFeedbackTooltip(dependency.type.BaseType);
+                        
+                        GUIContent icon = new GUIContent($" {name.Last()} on variable {info.Name}", EditorGUIUtility.IconContent("d_console.warnicon.sml").image, tooltip: toolTip);
+                        EditorGUILayout.LabelField(new GUIContent(icon), fakeHelpbox);
+                    }
+                    GUILayout.Space(5);
                 }
                 
                 GUILayout.Space(20);
             }
+        }
+
+        private string InspectorFeedbackTooltip(Type type)
+        {
+            if (type == typeof(Controller.Controller))
+            {
+                return "Controllers are allowed to have only other module's Controller as field dependency.\n" +
+                       "If you need to send other type of data, consider using events instead.";
+            }
+            if (type == typeof(View.View))
+            {
+                return "Views are not allowed to use ANY field dependency from other modules. Its own Controller should provide the needed data.";
+            }
+            if (type == typeof(MVCComponent))
+            {
+                return "MVCComponents are not allowed to use ANY field dependency from other modules. Its own View should provide the needed data.";
+            }
+            if (type == typeof(MVCComponentGroup))
+            {
+                return "MVCComponentGroups are only allowed to depend on MVCComponents from other modules.";
+            }
+            if (type == typeof(UnityComponent.UnityComponent))
+            {
+                return "MVCComponents are not allowed to use ANY field dependency from other modules. A MVCComponent should provide the needed data.";
+            }
+
+            return "You have a dependency from another module. This can be an unintended dependency, please check your script.";
         }
         
         private void NamespacePrefixArea()
