@@ -8,6 +8,7 @@ using UnityEditor.Graphs;
 using UnityEngine;
 using UnityMVC.CodeGenerator;
 using UnityMVC.Component;
+using UnityMVC.Inspector;
 using UnityMVC.Model;
 
 namespace UnityMVC.Editor
@@ -57,7 +58,7 @@ namespace UnityMVC.Editor
         private int _moduleIndex;
         private List<UnityMVCModuleModel> _modules = new List<UnityMVCModuleModel>();
 
-        private List<MVCDataDependencies> _dependenciesList = new List<MVCDataDependencies>();
+        private List<MVCDependencyResult> _dependenciesList = new List<MVCDependencyResult>();
         private List<bool> _dependenciesFoldout = new List<bool>();
 
         private List<string> _componentViewTypes = new List<string>();
@@ -83,7 +84,7 @@ namespace UnityMVC.Editor
             //SolveDatapaths();
             UnityMVCResources.LoadData();
             _modulePath = UnityMVCResources.Data.modulesRelativePath;
-            UnityMVCModuleData.GetAllModules();
+            UnityMVCModuleData.UpdateModulesList();
             UpdateAllTypes();
             UpdateDependencies();
         }
@@ -526,12 +527,12 @@ namespace UnityMVC.Editor
         
         private void InspectorArea()
         {
-            GUILayout.Label($"Dependency inspector. Maps MVC+C modules that depends on each other", GUILayout.Width(_btnWidth * 2));
+            GUILayout.Label($"Dependency inspector. Maps MVC+C modules that depends on each other\n\nThe warnings help you to find possible unintended dependencies.\nIf you are sure your code is ok, just ignore it.", GUILayout.Width(_btnWidth * 2));
             GUILayout.Space(20);
 
             for (int i = 0; i < _dependenciesList.Count; i++)
             {
-                MVCDataDependencies dependencyInfo = _dependenciesList[i];
+                MVCDependencyResult dependencyInfo = _dependenciesList[i];
 
                 int dependenciesCount = dependencyInfo.controllers.ItemsCount +
                             dependencyInfo.mvcComponentGroups.ItemsCount +
@@ -539,15 +540,15 @@ namespace UnityMVC.Editor
                             dependencyInfo.mvcComponents.ItemsCount +
                             dependencyInfo.unityComponents.ItemsCount;
                 
-                int classesCount = dependencyInfo.controllers.results.Count +
-                                   dependencyInfo.mvcComponentGroups.results.Count +
-                                   dependencyInfo.views.results.Count +
-                                   dependencyInfo.mvcComponents.results.Count +
-                                   dependencyInfo.unityComponents.results.Count;
+                int classesCount = dependencyInfo.controllers.Results.Count +
+                                   dependencyInfo.mvcComponentGroups.Results.Count +
+                                   dependencyInfo.views.Results.Count +
+                                   dependencyInfo.mvcComponents.Results.Count +
+                                   dependencyInfo.unityComponents.Results.Count;
 
-                string name = dependencyInfo.controllers.results[0].type.Name.Replace("Controller", "");
+                string name = dependencyInfo.controllers.Results[0].type.Name.Replace("Controller", "");
 
-                var icon = DependenciesAreOk(dependencyInfo)? EditorGUIUtility.IconContent("d_winbtn_mac_max") : EditorGUIUtility.IconContent("d_console.warnicon.sml");
+                var icon = dependencyInfo.IsOk? EditorGUIUtility.IconContent("d_winbtn_mac_max") : EditorGUIUtility.IconContent("d_console.warnicon.sml");
 
                 string text = $"<b>{name} Module</b>:  {classesCount.ToString("00")} MVC+C classes and {dependenciesCount.ToString("00")} MVC+C dependencies";
 
@@ -570,23 +571,19 @@ namespace UnityMVC.Editor
                     
                     _dependenciesFoldout[i] = EditorGUILayout.Foldout(_dependenciesFoldout[i], text, foldoutStyle);
                     
-                    if (_dependenciesFoldout[i] && dependenciesCount > 0)
+                    if (_dependenciesFoldout[i])
                     {
                         GUILayout.BeginHorizontal();
                         GUILayout.Space(-55);
                         GUILayout.BeginVertical();
                         GUILayout.Space(25);
-                        bool controllersOk = ControllerDependenciesAreOk(dependencyInfo.controllers);
-                        MessageType controllerMessage = controllersOk? MessageType.Info : MessageType.Warning;
-                        DependencyFeedback(dependencyInfo.controllers, controllerMessage);
-                    
-                        bool componentGroupsOk = MVCComponentsDependenciesAreOk(dependencyInfo.mvcComponentGroups);
-                        MessageType componentGroupsMessage = componentGroupsOk? MessageType.Info : MessageType.Warning;
-                        DependencyFeedback(dependencyInfo.mvcComponentGroups, componentGroupsMessage);
-                    
-                        DependencyFeedback(dependencyInfo.views, MessageType.Warning);
-                        DependencyFeedback(dependencyInfo.mvcComponents, MessageType.Warning);
-                        DependencyFeedback(dependencyInfo.unityComponents, MessageType.Warning);
+
+                        DependencyFeedback(dependencyInfo.controllers.Results);
+                        DependencyFeedback(dependencyInfo.mvcComponentGroups.Results);
+                        DependencyFeedback(dependencyInfo.views.Results);
+                        DependencyFeedback(dependencyInfo.mvcComponents.Results);
+                        DependencyFeedback(dependencyInfo.unityComponents.Results);
+                        
                         GUILayout.EndVertical();
                         GUILayout.FlexibleSpace();
                         GUILayout.FlexibleSpace();
@@ -602,119 +599,30 @@ namespace UnityMVC.Editor
             }
         }
 
-        private bool ControllerDependenciesAreOk(MVCInspectorData data)
+
+        private void DependencyFeedback(List<MVCInspectorDataTypeResult> results)
         {
-
-            foreach (var dependency in data.results)
+            foreach (var dependency in results)
             {
-                if (dependency.dependenciesRoot.Count == 0)
+                if (dependency.fieldInfos.Count == 0)
                 {
-                    return true;
-                }
-                
-                foreach (var value in dependency.dependenciesRoot)
-                {
-                    if (value.FieldType.BaseType != typeof(Controller.Controller))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        private bool MVCComponentsDependenciesAreOk(MVCInspectorData data)
-        {
-            foreach (var dependency in data.results)
-            {
-                if (dependency.dependenciesRoot.Count == 0)
-                {
-                    return true;
-                }
-                
-                foreach (var value in dependency.dependenciesRoot)
-                {
-                    if (value.FieldType.BaseType != typeof(MVCComponent))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        private bool DependenciesAreOk(MVCDataDependencies info)
-        {
-            bool controllerDependenciesAreOk = ControllerDependenciesAreOk(info.controllers);
-            bool cgAreOk = MVCComponentsDependenciesAreOk(info.mvcComponentGroups);
-            bool viewsAreOk = info.views.ItemsCount == 0;
-            bool componentsAreOk = info.mvcComponents.ItemsCount == 0;
-            bool unityComponentsAreOk = info.unityComponents.ItemsCount == 0;
-
-            return cgAreOk && controllerDependenciesAreOk && viewsAreOk && componentsAreOk && unityComponentsAreOk;
-        }
-
-        private bool CheckIfHasDependency(MVCDataDependencies dependencies)
-        {
-            return HasDependency(dependencies.controllers) &&
-                   HasDependency(dependencies.mvcComponentGroups) &&
-                   HasDependency(dependencies.mvcComponents) &&
-                   HasDependency(dependencies.views) &&
-                   HasDependency(dependencies.unityComponents);
-        }
-        
-        private bool HasDependency(MVCInspectorData data)
-        {
-
-            if (data == null || data.results == null)
-            {
-                return false;
-            }
-            
-            foreach (var dependency in data.results)
-            {
-                if (dependency.dependenciesRoot.Count == 0)
-                {
-                    return false;
-                }
-                
-                foreach (var value in dependency.dependenciesRoot)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private void DependencyFeedback(MVCInspectorData data, MessageType messageType)
-        {
-            if (data == null || data.results == null)
-            {
-                return;
-            }
-            
-            foreach (var dependency in data.results)
-            {
-                if (dependency.dependenciesRoot.Count == 0)
-                {
-                    //GUILayout.Label($"{dependency.type.Name} has no dependency", GUILayout.Width(_btnWidth * 2));
                     return;
                 }
                 
                 GUILayout.Label($"{dependency.type.Name} depends on:", GUILayout.Width(_btnWidth * 2));
 
-                foreach (var value in dependency.dependenciesRoot)
+                for (int i = 0; i < dependency.fieldInfos.Count; i++)
                 {
+                    FieldInfo info = dependency.fieldInfos[i];
+                    MessageType message = dependency.MessageTypes[i];
                     char[] separators = new char[] { '.' };
-                    string[] name = value.FieldType.ToString().Split(separators);
+                    string[] name = info.FieldType.ToString().Split(separators);
                     var helpBoxStyle = EditorStyles.helpBox;
                     helpBoxStyle.fontSize = 13;
 
-                    EditorGUILayout.HelpBox($"{name.Last()} on variable {value.Name}", messageType);
+                    EditorGUILayout.HelpBox($"{name.Last()} on variable {info.Name}", message);
                 }
+                
                 GUILayout.Space(20);
             }
         }
@@ -990,7 +898,8 @@ namespace UnityMVC.Editor
         private void UpdateModules(ref List<UnityMVCModuleModel> models, Type type)
         {
             models.Clear();
-            models = UnityMVCModuleData.GetAllModules();
+            UnityMVCModuleData.UpdateModulesList();
+            models = UnityMVCModuleData.ProjectModules;
         }
         private void TypesListDropdown(ref int index, List<string> types, float sizeMultiplier = 1, string label = "")
         {
