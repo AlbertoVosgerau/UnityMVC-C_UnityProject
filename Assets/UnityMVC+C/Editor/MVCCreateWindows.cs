@@ -805,7 +805,7 @@ namespace UnityMVC.Editor
                     return;
                 }
                 
-                MVCCodeGenerator.CreateScriptableObject(_namespace, $"{_baseName}ScriptableObject", order, _scriptableObjectFileName,_scriptableObjectMenuName, UnityMVCResources.Data.removeComments);
+                MVCCodeGenerator.CreateScriptableObject(_namespace, _baseName, order, _scriptableObjectFileName,_scriptableObjectMenuName, UnityMVCResources.Data.removeComments);
                 _scriptableObjectFileName = String.Empty;
                 _scriptableObjectMenuName = string.Empty;
                 OnCreatedFile();
