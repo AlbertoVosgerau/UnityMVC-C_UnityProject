@@ -21,10 +21,10 @@ namespace UnityMVC.Inspector
                 foreach (FieldInfo info in fieldInfos)
                 {
                     bool isSameNamespace = info.FieldType.Namespace == type.Namespace;
-                    bool notView = info.FieldType.BaseType == typeof(Controller.Controller) &&
-                                            type.BaseType != typeof(View.View);
+                    bool isController = info.FieldType.BaseType == typeof(Controller.Controller) &&
+                                            type.BaseType == typeof(Controller.Controller);
 
-                    bool isOk = isSameNamespace || notView;
+                    bool isOk = isSameNamespace || isController;
                     _isOk.Add(isOk);
                 }
 
