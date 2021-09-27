@@ -8,6 +8,7 @@ using UnityMVC.Component;
 
 namespace UnityMVC.Inspector
 {
+#if UNITY_EDITOR
     public class MVCInspectorDataTypeResult
     {
         public Type type;
@@ -63,4 +64,5 @@ namespace UnityMVC.Inspector
 
         private List<bool> _isOk = new List<bool>();
     }
+#endif
 }

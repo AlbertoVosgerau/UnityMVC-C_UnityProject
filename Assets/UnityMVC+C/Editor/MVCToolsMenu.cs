@@ -12,6 +12,7 @@ using UnityMVC.View;
 
 public class MVCToolsMenu : EditorWindow
 {
+#if UNITY_EDITOR
     public class PartialUpdateData
     {
         public string nameSpace;
@@ -79,4 +80,5 @@ public class MVCToolsMenu : EditorWindow
         }
         return null;
     }
+    #endif
 }
