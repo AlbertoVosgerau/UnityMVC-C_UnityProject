@@ -1,10 +1,11 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityMVC.CodeGenerator;
 using UnityMVC.Component;
 
 namespace UnityMVC.Editor
 {
-#if UNITY_EDITOR
+
     public class MVCMenu : EditorWindow
     {
         //[MenuItem("Unity MVC+C/Tools/Update Partials", priority = 200)]
@@ -39,5 +40,5 @@ namespace UnityMVC.Editor
             MVCFolderStructure.SetupProjectFolder();
         }
     }
-#endif
 }
+#endif

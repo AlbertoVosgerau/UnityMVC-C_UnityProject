@@ -1,4 +1,4 @@
-﻿
+﻿#if UNITY_EDITOR
 using System.IO;
 using UnityEngine;
 
@@ -209,3 +209,4 @@ namespace UnityMVC.Editor
         }
     }
 }
+#endif

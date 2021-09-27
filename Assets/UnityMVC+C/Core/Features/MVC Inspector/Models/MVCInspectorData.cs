@@ -1,9 +1,10 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnityMVC.Inspector
 {
-#if UNITY_EDITOR
+
     public class MVCInspectorData<T> where T : class
     {
         public int ItemsCount
@@ -52,5 +53,5 @@ namespace UnityMVC.Inspector
             _results = results;
         }
     }
-#endif
 }
+#endif

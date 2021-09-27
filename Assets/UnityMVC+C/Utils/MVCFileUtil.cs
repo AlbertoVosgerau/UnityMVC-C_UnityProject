@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#if UNITY_EDITOR
+using System.IO;
 
 namespace UnityMVC.Editor
 {
@@ -24,3 +25,4 @@ namespace UnityMVC.Editor
         }
     }
 }
+#endif

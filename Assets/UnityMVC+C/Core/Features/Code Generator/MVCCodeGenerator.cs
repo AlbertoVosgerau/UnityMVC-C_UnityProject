@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,6 @@ using UnityMVC.Utils;
 
 namespace UnityMVC.CodeGenerator
 {
-    #if UNITY_EDITOR
     public enum ScriptType
     {
         MVCApplication,
@@ -25,6 +25,7 @@ namespace UnityMVC.CodeGenerator
         Enum,
         ScriptableObject
     }
+    
     public class MVCCodeGenerator
     {
         public static void CreateApplication(string name)
@@ -481,5 +482,5 @@ namespace UnityMVC.CodeGenerator
             return str;
         }
     }
-#endif
 }
+#endif

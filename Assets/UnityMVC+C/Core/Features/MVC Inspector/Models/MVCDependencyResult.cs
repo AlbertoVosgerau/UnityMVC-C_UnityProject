@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityMVC.Component;
 
 namespace UnityMVC.Inspector
@@ -13,3 +14,4 @@ namespace UnityMVC.Inspector
         public MVCInspectorData<UnityComponent.UnityComponent> unityComponents = new MVCInspectorData<UnityComponent.UnityComponent>();
     }
 }
+#endif
