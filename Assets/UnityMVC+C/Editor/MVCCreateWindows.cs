@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -1356,5 +1357,5 @@ namespace UnityMVC.Editor
     }
 }
 #pragma warning restore 414
-#if UNITY_EDITOR
+
 #endif
