@@ -6,7 +6,7 @@ It is an architecture, project manager and code generator that aims to implement
 
 # Philosophy
 
-Unity MVC+C is build aroung a few core philosophies:
+Unity MVC+C is built around a few core philosophies:
 
 - Every feature is a module that MUST work on its own or be explicit and clear about its dependencies.
 
