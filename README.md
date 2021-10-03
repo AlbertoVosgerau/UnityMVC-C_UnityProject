@@ -103,7 +103,7 @@ Their job is simple do the smaller piece of GameObject logic and can't access an
 
 In the end this is how the hierarchy of the architectuure looks like:
 
-![Unity MVC+C Hierarchy](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/02.png)
+![Unity MVC+C Hierarchy](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/Hierarchy.png)
 
 
 # Ok, but how does it work?
