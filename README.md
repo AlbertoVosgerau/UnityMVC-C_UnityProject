@@ -101,6 +101,11 @@ Let's say you cave a module that is important and nests other module's features.
 Simply put, it is the MVC+C version of the MonoBehaviour. It inherits from MonoBehaviour and organizes the structure to make sure it is consistent with the architecture code standards.
 Their job is simple do the smaller piece of GameObject logic and can't access any external dependency.
 
+In the end this is how the hierarchy of the architectuure looks like:
+
+![Unity MVC+C Hierarchy](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/02.png)
+
+
 # Ok, but how does it work?
 
 ## How to start a project
