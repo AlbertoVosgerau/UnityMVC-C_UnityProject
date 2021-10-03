@@ -78,14 +78,14 @@ Solver is responsible for get data in a format and output it in some other requi
 
 ##### MVCComponent
 
-MVCComponents are essencially the owner of a Unity GameObject on the architecture.
+MVCComponents are essencially the owners of a Unity GameObject on the architecture.
 If a View needs to talk to the GameObject or it needs any data or component, it will ask the MVCComponent, and it is MVCComponent's responsability to locally look for it and provide it.
 It will also apply any internal logic that responds to what the object does.
 It never calls any method on its owner View, it will raise events to pass data to it.
 
 ##### MVCComponentGroup
 
-MVCComponentGroups are an exception on the system.
+MVCComponentGroups are an exception to the system.
 Let's say you cave a module that is important and nests other module's features. This component will be responsible to make the whole object hierarchy work, by calling other MVCComponents's methods.
 
 ##### UnityComponent
