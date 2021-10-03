@@ -247,3 +247,6 @@ This section is probably gonna become a separate window, it will just contain gu
 - [ ] Make a sample and template project to showcade use cases
 - [ ] Add settings window if needed
 - [ ] Create a version of the system that runs without AssemblyDefinition, since some projects might rely on code that is not ready for it
+- [ ] Finish documentation
+- [ ] Create tutorials
+- [ ] Fill Wiki with infos and documentation
