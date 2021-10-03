@@ -107,6 +107,21 @@ Let's say you cave a module that is important and nests other module's features.
 Simply put, it is the MVC+C version of the MonoBehaviour. It inherits from MonoBehaviour and organizes the structure to make sure it is consistent with the architecture code standards.
 Their job is simple do the smaller piece of GameObject logic and can't access any external dependency.
 
+##### Assembly Definitions
+
+On top of the architecture structure, MVC+C makes use of Assembly Definitions.
+That means every module will linve inside of its own assembly. This is done by placing an AssemblyDefinition file inside the Module's Script folder, which will be done automatically for you.
+
+![Assembly Definition Screenshot](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/15.png)
+
+If you want to use any class from outside your module, you will now have to explicitly add its reference to the Assembly Definition file, like that:
+
+![Adding Assembly Definition reference](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/16.png)
+
+Assembly Definitions are an amazing tool to prevend bad habits with code, making sure no reference is added to the module without explicit knowledge of the developer, it also won't allow you to create cyclic dependencies, meaning if two modules depend on each other, you probably want to create a third module that will interface their common behaviour, or passing data trough events, delegates or wathever your team agree on.
+
+Also, Assembly Definitions allow us to implement unit tests and yes, we got you covered on that one too! MVC+C will automatically generate Tests folders with a basic setup for every feature and module.
+
 
 # Ok, but how does it work?
 
