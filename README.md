@@ -10,6 +10,8 @@ Unity MVC+C is build aroung a few core philosophies:
 
 - Every feature is a module that MUST work on its own or be explicit and clear about its dependencies.
 
+- Every module has its own independent folder that can be easily detached or deleted from the project.
+
 - Every module has its own namespace.
 
 - Every module has its own assembly.
