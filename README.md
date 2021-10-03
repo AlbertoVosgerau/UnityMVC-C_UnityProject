@@ -155,11 +155,64 @@ After you have a project initialized with the proper files and structure and at 
 
 It is VERY important to note, this is where you create your classes from now on, since the code generator will take care to link all dependencies internally and generate the proper code. If you have a specific type of class you want to ask to be included, please feel free to do so.
 
+Let's take a look at that the tabs in there are for.
+
 ### Module Wizard
 
 This is the tab in which you will create new modules.
 
 ### Code Generator
+
+The main part of the MVC+C system, here you are going to create every file inside a module.
+
+If you take a look at it, you will notice that you can select the module you are working on in a dropdown. No need to worry about folders or anything like that, the MVC+C has a standar folder structure and your file will be created inside your module on the righr place for you. Soon you will have more details about it in the wiki of this project as well.
+
+![Unity MVC+C Modules dropdown](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/08.png)
+
+Right below it, you will find the Base File Name input field.
+There you can type the name of your feature, that will then be automatically composed with the type of file you will be creating, like, if you file is Player, then you are creating a MVCComponent, you will have the button Create PlayerMVCComponent that will create a file called PlayerMVCComponent.cs inside the module's Scripts/Components folder and so on.
+
+![Unity MVC+C Inspector](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/09.png)
+
+Here are the tabs inside this section and what they will contain. Keep in mind that every class in this section will be found inside your module's Script folder
+
+#### Controllers/Views
+
+- Create View/Controller
+- Create View
+- Create Controller
+
+![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/10.png)
+
+#### MVC Components
+
+- Create MVCComponent
+- Create MVCComponentGroup
+
+![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/11.png)
+
+#### Models
+
+- Create Loader/Solver/Container
+- Create Container
+- Create Loader
+- Create Solver
+
+![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/12.png)
+
+#### UnityComponent
+
+- Create UnityComponent
+
+![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/13.png)
+
+#### Other
+
+- Create Interface
+- Create Enum
+- Create ScriptableObject
+
+![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/14.png)
 
 ### Inspector
 
@@ -177,6 +230,8 @@ This section is probably gonna become a separate window, it will just contain gu
 
 - [ ] Add assets module (modules that dedicated to assets and prefabs, no code involved)
 - [ ] Add help window
+- [ ] Add the module's location in the project in the MVC+C Generator window
+- [ ] Highlight the created folder or file on Unity's Project tab after creation
 - [ ] Refactor EditorWindow code (divide in smaller classes)
 - [ ] Refactor Code Generator (Right now it works with no known issue, but it can be generic and more elegant)
 - [ ] Develop upgrade feature and/or workflow (for upgrading MVC+C versions on running projects)
