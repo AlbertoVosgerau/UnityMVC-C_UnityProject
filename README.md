@@ -4,7 +4,6 @@ Unity MVC+C stands for Model, View, Controller + Component.
 
 It is an architecture, project manager and code generator that aims to implement a modular MVC concept on Unity project, making sure the project is clean, organized and no unwanted dependency is ever added to any feature of your project.
 
-
 # Philosophy
 
 Unity MVC+C is build aroung a few core philosophies:
@@ -40,9 +39,8 @@ In special, there is no upgrade feture ow workflow for now, it is planed for the
 
 ![Installation screenshot](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/06.png)
 
-# Ok, but how does it work?
 
-## Architecture
+### Architecture
 The MVC+C architecture has the followin components:
 
 ### Controller
@@ -103,6 +101,7 @@ Let's say you cave a module that is important and nests other module's features.
 Simply put, it is the MVC+C version of the MonoBehaviour. It inherits from MonoBehaviour and organizes the structure to make sure it is consistent with the architecture code standards.
 Their job is simple do the smaller piece of GameObject logic and can't access any external dependency.
 
+# Ok, but how does it work?
 
 ## How to start a project
 
