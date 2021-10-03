@@ -4,7 +4,6 @@ Unity MVC+C stands for Model, View, Controller + Component.
 
 It is an architecture, project manager and code generator that aims to implement a modular MVC concept on Unity project, making sure the project is clean, organized and no unwanted dependency is ever added to any feature of your project.
 
-
 # Philosophy
 
 Unity MVC+C is build aroung a few core philosophies:
@@ -29,7 +28,7 @@ Unity MVC+C is build aroung a few core philosophies:
 
 - MVC Components take care of local data of the GameObject itself and provide data for the View.
 
-# Installing
+# Installation
 
 If you want to use the MVC+C Code Generator, for now please add this git link to your Unity Package Manager:
 
@@ -38,9 +37,10 @@ https://github.com/AlbertoVosgerau/UnityMVC-C.git#releases/0.0.3
 Please, keep in ming that it is still on an alpha state and it might have a few changes and bug fixes in the future.
 In special, there is no upgrade feture ow workflow for now, it is planed for the future, so feel free to use it, change it in any way you want, just keep in mind the current state of the project.
 
-# Ok, but how does it work?
+![Installation screenshot](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/06.png)
 
-## Architecture
+
+### Architecture
 The MVC+C architecture has the followin components:
 
 ### Controller
@@ -101,12 +101,18 @@ Let's say you cave a module that is important and nests other module's features.
 Simply put, it is the MVC+C version of the MonoBehaviour. It inherits from MonoBehaviour and organizes the structure to make sure it is consistent with the architecture code standards.
 Their job is simple do the smaller piece of GameObject logic and can't access any external dependency.
 
+# Ok, but how does it work?
 
 ## How to start a project
 
 Using the MVC+C Code Generator is pretty straightfoward.
 After importing Unity MVC+C package on your brand new Unity project, go to Unity MVC+C > Open Creation Window.
+
+![Unity MVC+C Menu](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/01.png)
+
 This will open the MVC+C Window, place it wherever you want on your Unity interface.
+
+![Unity MVC+C Window](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/02.png)
 
 Now you need to initialize your project by creating your projects MVCApplication file.
 A MVCApplication is the static class that will provide Controllers and is the place you can add your global application data if needed.
@@ -117,7 +123,11 @@ If you want to fill your folder structure, you can select which folders you want
 Then just create your project MVC+C Project.
 
 Great, you now have created a whole MVC+C project.
+
+![Proejct folder structure](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/03.png)
+
 From now on the MVC+C window will be where you start all the code for any module.
+
 
 ## Modules? What is it?
 
@@ -130,7 +140,35 @@ A module is essencially a feature your project might have. Every feature should 
 Creating your first module is pretty simple, for your first module the MVC+C Code Generator will ask you the name and namespace of the module.
 Just go ahead and create your very first module.
 
+![Module creation window](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/04.png)
+
 That's all! Your module is ready.
 You can inspect your Modules folder and see how the structure of a module looks like.
 
 Note: There's a known issue for now where for the first module, it won't recognize _Project/Modules folder as the module folder, it that is your case, please select this path manually. This will be fixed soon.
+
+## MVC+C Window
+
+After you have a project initialized with the proper files and structure and at least one module, whenever you come back to the MVC+C window, this is how it is gonna look like:
+
+![Unity MVC+C Window](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/05.png)
+
+It is VERY important to note, this is where you create your classes from now on, since the code generator will take care to link all dependencies internally and generate the proper code. If you have a specific type of class you want to ask to be included, please feel free to do so.
+
+### Module Wizard
+
+This is the tab in which you will create new modules.
+
+### Code Generator
+
+### Inspector
+
+The Inspector is a helper tool that will analyse the code's health.
+It inspects the MVC+C classes to find possible wrong declarations or improper dependencies on classes fields.
+If any problem is detected, it will show it as a warning, this may or may not be what you intented, it is not up to the MVC+C to say that, but it is going to try to help you to find blindspots.
+
+![Unity MVC+C Inspector](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/07.png)
+
+### Help
+
+This section is propably gonna become a separate window, it will just contain guides and help, probably, if needed and helpful.
