@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +7,9 @@ using System.Reflection;
 using UnityEditor;
 using UnityEditor.Graphs;
 using UnityEngine;
+using UnityMVC.CodeGenerator;
 using UnityMVC.Component;
+using UnityMVC.Inspector;
 using UnityMVC.Model;
 
 namespace UnityMVC.Editor
@@ -15,7 +18,7 @@ namespace UnityMVC.Editor
     public class MVCCreateWindows : EditorWindow
     {
         private int _mainTabIntex = 0;
-        private string[] _mainTabs = new[] {"Module Wizard", "MVC+C Code Generator", "Inspector"};
+        private string[] _mainTabs = new[] {"Module Wizard", "Code Generator", "Inspector", "Help"};
 
         private string _newModuleName;
         private string _newNamespace;
@@ -29,7 +32,7 @@ namespace UnityMVC.Editor
         private float _btnWidth = 220;
         private Vector2 _scrollPosition = new Vector2(0,0);
         private int _currentMVCTab = 0;
-        private string[] _MVCtabs = new[] {"Controllers/Views", "MVCComponents", "Models", "UnityComponent"};
+        private string[] _MVCtabs = new[] {"Controllers/Views", "MVC Components", "Models", "UnityComponent", "Other"};
         private int _currentPath = 0;
         private List<string> _dataPaths;
         
@@ -56,13 +59,18 @@ namespace UnityMVC.Editor
         private int _moduleIndex;
         private List<UnityMVCModuleModel> _modules = new List<UnityMVCModuleModel>();
 
-        private List<MVCDataDependencies> _dependenciesList = new List<MVCDataDependencies>();
+        private List<MVCDependencyResult> _dependenciesList = new List<MVCDependencyResult>();
         private List<bool> _dependenciesFoldout = new List<bool>();
 
         private List<string> _componentViewTypes = new List<string>();
         private int _componentViewIndex;
         private bool _hasApplication = false;
 
+        int _scriptableObjectOrder = 0;
+        string _scriptableObjectFileName;
+        private string _scriptableObjectMenuName;
+
+        
         [MenuItem("Unity MVC+C/Open Creation Window", priority = 0)]
         private static void Init()
         {
@@ -77,7 +85,7 @@ namespace UnityMVC.Editor
             //SolveDatapaths();
             UnityMVCResources.LoadData();
             _modulePath = UnityMVCResources.Data.modulesRelativePath;
-            UnityMVCModuleData.GetAllModules();
+            UnityMVCModuleData.UpdateModulesList();
             UpdateAllTypes();
             UpdateDependencies();
         }
@@ -120,15 +128,18 @@ namespace UnityMVC.Editor
             MainTabs();
         }
 
-        private static void Header()
+        private static void Header(string str)
         {
-            GUILayout.Label("Create MVC+C Script", EditorStyles.boldLabel);
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.LabelField(str, EditorStyles.boldLabel, GUILayout.Width(440));
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
         }
         
         private void CreateApplicationArea()
         {
             GUILayout.Space(10);
-            
             
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
@@ -185,7 +196,87 @@ namespace UnityMVC.Editor
                 MVCCodeGenerator.CreateApplication(_projectName);
                 OnCreatedFile();
             }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            
+            GUILayout.Space(5);
+            OptionsArea();
+            GUILayout.Space(15);
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Label($"The project {_projectName} will be created with the following folder structure", GUILayout.Width(_btnWidth * 2));
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            GUILayout.Space(15);
+            
+            GUILayout.BeginVertical();
 
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            
+            FoldersCreationArea();
+            
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+
+            GUILayout.EndVertical();
+        }
+
+        private void FoldersCreationArea()
+        {
+            GUILayout.BeginVertical();
+
+            Checkbox(true, "_Project", 0);
+            Checkbox(ref MVCFolderStructure.create3dModelsFolder,"3D Models", 1);
+            Checkbox(true,"Application", 1);
+            Checkbox(ref MVCFolderStructure.createAudioFolder,"Audio", 1);
+            Checkbox(true,"Scripts", 2);
+            Checkbox(true,"Common", 1);
+            Checkbox(true,"Prefabs", 2);
+            Checkbox(true,"Scripts", 2);
+            Checkbox(true,"Tests", 3);
+            Checkbox(true,"EditMode", 4);
+            Checkbox(true,"PlayMode", 4);
+            Checkbox(true,"Modules", 1);
+            Checkbox(true,"Prefabs", 1);
+            Checkbox(true,"Scenes", 1);
+            Checkbox(true,"Scripts", 1);
+            Checkbox(true,"Tests", 2);
+            Checkbox(true,"EditMode", 3);
+            Checkbox(true,"PlayMode", 3);
+            Checkbox(ref MVCFolderStructure.createResourcesFolder,"Resources", 1);
+            Checkbox(ref MVCFolderStructure.createSpritesFolder,"Sprites", 1);
+            Checkbox(ref MVCFolderStructure.createTexturesFolder,"Textures", 1);
+            Checkbox(ref MVCFolderStructure.createUIFolder,"UI", 1);
+            
+            Checkbox(ref MVCFolderStructure.createThirdPartyFolder,"ThirdParty", 0);
+
+            GUILayout.EndVertical();
+        }
+
+        private void Checkbox(ref bool value, string str, int spacing)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Space(spacing * 20);
+
+            value = GUILayout.Toggle(value, str, GUILayout.Width(_btnWidth *2));
+            
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        
+        private void Checkbox(bool defaultValue, string str, int spacing)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Space(spacing * 20);
+            GUIStyle style = new GUIStyle("Toggle");
+            style.fontStyle = FontStyle.Bold;
+
+            GUILayout.Toggle(defaultValue, str, style, GUILayout.Width(_btnWidth *2));
+            
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
@@ -214,7 +305,15 @@ namespace UnityMVC.Editor
                 case 2:
                     InspectorArea();
                     break;
+                case 3:
+                    HelpArea();
+                    break;
             }
+        }
+
+        private void HelpArea()
+        {
+            GUILayout.Label($"Will contain Help and documentation");
         }
 
         private void MVCTabs()
@@ -225,7 +324,7 @@ namespace UnityMVC.Editor
             GUIStyle style = new GUIStyle(GUI.skin.button);;
             style.fontSize = 2;
 
-            _currentMVCTab = GUILayout.Toolbar(_currentMVCTab, _MVCtabs, style, GUILayout.Width(_btnWidth *2) );
+            _currentMVCTab = GUILayout.Toolbar(_currentMVCTab, _MVCtabs, style );
             
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
@@ -243,10 +342,13 @@ namespace UnityMVC.Editor
                     }
                     break;
                 case 2:
-                    LoaderSolverAndContainerArea();
+                    ModelsArea();
                     break;
                 case 3:
                     UnityComponentArea();
+                    break;
+                case 4:
+                    OtherArea();
                     break;
             }
         }
@@ -316,7 +418,7 @@ namespace UnityMVC.Editor
             
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            RemoveCommentsFromGeneratedCodeArea();
+            OptionsArea();
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
             
@@ -366,7 +468,7 @@ namespace UnityMVC.Editor
 
         private void MVCAreaCodeGeneratorArea()
         {
-            Header();
+            Header("Create MVC+C Script");
             GUILayout.Space(20);
             
             CreateAssetAtArea();
@@ -385,11 +487,31 @@ namespace UnityMVC.Editor
             }
             else
             {
-                RemoveCommentsFromGeneratedCodeArea();
+                OptionsArea();
                 GUILayout.Space(20);
                 MVCTabs();
             }
             
+            GUILayout.EndVertical();
+        }
+
+        private void SettingsArea()
+        {
+            Header("MVC+C Settings");
+            GUILayout.Space(5);
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Label("All settings on this session are placeholder for now. Nothing is really working.");
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(20);
+            OptionsArea();
+        }
+
+        private void OptionsArea()
+        {
+            GUILayout.BeginVertical();
+            RemoveCommentsFromGeneratedCodeArea();
             GUILayout.EndVertical();
         }
 
@@ -406,12 +528,12 @@ namespace UnityMVC.Editor
         
         private void InspectorArea()
         {
-            GUILayout.Label($"Dependency inspector. Maps MVC+C modules that depends on each other", GUILayout.Width(_btnWidth * 2));
+            GUILayout.Label($"Dependency inspector. Maps MVC+C modules that depends on each other\n\nThe warnings help you to find possible unintended dependencies.\nIf you are sure your code is ok, just ignore it.", GUILayout.Width(_btnWidth * 2));
             GUILayout.Space(20);
 
             for (int i = 0; i < _dependenciesList.Count; i++)
             {
-                MVCDataDependencies dependencyInfo = _dependenciesList[i];
+                MVCDependencyResult dependencyInfo = _dependenciesList[i];
 
                 int dependenciesCount = dependencyInfo.controllers.ItemsCount +
                             dependencyInfo.mvcComponentGroups.ItemsCount +
@@ -419,15 +541,15 @@ namespace UnityMVC.Editor
                             dependencyInfo.mvcComponents.ItemsCount +
                             dependencyInfo.unityComponents.ItemsCount;
                 
-                int classesCount = dependencyInfo.controllers.results.Count +
-                                   dependencyInfo.mvcComponentGroups.results.Count +
-                                   dependencyInfo.views.results.Count +
-                                   dependencyInfo.mvcComponents.results.Count +
-                                   dependencyInfo.unityComponents.results.Count;
+                int classesCount = dependencyInfo.controllers.Results.Count +
+                                   dependencyInfo.mvcComponentGroups.Results.Count +
+                                   dependencyInfo.views.Results.Count +
+                                   dependencyInfo.mvcComponents.Results.Count +
+                                   dependencyInfo.unityComponents.Results.Count;
 
-                string name = dependencyInfo.controllers.results[0].type.Name.Replace("Controller", "");
+                string name = dependencyInfo.controllers.Results[0].type.Name.Replace("Controller", "");
 
-                var icon = DependenciesAreOk(dependencyInfo)? EditorGUIUtility.IconContent("d_winbtn_mac_max") : EditorGUIUtility.IconContent("d_console.warnicon.sml");
+                GUIContent icon = dependencyInfo.IsOk? EditorGUIUtility.IconContent("d_winbtn_mac_max") : EditorGUIUtility.IconContent("d_console.warnicon.sml");
 
                 string text = $"<b>{name} Module</b>:  {classesCount.ToString("00")} MVC+C classes and {dependenciesCount.ToString("00")} MVC+C dependencies";
 
@@ -450,23 +572,19 @@ namespace UnityMVC.Editor
                     
                     _dependenciesFoldout[i] = EditorGUILayout.Foldout(_dependenciesFoldout[i], text, foldoutStyle);
                     
-                    if (_dependenciesFoldout[i] && dependenciesCount > 0)
+                    if (_dependenciesFoldout[i])
                     {
                         GUILayout.BeginHorizontal();
                         GUILayout.Space(-55);
                         GUILayout.BeginVertical();
                         GUILayout.Space(25);
-                        bool controllersOk = ControllerDependenciesAreOk(dependencyInfo.controllers);
-                        MessageType controllerMessage = controllersOk? MessageType.Info : MessageType.Warning;
-                        DependencyFeedback(dependencyInfo.controllers, controllerMessage);
-                    
-                        bool componentGroupsOk = MVCComponentsDependenciesAreOk(dependencyInfo.mvcComponentGroups);
-                        MessageType componentGroupsMessage = componentGroupsOk? MessageType.Info : MessageType.Warning;
-                        DependencyFeedback(dependencyInfo.mvcComponentGroups, componentGroupsMessage);
-                    
-                        DependencyFeedback(dependencyInfo.views, MessageType.Warning);
-                        DependencyFeedback(dependencyInfo.mvcComponents, MessageType.Warning);
-                        DependencyFeedback(dependencyInfo.unityComponents, MessageType.Warning);
+
+                        DependencyFeedback(dependencyInfo.controllers.Results);
+                        DependencyFeedback(dependencyInfo.mvcComponentGroups.Results);
+                        DependencyFeedback(dependencyInfo.views.Results);
+                        DependencyFeedback(dependencyInfo.mvcComponents.Results);
+                        DependencyFeedback(dependencyInfo.unityComponents.Results);
+                        
                         GUILayout.EndVertical();
                         GUILayout.FlexibleSpace();
                         GUILayout.FlexibleSpace();
@@ -482,121 +600,74 @@ namespace UnityMVC.Editor
             }
         }
 
-        private bool ControllerDependenciesAreOk(MVCInspectorData data)
+
+        private void DependencyFeedback(List<MVCInspectorDataTypeResult> results)
         {
-
-            foreach (var dependency in data.results)
+            foreach (var dependency in results)
             {
-                if (dependency.dependenciesRoot.Count == 0)
+                if (dependency.fieldInfos.Count == 0)
                 {
-                    return true;
-                }
-                
-                foreach (var value in dependency.dependenciesRoot)
-                {
-                    if (value.FieldType.BaseType != typeof(Controller.Controller))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        private bool MVCComponentsDependenciesAreOk(MVCInspectorData data)
-        {
-            foreach (var dependency in data.results)
-            {
-                if (dependency.dependenciesRoot.Count == 0)
-                {
-                    return true;
-                }
-                
-                foreach (var value in dependency.dependenciesRoot)
-                {
-                    if (value.FieldType.BaseType != typeof(MVCComponent))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        private bool DependenciesAreOk(MVCDataDependencies info)
-        {
-            bool controllerDependenciesAreOk = ControllerDependenciesAreOk(info.controllers);
-            bool cgAreOk = MVCComponentsDependenciesAreOk(info.mvcComponentGroups);
-            bool viewsAreOk = info.views.ItemsCount == 0;
-            bool componentsAreOk = info.mvcComponents.ItemsCount == 0;
-            bool unityComponentsAreOk = info.unityComponents.ItemsCount == 0;
-
-            return cgAreOk && controllerDependenciesAreOk && viewsAreOk && componentsAreOk && unityComponentsAreOk;
-        }
-
-        private bool CheckIfHasDependency(MVCDataDependencies dependencies)
-        {
-            return HasDependency(dependencies.controllers) &&
-                   HasDependency(dependencies.mvcComponentGroups) &&
-                   HasDependency(dependencies.mvcComponents) &&
-                   HasDependency(dependencies.views) &&
-                   HasDependency(dependencies.unityComponents);
-        }
-        
-        private bool HasDependency(MVCInspectorData data)
-        {
-
-            if (data == null || data.results == null)
-            {
-                return false;
-            }
-            
-            foreach (var dependency in data.results)
-            {
-                if (dependency.dependenciesRoot.Count == 0)
-                {
-                    return false;
-                }
-                
-                foreach (var value in dependency.dependenciesRoot)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private void DependencyFeedback(MVCInspectorData data, MessageType messageType)
-        {
-            if (data == null || data.results == null)
-            {
-                return;
-            }
-            
-            foreach (var dependency in data.results)
-            {
-                if (dependency.dependenciesRoot.Count == 0)
-                {
-                    //GUILayout.Label($"{dependency.type.Name} has no dependency", GUILayout.Width(_btnWidth * 2));
                     return;
                 }
                 
                 GUILayout.Label($"{dependency.type.Name} depends on:", GUILayout.Width(_btnWidth * 2));
+                GUILayout.Space(5);
 
-                foreach (var value in dependency.dependenciesRoot)
+                for (int i = 0; i < dependency.fieldInfos.Count; i++)
                 {
+                    FieldInfo info = dependency.fieldInfos[i];
+                    MessageType message = dependency.MessageTypes[i];
                     char[] separators = new char[] { '.' };
-                    string[] name = value.FieldType.ToString().Split(separators);
-                    var helpBoxStyle = EditorStyles.helpBox;
-                    helpBoxStyle.fontSize = 13;
+                    string[] name = info.FieldType.ToString().Split(separators);
+                    GUIStyle fakeHelpbox = new GUIStyle("HelpBox");
+                    fakeHelpbox.fontSize = 13;
+                    
+                    
+                    if (message == MessageType.Info)
+                    {
+                        GUIContent icon = new GUIContent($" {name.Last()} on variable {info.Name}", EditorGUIUtility.IconContent("d_winbtn_mac_max").image);
 
-                    EditorGUILayout.HelpBox($"{name.Last()} on variable {value.Name}", messageType);
+                        EditorGUILayout.LabelField(icon, fakeHelpbox);
+                    }
+                    else
+                    {
+                        string toolTip = InspectorFeedbackTooltip(dependency.type.BaseType);
+                        
+                        GUIContent icon = new GUIContent($" {name.Last()} on variable {info.Name}", EditorGUIUtility.IconContent("d_console.warnicon.sml").image, tooltip: toolTip);
+                        EditorGUILayout.LabelField(new GUIContent(icon), fakeHelpbox);
+                    }
+                    GUILayout.Space(5);
                 }
+                
                 GUILayout.Space(20);
             }
+        }
+
+        private string InspectorFeedbackTooltip(Type type)
+        {
+            if (type == typeof(Controller.Controller))
+            {
+                return "Controllers are allowed to have only other module's Controller as field dependency.\n" +
+                       "If you need to send other type of data, consider using events instead.";
+            }
+            if (type == typeof(View.View))
+            {
+                return "Views are not allowed to use ANY field dependency from other modules. Its own Controller should provide the needed data.";
+            }
+            if (type == typeof(MVCComponent))
+            {
+                return "MVCComponents are not allowed to use ANY field dependency from other modules. Its own View should provide the needed data.";
+            }
+            if (type == typeof(MVCComponentGroup))
+            {
+                return "MVCComponentGroups are only allowed to depend on MVCComponents from other modules.";
+            }
+            if (type == typeof(UnityComponent.UnityComponent))
+            {
+                return "MVCComponents are not allowed to use ANY field dependency from other modules. A MVCComponent should provide the needed data.";
+            }
+
+            return "You have a dependency from another module. This can be an unintended dependency, please check your script.";
         }
         
         private void NamespacePrefixArea()
@@ -614,7 +685,7 @@ namespace UnityMVC.Editor
             GUILayout.FlexibleSpace();
             EditorGUI.BeginChangeCheck();
             List<string> names = _modules.Select(x => x.moduleName).ToList();
-            NamespacesDropdown(ref _moduleIndex, names);
+            ModulesDropdown(ref _moduleIndex, names);
             _namespace = _modules[_moduleIndex].moduleNamespace;
             UnityMVCResources.Data.currentModule = _modules[_moduleIndex];
             if (EditorGUI.EndChangeCheck())
@@ -632,12 +703,13 @@ namespace UnityMVC.Editor
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
         }
+
         private void RemoveCommentsFromGeneratedCodeArea()
         {
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             EditorGUI.BeginChangeCheck();
-            UnityMVCResources.Data.removeComments = GUILayout.Toggle(UnityMVCResources.Data.removeComments, " Remove comments from generated code", GUILayout.Width(_btnWidth * 2));
+            Checkbox(ref UnityMVCResources.Data.removeComments, " Remove comments from generated code", 0);
             UnityMVCResources.SaveAllData();
             if (EditorGUI.EndChangeCheck())
             {
@@ -650,7 +722,7 @@ namespace UnityMVC.Editor
 
         private void ViewAndControllerArea()
         {
-            HeaderCreate();
+            HeaderCreate("View/Controller");
 
             ViewAndControllerButton();
             SingleTypesDropdown(ref _controllerAndViewTypeIndex, _controllerAndViewTypes);
@@ -661,34 +733,133 @@ namespace UnityMVC.Editor
         }
         private void ComponentArea()
         {
-            HeaderCreate();
+            HeaderCreate("MVC Component");
             
             ComponentButton();
             CustomSingleTypesDropdown(ref _componentTypeIndex, _componentTypes, "and inherits from:");
         }
-        private void LoaderSolverAndContainerArea()
+        private void ModelsArea()
         {
-            HeaderCreate();
+            HeaderCreate("Loader, Solver and Controller");
             
             LoaderSolverAndContainerButton();
             SingleTypesDropdown(ref _loaderSolverAndContainerIntex, _loaderSolverAndContainerTypes);
             GUILayout.Space(7);
             
-            HeaderCreate();
+            HeaderCreate("Container");
             
             ContainerButton();
             SingleTypesDropdown(ref _containerTypeIndex, _containerTypes);
             GUILayout.Space(7);
             
-            HeaderCreate();
+            HeaderCreate("Loader and Solver");
             
             LoaderAndSolverButtons();
             DoubleTypesDropdown(ref  _loaderTypeIndex, _loaderTypes, ref _solverTypeIndex, _solverTypes);
         }
         
+        private void OtherArea()
+        {
+
+            CreateInterfaceButton();
+            CreateEnumButton();
+            CreateScriptableObjectButton();
+        }
+
+        private void CreateInterfaceButton()
+        {
+            HeaderCreate("Interface");
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button($"I{_baseName}", GUILayout.Width(_btnWidth * 2)))
+            {
+                if (String.IsNullOrEmpty(_namespace))
+                {
+                    ShowNameSpaceEmptyDialog();
+                    return;
+                }
+                
+                MVCCodeGenerator.CreateInterface(_namespace, _baseName, UnityMVCResources.Data.removeComments);
+                OnCreatedFile();
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        
+        private void CreateEnumButton()
+        {
+            GUILayout.Space(5);
+            HeaderCreate("Enum");
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button($"{_baseName}", GUILayout.Width(_btnWidth * 2)))
+            {
+                if (String.IsNullOrEmpty(_namespace))
+                {
+                    ShowNameSpaceEmptyDialog();
+                    return;
+                }
+                
+                MVCCodeGenerator.CreateEnum(_namespace, _baseName, UnityMVCResources.Data.removeComments);
+                OnCreatedFile();
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        
+        private void CreateScriptableObjectButton()
+        {
+            GUILayout.Space(5);
+            HeaderCreate("Scriptable Object");
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            int order = 0;
+            GUILayout.Label("Order: ");
+            order = EditorGUILayout.IntField(order, GUILayout.Width(40));
+            if (order < 0)
+            {
+                order = 0;
+            }
+            
+            GUILayout.Label("File Name: ");
+            _scriptableObjectFileName = EditorGUILayout.TextField(_scriptableObjectFileName, GUILayout.Width(100));
+
+            
+            GUILayout.Label("Menu Name: ");
+            _scriptableObjectMenuName = EditorGUILayout.TextField(_scriptableObjectMenuName, GUILayout.Width(100));
+            
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button($"{_baseName}ScriptableObject", GUILayout.Width(_btnWidth * 2)))
+            {
+                if (string.IsNullOrEmpty(_scriptableObjectFileName) || string.IsNullOrEmpty(_scriptableObjectMenuName))
+                {
+                    FileNameOrMenuNameNullDialog();
+                    return;
+                }
+                if (String.IsNullOrEmpty(_namespace))
+                {
+                    ShowNameSpaceEmptyDialog();
+                    return;
+                }
+                
+                MVCCodeGenerator.CreateScriptableObject(_namespace, _baseName, order, _scriptableObjectFileName,_scriptableObjectMenuName, UnityMVCResources.Data.removeComments);
+                _scriptableObjectFileName = String.Empty;
+                _scriptableObjectMenuName = string.Empty;
+                OnCreatedFile();
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        
         private void UnityComponentArea()
         {
-            HeaderCreate();
+            HeaderCreate("Unity Component");
             
             UnityComponentButton();
             //SingleTypesDropdown(ref _loaderSolverAndContainerIntex, _loaderSolverAndContainerTypes);
@@ -698,6 +869,7 @@ namespace UnityMVC.Editor
         private void OnChangedValue()
         {
             UnityMVCResources.SaveAllData();
+            _modulePath = UnityMVCResources.Data.modulesRelativePath;
         }
 
         private void OnCreatedFile()
@@ -706,6 +878,7 @@ namespace UnityMVC.Editor
             UpdateAllTypes();
             UpdateDependencies();
             _hasApplication = HasApplication();
+            AssetDatabase.Refresh();
         }
 
         public static List<string> GetTypesList(Type objectType, bool addFirstItem, string suffix, string namespaceFilter)
@@ -768,18 +941,19 @@ namespace UnityMVC.Editor
         private void UpdateModules(ref List<UnityMVCModuleModel> models, Type type)
         {
             models.Clear();
-            models = UnityMVCModuleData.GetAllModules();
+            UnityMVCModuleData.UpdateModulesList();
+            models = UnityMVCModuleData.ProjectModules;
         }
         private void TypesListDropdown(ref int index, List<string> types, float sizeMultiplier = 1, string label = "")
         {
             index = EditorGUILayout.Popup(label, index, types.ToArray(), GUILayout.Width(_btnWidth * sizeMultiplier));
         }
         
-        private void NamespacesDropdown(ref int index, List<string> types, int multiplier = 2)
+        private void ModulesDropdown(ref int index, List<string> types, int multiplier = 2)
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            TypesListDropdown(ref index, types, multiplier, "Namespace");
+            TypesListDropdown(ref index, types, multiplier, "Modules");
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
@@ -823,9 +997,9 @@ namespace UnityMVC.Editor
             GUILayout.Space(3);
         }
 
-        private void HeaderCreate()
+        private void HeaderCreate(string label)
         {
-            RegionHeader("Create:");
+            RegionHeader($"Create {label}:");
         }
         private void RegionFooter(string str)
         {
@@ -1117,16 +1291,19 @@ namespace UnityMVC.Editor
 
         }
 
+        private void FileNameOrMenuNameNullDialog()
+        {
+            EditorUtility.DisplayDialog("Invalid operation", "Please, add File Name or Menu Name", "Ok!"); 
+        }
+
         private void ShowNameSpaceEmptyDialog()
         {
             EditorUtility.DisplayDialog("Invalid operation", "Please, add a namespace to your class.", "Ok!");
-
         }
         
         private void ShowModuleAlreadyExistsDialog()
         {
             EditorUtility.DisplayDialog("Invalid operation", "This module already exists. Please, go to MVC Code Generator tab", "Ok!");
-
         }
 
         private void ShowClassSelectionDialog()
@@ -1180,5 +1357,5 @@ namespace UnityMVC.Editor
     }
 }
 #pragma warning restore 414
-#if UNITY_EDITOR
+
 #endif

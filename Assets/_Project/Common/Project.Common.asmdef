@@ -1,0 +1,16 @@
+{
+    "name": "Project.Common",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d455f17496f913747a2155f7f914f5d6"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

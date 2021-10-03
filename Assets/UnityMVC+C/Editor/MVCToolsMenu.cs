@@ -1,9 +1,11 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using UnityMVC.CodeGenerator;
 using UnityMVC.Component;
 using UnityMVC.Controller;
 using UnityMVC.Editor;
@@ -11,6 +13,7 @@ using UnityMVC.View;
 
 public class MVCToolsMenu : EditorWindow
 {
+
     public class PartialUpdateData
     {
         public string nameSpace;
@@ -79,3 +82,4 @@ public class MVCToolsMenu : EditorWindow
         return null;
     }
 }
+#endif

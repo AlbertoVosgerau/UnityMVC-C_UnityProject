@@ -1,0 +1,6 @@
+/*<NAMESPACE>*/
+    public enum EnumTemplate
+    {
+        
+    }
+/*}*/

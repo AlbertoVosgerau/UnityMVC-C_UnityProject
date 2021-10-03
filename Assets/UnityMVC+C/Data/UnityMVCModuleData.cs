@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -25,6 +26,9 @@ namespace UnityMVC.Editor
         public static string ModuleMetadataFileName => $"{_moduleMetadataFileName}.{_moduleMetadataExtension}";
         private static string _moduleMetadataFileName = "unitymvcdata";
         private static string _moduleMetadataExtension = "module";
+
+        public static List<UnityMVCModuleModel> ProjectModules => _projectModules;
+        private static List<UnityMVCModuleModel> _projectModules = new List<UnityMVCModuleModel>();
 
         public static UnityMVCModuleModel GenerateModuleMetadata(string moduleAbsolutePath, string moduleName, string moduleNamespace)
         {
@@ -76,7 +80,7 @@ namespace UnityMVC.Editor
             return absolutePath;
         }
 
-        public static List<UnityMVCModuleModel> GetAllModules()
+        public static void UpdateModulesList()
         {
             List<UnityMVCModuleModel> data = new List<UnityMVCModuleModel>();
             string[] assets = AssetDatabase.FindAssets(_moduleMetadataFileName);
@@ -93,7 +97,9 @@ namespace UnityMVC.Editor
                 dataFile.relativePath = assetPath;
                 data.Add(dataFile);
             }
-            return data;
+
+            _projectModules = data;
         }
     }
 }
+#endif
