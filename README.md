@@ -29,7 +29,7 @@ Unity MVC+C is build aroung a few core philosophies:
 
 - MVC Components take care of local data of the GameObject itself and provide data for the View.
 
-# Installing
+# Installation
 
 If you want to use the MVC+C Code Generator, for now please add this git link to your Unity Package Manager:
 
@@ -37,6 +37,8 @@ https://github.com/AlbertoVosgerau/UnityMVC-C.git#releases/0.0.3
 
 Please, keep in ming that it is still on an alpha state and it might have a few changes and bug fixes in the future.
 In special, there is no upgrade feture ow workflow for now, it is planed for the future, so feel free to use it, change it in any way you want, just keep in mind the current state of the project.
+
+![Installation screenshot](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/06.png)
 
 # Ok, but how does it work?
 
