@@ -26,7 +26,7 @@ Unity MVC+C is built around a few core philosophies:
 
 - Controllers NEVER access directly any class from another module. It calls the other module's controller and subscribe to its events.
 
-- Every MonoBehaviour belongs to View side of MVC.
+- Views are MonoBehaviours.
 
 - MVC Components take care of local data of the GameObject itself and provide data for the View.
 
@@ -39,11 +39,15 @@ https://github.com/AlbertoVosgerau/UnityMVC-C.git#releases/0.0.3
 Please, keep in ming that it is still on an alpha state and it might have a few changes and bug fixes in the future.
 In special, there is no upgrade feture ow workflow for now, it is planed for the future, so feel free to use it, change it in any way you want, just keep in mind the current state of the project.
 
-![Installation screenshot](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/06.png)
+![Installation screenshot](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/06.png)
 
 
 ### Architecture
+
 The MVC+C architecture has the following components:
+
+
+![Unity MVC+C Hierarchy](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/Hierarchy.png)
 
 ### Controller
 
@@ -103,9 +107,20 @@ Let's say you cave a module that is important and nests other module's features.
 Simply put, it is the MVC+C version of the MonoBehaviour. It inherits from MonoBehaviour and organizes the structure to make sure it is consistent with the architecture code standards.
 Their job is simple do the smaller piece of GameObject logic and can't access any external dependency.
 
-In the end this is how the hierarchy of the architectuure looks like:
+##### Assembly Definitions
 
-![Unity MVC+C Hierarchy](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/Hierarchy.png)
+On top of the architecture structure, MVC+C makes use of Assembly Definitions.
+That means every module will linve inside of its own assembly. This is done by placing an AssemblyDefinition file inside the Module's Script folder, which will be done automatically for you.
+
+![Assembly Definition Screenshot](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/15.png)
+
+If you want to use any class from outside your module, you will now have to explicitly add its reference to the Assembly Definition file, like that:
+
+![Adding Assembly Definition reference](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/16.png)
+
+Assembly Definitions are an amazing tool to prevend bad habits with code, making sure no reference is added to the module without explicit knowledge of the developer, it also won't allow you to create cyclic dependencies, meaning if two modules depend on each other, you probably want to create a third module that will interface their common behaviour, or passing data trough events, delegates or wathever your team agree on.
+
+Also, Assembly Definitions allow us to implement unit tests and yes, we got you covered on that one too! MVC+C will automatically generate Tests folders with a basic setup for every feature and module.
 
 
 # Ok, but how does it work?
@@ -115,11 +130,11 @@ In the end this is how the hierarchy of the architectuure looks like:
 Using the MVC+C Code Generator is pretty straightfoward.
 After importing Unity MVC+C package on your brand new Unity project, go to Unity MVC+C > Open Creation Window.
 
-![Unity MVC+C Menu](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/01.png)
+![Unity MVC+C Menu](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/01.png)
 
 This will open the MVC+C Window, place it wherever you want on your Unity interface.
 
-![Unity MVC+C Window](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/02.png)
+![Unity MVC+C Window](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/02.png)
 
 Now you need to initialize your project by creating your projects MVCApplication file.
 A MVCApplication is the static class that will provide Controllers and is the place you can add your global application data if needed.
@@ -131,7 +146,7 @@ Then just create your project MVC+C Project.
 
 Great, you now have created a whole MVC+C project.
 
-![Proejct folder structure](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/03.png)
+![Proejct folder structure](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/03.png)
 
 From now on the MVC+C window will be where you start all the code for any module.
 
@@ -147,7 +162,7 @@ A module is essencially a feature your project might have. Every feature should 
 Creating your first module is pretty simple, for your first module the MVC+C Code Generator will ask you the name and namespace of the module.
 Just go ahead and create your very first module.
 
-![Module creation window](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/04.png)
+![Module creation window](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/04.png)
 
 That's all! Your module is ready.
 You can inspect your Modules folder and see how the structure of a module looks like.
@@ -158,7 +173,7 @@ Note: There's a known issue for now where for the first module, it won't recogni
 
 After you have a project initialized with the proper files and structure and at least one module, whenever you come back to the MVC+C window, this is how it is gonna look like:
 
-![Unity MVC+C Window](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/05.png)
+![Unity MVC+C Window](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/05.png)
 
 It is VERY important to note, this is where you create your classes from now on, since the code generator will take care to link all dependencies internally and generate the proper code. If you have a specific type of class you want to ask to be included, please feel free to do so.
 
@@ -174,12 +189,12 @@ The main part of the MVC+C system, here you are going to create every file insid
 
 If you take a look at it, you will notice that you can select the module you are working on in a dropdown. No need to worry about folders or anything like that, the MVC+C has a standar folder structure and your file will be created inside your module on the righr place for you. Soon you will have more details about it in the wiki of this project as well.
 
-![Unity MVC+C Modules dropdown](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/08.png)
+![Unity MVC+C Modules dropdown](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/08.png)
 
 Right below it, you will find the Base File Name input field.
 There you can type the name of your feature, that will then be automatically composed with the type of file you will be creating, like, if you file is Player, then you are creating a MVCComponent, you will have the button Create PlayerMVCComponent that will create a file called PlayerMVCComponent.cs inside the module's Scripts/Components folder and so on.
 
-![Unity MVC+C Inspector](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/09.png)
+![Unity MVC+C Inspector](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/09.png)
 
 Here are the tabs inside this section and what they will contain. Keep in mind that every class in this section will be found inside your module's Script folder
 
@@ -189,14 +204,14 @@ Here are the tabs inside this section and what they will contain. Keep in mind t
 - Create View
 - Create Controller
 
-![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/10.png)
+![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/10.png)
 
 #### MVC Components
 
 - Create MVCComponent
 - Create MVCComponentGroup
 
-![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/11.png)
+![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/11.png)
 
 #### Models
 
@@ -205,13 +220,13 @@ Here are the tabs inside this section and what they will contain. Keep in mind t
 - Create Loader
 - Create Solver
 
-![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/12.png)
+![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/12.png)
 
 #### UnityComponent
 
 - Create UnityComponent
 
-![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/13.png)
+![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/13.png)
 
 #### Other
 
@@ -219,7 +234,7 @@ Here are the tabs inside this section and what they will contain. Keep in mind t
 - Create Enum
 - Create ScriptableObject
 
-![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/14.png)
+![Unity MVC+C Creation tab](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/14.png)
 
 ### Inspector
 
@@ -227,7 +242,7 @@ The Inspector is a helper tool that will analyse the code's health.
 It inspects the MVC+C classes to find possible wrong declarations or improper dependencies on classes fields.
 If any problem is detected, it will show it as a warning, this may or may not be what you intented, it is not up to the MVC+C to say that, but it is going to try to help you to find blindspots.
 
-![Unity MVC+C Inspector](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/07.png)
+![Unity MVC+C Inspector](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/07.png)
 
 ### Help
 
@@ -247,3 +262,6 @@ This section is probably gonna become a separate window, it will just contain gu
 - [ ] Make a sample and template project to showcade use cases
 - [ ] Add settings window if needed
 - [ ] Create a version of the system that runs without AssemblyDefinition, since some projects might rely on code that is not ready for it
+- [ ] Finish documentation
+- [ ] Create tutorials
+- [ ] Fill Wiki with infos and documentation
