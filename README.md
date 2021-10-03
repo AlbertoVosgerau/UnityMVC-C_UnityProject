@@ -41,7 +41,7 @@ In special, there is no upgrade feture ow workflow for now, it is planed for the
 
 
 ### Architecture
-The MVC+C architecture has the followin components:
+The MVC+C architecture has the following components:
 
 ### Controller
 
