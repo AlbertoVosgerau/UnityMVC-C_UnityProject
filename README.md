@@ -26,7 +26,7 @@ Unity MVC+C is built around a few core philosophies:
 
 - Controllers NEVER access directly any class from another module. It calls the other module's controller and subscribe to its events.
 
-- Every MonoBehaviour belongs to View side of MVC.
+- Views are MonoBehaviours.
 
 - MVC Components take care of local data of the GameObject itself and provide data for the View.
 
@@ -43,7 +43,11 @@ In special, there is no upgrade feture ow workflow for now, it is planed for the
 
 
 ### Architecture
+
 The MVC+C architecture has the following components:
+
+
+![Unity MVC+C Hierarchy](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/Hierarchy.png)
 
 ### Controller
 
@@ -102,10 +106,6 @@ Let's say you cave a module that is important and nests other module's features.
 
 Simply put, it is the MVC+C version of the MonoBehaviour. It inherits from MonoBehaviour and organizes the structure to make sure it is consistent with the architecture code standards.
 Their job is simple do the smaller piece of GameObject logic and can't access any external dependency.
-
-In the end this is how the hierarchy of the architectuure looks like:
-
-![Unity MVC+C Hierarchy](https://github.com/AlbertoVosgerau/Unity_MVC/blob/develop/Screenshots/Hierarchy.png)
 
 
 # Ok, but how does it work?
@@ -247,3 +247,6 @@ This section is probably gonna become a separate window, it will just contain gu
 - [ ] Make a sample and template project to showcade use cases
 - [ ] Add settings window if needed
 - [ ] Create a version of the system that runs without AssemblyDefinition, since some projects might rely on code that is not ready for it
+- [ ] Finish documentation
+- [ ] Create tutorials
+- [ ] Fill Wiki with infos and documentation
