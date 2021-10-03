@@ -171,4 +171,17 @@ If any problem is detected, it will show it as a warning, this may or may not be
 
 ### Help
 
-This section is propably gonna become a separate window, it will just contain guides and help, probably, if needed and helpful.
+This section is probably gonna become a separate window, it will just contain guides and help, probably, if needed and helpful.
+
+# Roadmap
+
+- [ ] Add assets module (modules that dedicated to assets and prefabs, no code involved)
+- [ ] Add help window
+- [ ] Refactor EditorWindow code (divide in smaller classes)
+- [ ] Refactor Code Generator (Right now it works with no known issue, but it can be generic and more elegant)
+- [ ] Develop upgrade feature and/or workflow (for upgrading MVC+C versions on running projects)
+- [ ] Create a inheritance Inspector to help visualize hierarchy structure of the MVC+C modules
+- [ ] Add more types of Unity Classes to the code generator if needed
+- [ ] Make a sample and template project to showcade use cases
+- [ ] Add settings window if needed
+- [ ] Create a version of the system that runs without AssemblyDefinition, since some projects might rely on code that is not ready for it
