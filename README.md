@@ -26,7 +26,7 @@ Unity MVC+C is build aroung a few core philosophies:
 
 - Controllers NEVER access directly any class from another module. It calls the other module's controller and subscribe to its events.
 
-- Every MonoBehaviour belong to View side of MVC.
+- Every MonoBehaviour belongs to View side of MVC.
 
 - MVC Components take care of local data of the GameObject itself and provide data for the View.
 
