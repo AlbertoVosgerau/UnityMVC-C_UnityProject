@@ -246,7 +246,7 @@ If any problem is detected, it will show it as a warning, this may or may not be
 
 ### Help
 
-This section is probably gonna become a separate window, it will just contain guides and help, probably, if needed and helpful.
+This section is probably going to become a separate window containing guides and help probably, if needed and it is helpful.
 
 # Roadmap
 
