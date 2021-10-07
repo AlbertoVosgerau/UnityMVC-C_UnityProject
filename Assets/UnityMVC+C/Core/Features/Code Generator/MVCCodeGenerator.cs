@@ -32,13 +32,14 @@ namespace UnityMVC.CodeGenerator
         {
             MVCFolderStructure.SetupProjectFolder();
             GenerateScript(null, name, GetTemplate(ScriptType.MVCApplication), MVCFolderStructure.ApplicationFolder, ScriptType.MVCApplication, true);
-            CreateCoreAssemblyDefinition(MVCFolderStructure.ProjectFolder, name);
-            CreatePlayModeAssemblyDefinition(MVCFolderStructure.PlayModeFolder, $"{name}PlayModeTest");
-            CreateEditorModeAssemblyDefinition(MVCFolderStructure.EditModeFolder, $"{name}EditModeTest");
-            
-            CreateCoreAssemblyDefinition(MVCFolderStructure.CommonFolder, $"{name}.Common");
-            CreatePlayModeAssemblyDefinition(MVCFolderStructure.CommonsPlayModeFolder, $"{name}.CommonPlayModeTest");
-            CreateEditorModeAssemblyDefinition(MVCFolderStructure.CommonsEditModeFolder, $"{name}.CommonEditModeTest");
+            if (MVCReflectionUtil.UsesAssemblyDefinition())
+            {
+                CreateCoreAssemblyDefinition(MVCFolderStructure.ProjectFolder, name);
+
+                CreateCoreAssemblyDefinition(MVCFolderStructure.CommonFolder, $"{name}.Common");
+                CreatePlayModeAssemblyDefinition(MVCFolderStructure.CommonsPlayModeFolder, $"{name}.CommonPlayModeTest");
+                CreateEditorModeAssemblyDefinition(MVCFolderStructure.CommonsEditModeFolder, $"{name}.CommonEditModeTest");
+            }
             AssetDatabase.Refresh();
         }
 
@@ -383,18 +384,24 @@ namespace UnityMVC.CodeGenerator
             Directory.CreateDirectory(prefabsFolder);
             Directory.CreateDirectory(scriptsFolder);
             Directory.CreateDirectory(scenesFolder);
-            Directory.CreateDirectory(testsFolder);
-            Directory.CreateDirectory(playModeFolder);
-            Directory.CreateDirectory(editModeFolder);
-            
-            CreateCoreAssemblyDefinition(scriptsFolder, newModuleName);
-            CreatePlayModeAssemblyDefinition(playModeFolder, $"PlayMode{newModuleName}Test");
-            CreateEditorModeAssemblyDefinition(editModeFolder, $"EditMode{newModuleName}Test");
+
+            if (MVCReflectionUtil.UsesAssemblyDefinition())
+            {
+                Directory.CreateDirectory(testsFolder);
+                Directory.CreateDirectory(playModeFolder);
+                Directory.CreateDirectory(editModeFolder);
+                
+                CreateCoreAssemblyDefinition(scriptsFolder, newModuleName);
+                CreatePlayModeAssemblyDefinition(playModeFolder, $"PlayMode{newModuleName}Test");
+                CreateEditorModeAssemblyDefinition(editModeFolder, $"EditMode{newModuleName}Test");
+            }
 
             UnityMVCModuleModel newModule =  UnityMVCModuleData.GenerateModuleMetadata(absolutePath, newModuleName, newNamespace);
             UnityMVCResources.Data.currentModule = newModule;
             
             CreateViewAndController(newNamespace, newModuleName, true);
+            AssetDatabase.Refresh();
+            
             return newModule;
         }
 

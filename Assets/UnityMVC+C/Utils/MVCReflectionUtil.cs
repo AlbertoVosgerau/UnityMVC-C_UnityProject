@@ -82,5 +82,20 @@ public class MVCReflectionUtil
 
         return filteredTypes;
     }
+
+    public static bool UsesAssemblyDefinition()
+    {
+        _assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+
+        foreach (Assembly assembly in _assemblies)
+        {
+            if (assembly.GetName().Name.Contains("MVC"))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }
 #endif

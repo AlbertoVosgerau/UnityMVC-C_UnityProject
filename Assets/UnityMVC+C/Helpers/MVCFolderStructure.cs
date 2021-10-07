@@ -8,13 +8,10 @@ namespace UnityMVC.Editor
     {
         public static string ProjectFolder => $"{Application.dataPath}/_Project";
         public static string ThirdPartyFolder => $"{Application.dataPath}/ThirdParty";
-        public static string ScriptsFolder => $"{ProjectFolder}/Scripts";
-        public static string TestsFolder => $"{ProjectFolder}/Scripts/Tests";
-        public static string PlayModeFolder => $"{ProjectFolder}/Scripts/Tests/PlayMode";
-        public static string EditModeFolder => $"{ProjectFolder}/Scripts/Tests/EditMode";
         public static string ScenesFolder => $"{ProjectFolder}/Scenes";
-        public static string PrefabsFolder => $"{ProjectFolder}/Prefabs";
         public static string CommonFolder => $"{ProjectFolder}/Common";
+        
+        public static string MaterialsFolder => $"{ProjectFolder}/Common/Materials";
         public static string CommonsModules => $"{ProjectFolder}/Modules";
         public static string CommonsPrefabsFolder => $"{ProjectFolder}/Common/Prefabs";
         public static string CommonsScriptsFolder => $"{ProjectFolder}/Common/Scripts";
@@ -44,9 +41,7 @@ namespace UnityMVC.Editor
             bool isOk;
 
             isOk = Directory.Exists(ProjectFolder) &&
-                   Directory.Exists(ScriptsFolder) &&
                    Directory.Exists(ScenesFolder) &&
-                   Directory.Exists(PrefabsFolder) &&
                    Directory.Exists(CommonFolder) &&
                    Directory.Exists(CommonsModules) &&
                    Directory.Exists(CommonsPrefabsFolder) &&
@@ -69,37 +64,13 @@ namespace UnityMVC.Editor
             {
                 Directory.CreateDirectory(ProjectFolder);
             }
-        
-            if(!Directory.Exists(ScriptsFolder))
-            {
-                Directory.CreateDirectory(ScriptsFolder);
-            }
             
-            if(!Directory.Exists(TestsFolder))
-            {
-                Directory.CreateDirectory(TestsFolder);
-            }
-            
-            if(!Directory.Exists(PlayModeFolder))
-            {
-                Directory.CreateDirectory(PlayModeFolder);
-            }
-            
-            if(!Directory.Exists(EditModeFolder))
-            {
-                Directory.CreateDirectory(EditModeFolder);
-            }
-        
+
             if(!Directory.Exists(ScenesFolder))
             {
                 Directory.CreateDirectory(ScenesFolder);
             }
-        
-            if(!Directory.Exists(PrefabsFolder))
-            {
-                Directory.CreateDirectory(PrefabsFolder);
-            }
-        
+
             if(!Directory.Exists(CommonFolder))
             {
                 Directory.CreateDirectory(CommonFolder);
@@ -118,21 +89,6 @@ namespace UnityMVC.Editor
             if(!Directory.Exists(CommonsScriptsFolder))
             {
                 Directory.CreateDirectory(CommonsScriptsFolder);
-            }
-            
-            if(!Directory.Exists(CommonsPlayModeFolder))
-            {
-                Directory.CreateDirectory(CommonsPlayModeFolder);
-            }
-            
-            if(!Directory.Exists(CommonsEditModeFolder))
-            {
-                Directory.CreateDirectory(CommonsEditModeFolder);
-            }
-            
-            if(!Directory.Exists(CommonsTestsFolder))
-            {
-                Directory.CreateDirectory(CommonsTestsFolder);
             }
 
             if (createThirdPartyFolder)
@@ -158,6 +114,8 @@ namespace UnityMVC.Editor
                 }
                 UnityMVCResources.SaveModulesPath(modulePath);
             }
+            
+
             
             if (create3dModelsFolder)
             {
@@ -206,6 +164,32 @@ namespace UnityMVC.Editor
                     Directory.CreateDirectory(UIFolder);
                 }
             }
+
+            if (!Directory.Exists(MaterialsFolder))
+            {
+                Directory.CreateDirectory(MaterialsFolder);
+            }
+
+            if (!MVCReflectionUtil.UsesAssemblyDefinition())
+            {
+                return;
+            }
+
+            if(!Directory.Exists(CommonsTestsFolder))
+            {
+                Directory.CreateDirectory(CommonsTestsFolder);
+            }
+            
+            if(!Directory.Exists(CommonsPlayModeFolder))
+            {
+                Directory.CreateDirectory(CommonsPlayModeFolder);
+            }
+            
+            if(!Directory.Exists(CommonsEditModeFolder))
+            {
+                Directory.CreateDirectory(CommonsEditModeFolder);
+            }
+
         }
     }
 }
