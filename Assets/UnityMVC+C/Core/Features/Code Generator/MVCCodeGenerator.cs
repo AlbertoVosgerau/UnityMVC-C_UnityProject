@@ -35,9 +35,7 @@ namespace UnityMVC.CodeGenerator
             if (MVCReflectionUtil.UsesAssemblyDefinition())
             {
                 CreateCoreAssemblyDefinition(MVCFolderStructure.ProjectFolder, name);
-                CreatePlayModeAssemblyDefinition(MVCFolderStructure.PlayModeFolder, $"{name}PlayModeTest");
-                CreateEditorModeAssemblyDefinition(MVCFolderStructure.EditModeFolder, $"{name}EditModeTest");
-            
+
                 CreateCoreAssemblyDefinition(MVCFolderStructure.CommonFolder, $"{name}.Common");
                 CreatePlayModeAssemblyDefinition(MVCFolderStructure.CommonsPlayModeFolder, $"{name}.CommonPlayModeTest");
                 CreateEditorModeAssemblyDefinition(MVCFolderStructure.CommonsEditModeFolder, $"{name}.CommonEditModeTest");

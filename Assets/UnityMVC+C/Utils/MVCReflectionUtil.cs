@@ -89,7 +89,7 @@ public class MVCReflectionUtil
 
         foreach (Assembly assembly in _assemblies)
         {
-            if (assembly.GetName().Name.Contains("MVC.C"))
+            if (assembly.GetName().Name.Contains("MVC"))
             {
                 return true;
             }

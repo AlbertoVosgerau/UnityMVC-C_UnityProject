@@ -232,8 +232,8 @@ namespace UnityMVC.Editor
             Checkbox(ref MVCFolderStructure.create3dModelsFolder,"3D Models", 1);
             Checkbox(true,"Application", 1);
             Checkbox(ref MVCFolderStructure.createAudioFolder,"Audio", 1);
-            Checkbox(true,"Scripts", 2);
             Checkbox(true,"Common", 1);
+            Checkbox(true,"Materials", 2);
             Checkbox(true,"Prefabs", 2);
             Checkbox(true,"Scripts", 2);
             Checkbox(true,"Tests", 3);
@@ -242,10 +242,6 @@ namespace UnityMVC.Editor
             Checkbox(true,"Modules", 1);
             Checkbox(true,"Prefabs", 1);
             Checkbox(true,"Scenes", 1);
-            Checkbox(true,"Scripts", 1);
-            Checkbox(true,"Tests", 2);
-            Checkbox(true,"EditMode", 3);
-            Checkbox(true,"PlayMode", 3);
             Checkbox(ref MVCFolderStructure.createResourcesFolder,"Resources", 1);
             Checkbox(ref MVCFolderStructure.createSpritesFolder,"Sprites", 1);
             Checkbox(ref MVCFolderStructure.createTexturesFolder,"Textures", 1);
