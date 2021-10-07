@@ -39,6 +39,10 @@ https://github.com/AlbertoVosgerau/UnityMVC-C.git#releases/0.0.3
 Please, keep in ming that it is still on an alpha state and it might have a few changes and bug fixes in the future.
 In special, there is no upgrade feture ow workflow for now, it is planed for the future, so feel free to use it, change it in any way you want, just keep in mind the current state of the project.
 
+If your project doesn't support assemby definitions or rely on code that doesn't use it, you may want to import the no-assembly-definition version available on the releases section of this repository. If you can work with assembly definitions, however, is strongly recommended that you use the package manager version insetad.
+
+https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/releases/tag/no-assembly-definition
+
 ![Installation screenshot](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/06.png)
 
 
