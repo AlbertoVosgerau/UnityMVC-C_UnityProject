@@ -244,10 +244,6 @@ If any problem is detected, it will show it as a warning, this may or may not be
 
 ![Unity MVC+C Inspector](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/07.png)
 
-### Help
-
-This section is probably going to become a separate window containing guides and help probably, if needed and it is helpful.
-
 # Roadmap
 
 - [ ] Add assets module (modules that dedicated to assets and prefabs, no code involved)
@@ -261,7 +257,7 @@ This section is probably going to become a separate window containing guides and
 - [ ] Add more types of Unity Classes to the code generator if needed
 - [ ] Make a sample and template project to showcade use cases
 - [ ] Add settings window if needed
-- [ ] Create a version of the system that runs without AssemblyDefinition, since some projects might rely on code that is not ready for it
+- [X] Create a version of the system that runs without AssemblyDefinition, since some projects might rely on code that is not ready for it
 - [ ] Finish documentation
 - [ ] Create tutorials
 - [ ] Fill Wiki with infos and documentation
