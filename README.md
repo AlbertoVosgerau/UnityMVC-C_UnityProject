@@ -41,7 +41,7 @@ In special, there is no upgrade feture ow workflow for now, it is planed for the
 
 ![Installation screenshot](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/06.png)
 
-NOTE: If your project doesn't support assemby definitions or rely on code that doesn't use it, you may want to import the no-assembly-definition version available on the releases section of this repository. If you can work with assembly definitions, however, is strongly recommended that you use the package manager version insetad.
+NOTE: If your project doesn't support assemby definitions or rely on code that doesn't use it, you may want to import the no-assembly-definition version available on the releases section of this repository. If you can work with assembly definitions, however, it is strongly recommended that you use the package manager version instead.
 
 https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/releases/tag/no-assembly-definition
 
