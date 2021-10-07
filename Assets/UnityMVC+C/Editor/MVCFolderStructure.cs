@@ -74,22 +74,7 @@ namespace UnityMVC.Editor
             {
                 Directory.CreateDirectory(ScriptsFolder);
             }
-            
-            if(!Directory.Exists(TestsFolder))
-            {
-                Directory.CreateDirectory(TestsFolder);
-            }
-            
-            if(!Directory.Exists(PlayModeFolder))
-            {
-                Directory.CreateDirectory(PlayModeFolder);
-            }
-            
-            if(!Directory.Exists(EditModeFolder))
-            {
-                Directory.CreateDirectory(EditModeFolder);
-            }
-        
+
             if(!Directory.Exists(ScenesFolder))
             {
                 Directory.CreateDirectory(ScenesFolder);
@@ -128,11 +113,6 @@ namespace UnityMVC.Editor
             if(!Directory.Exists(CommonsEditModeFolder))
             {
                 Directory.CreateDirectory(CommonsEditModeFolder);
-            }
-            
-            if(!Directory.Exists(CommonsTestsFolder))
-            {
-                Directory.CreateDirectory(CommonsTestsFolder);
             }
 
             if (createThirdPartyFolder)
@@ -205,6 +185,31 @@ namespace UnityMVC.Editor
                 {
                     Directory.CreateDirectory(UIFolder);
                 }
+            }
+
+            if (!MVCReflectionUtil.UsesAssemblyDefinition())
+            {
+                return;
+            }
+            
+            if(!Directory.Exists(TestsFolder))
+            {
+                Directory.CreateDirectory(TestsFolder);
+            }
+            
+            if(!Directory.Exists(PlayModeFolder))
+            {
+                Directory.CreateDirectory(PlayModeFolder);
+            }
+            
+            if(!Directory.Exists(EditModeFolder))
+            {
+                Directory.CreateDirectory(EditModeFolder);
+            }
+            
+            if(!Directory.Exists(CommonsTestsFolder))
+            {
+                Directory.CreateDirectory(CommonsTestsFolder);
             }
         }
     }

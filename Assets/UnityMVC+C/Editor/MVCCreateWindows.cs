@@ -18,7 +18,7 @@ namespace UnityMVC.Editor
     public class MVCCreateWindows : EditorWindow
     {
         private int _mainTabIntex = 0;
-        private string[] _mainTabs = new[] {"Module Wizard", "Code Generator", "Inspector", "Help"};
+        private string[] _mainTabs = new[] {"Module Wizard", "Code Generator", "Inspector"};
 
         private string _newModuleName;
         private string _newNamespace;
@@ -103,6 +103,7 @@ namespace UnityMVC.Editor
         private void SolveDatapaths()
         {
             _dataPaths = AssetDatabase.GetAllAssetPaths().ToList();
+            
             foreach (string path in _dataPaths)
             {
                 List<string> foldersList = path.Split('/', '\\').ToList();
