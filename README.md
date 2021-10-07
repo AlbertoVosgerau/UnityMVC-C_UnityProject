@@ -36,8 +36,8 @@ If you want to use the MVC+C Code Generator, for now please add this git link to
 
 https://github.com/AlbertoVosgerau/UnityMVC-C.git#releases/0.0.3
 
-Please, keep in mind that it is still on alpha state and it might have a few changes and bug fixes in the future.
-In special, there is no upgrade feature or workflow for now, this is planned for the future, so feel free to use it, change it in any way you want, just keep in mind the current state of the project.
+Please, keep in ming that it is still on an alpha state and it might have a few changes and bug fixes in the future.
+In special, there is no upgrade feture ow workflow for now, it is planed for the future, so feel free to use it, change it in any way you want, just keep in mind the current state of the project.
 
 ![Installation screenshot](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/06.png)
 
@@ -244,6 +244,10 @@ If any problem is detected, it will show it as a warning, this may or may not be
 
 ![Unity MVC+C Inspector](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/07.png)
 
+### Help
+
+This section is probably gonna become a separate window, it will just contain guides and help, probably, if needed and helpful.
+
 # Roadmap
 
 - [ ] Add assets module (modules that dedicated to assets and prefabs, no code involved)
@@ -257,7 +261,7 @@ If any problem is detected, it will show it as a warning, this may or may not be
 - [ ] Add more types of Unity Classes to the code generator if needed
 - [ ] Make a sample and template project to showcade use cases
 - [ ] Add settings window if needed
-- [X] Create a version of the system that runs without AssemblyDefinition, since some projects might rely on code that is not ready for it
+- [ ] Create a version of the system that runs without AssemblyDefinition, since some projects might rely on code that is not ready for it
 - [ ] Finish documentation
 - [ ] Create tutorials
 - [ ] Fill Wiki with infos and documentation
