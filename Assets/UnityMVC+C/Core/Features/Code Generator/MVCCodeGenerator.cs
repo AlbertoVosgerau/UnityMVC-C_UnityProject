@@ -391,7 +391,7 @@ namespace UnityMVC.CodeGenerator
                 Directory.CreateDirectory(playModeFolder);
                 Directory.CreateDirectory(editModeFolder);
                 
-                CreateCoreAssemblyDefinition(scriptsFolder, newModuleName);
+                CreateCoreAssemblyDefinition(scriptsFolder, $"Modules.{newModuleName}");
                 CreatePlayModeAssemblyDefinition(playModeFolder, $"PlayMode{newModuleName}Test");
                 CreateEditorModeAssemblyDefinition(editModeFolder, $"EditMode{newModuleName}Test");
             }

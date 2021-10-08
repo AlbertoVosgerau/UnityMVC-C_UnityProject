@@ -229,24 +229,24 @@ namespace UnityMVC.Editor
             GUILayout.BeginVertical();
 
             Checkbox(true, "_Project", 0);
-            Checkbox(ref MVCFolderStructure.create3dModelsFolder,"3D Models", 1);
             Checkbox(true,"Application", 1);
-            Checkbox(ref MVCFolderStructure.createAudioFolder,"Audio", 1);
             Checkbox(true,"Common", 1);
+            Checkbox(ref MVCFolderStructure.create3dModelsFolder,"3D Models", 2);
+            Checkbox(ref MVCFolderStructure.createAudioFolder,"Audio", 2);
             Checkbox(true,"Materials", 2);
             Checkbox(true,"Prefabs", 2);
             Checkbox(true,"Scripts", 2);
             Checkbox(true,"Tests", 3);
             Checkbox(true,"EditMode", 4);
             Checkbox(true,"PlayMode", 4);
+            Checkbox(ref MVCFolderStructure.createShadersFolder,"Shaders", 2);
+            Checkbox(ref MVCFolderStructure.createSpritesFolder,"Sprites", 2);
+            Checkbox(ref MVCFolderStructure.createTexturesFolder,"Textures", 2);
+            Checkbox(ref MVCFolderStructure.createUIFolder,"UI", 2);
             Checkbox(true,"Modules", 1);
-            Checkbox(true,"Prefabs", 1);
-            Checkbox(true,"Scenes", 1);
             Checkbox(ref MVCFolderStructure.createResourcesFolder,"Resources", 1);
-            Checkbox(ref MVCFolderStructure.createSpritesFolder,"Sprites", 1);
-            Checkbox(ref MVCFolderStructure.createTexturesFolder,"Textures", 1);
-            Checkbox(ref MVCFolderStructure.createUIFolder,"UI", 1);
-            
+            Checkbox(true,"Scenes", 1);
+
             Checkbox(ref MVCFolderStructure.createThirdPartyFolder,"ThirdParty", 0);
 
             GUILayout.EndVertical();

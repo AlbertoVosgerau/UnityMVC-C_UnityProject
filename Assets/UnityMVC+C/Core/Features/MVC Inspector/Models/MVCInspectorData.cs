@@ -25,7 +25,6 @@ namespace UnityMVC.Inspector
         {
             get
             {
-                bool isOk = true;
                 foreach (MVCInspectorDataTypeResult result in _results)
                 {
                     foreach (bool b in result.IsOk)

@@ -21,12 +21,13 @@ namespace UnityMVC.Editor
         public static string ApplicationFolder => $"{ProjectFolder}/Application/Scripts/Application";
         public static string ModulesFolder => $"{ProjectFolder}/Modules";
         
-        public static string Models3DFolder => $"{Application.dataPath}/_Project/3D Models";
-        public static string AudioFolder => $"{Application.dataPath}/_Project/Audio";
+        public static string Models3DFolder => $"{Application.dataPath}/_Project/Common/3D Models";
+        public static string ShadersFolder => $"{Application.dataPath}/_Project/Common/Shaders";
+        public static string AudioFolder => $"{Application.dataPath}/_Project/Common/Audio";
         public static string ResourcesFolder => $"{Application.dataPath}/_Project/Resources";
-        public static string SpritesFolder => $"{Application.dataPath}/_Project/Sprites";
-        public static string TexturesFolder => $"{Application.dataPath}/_Project/Textures";
-        public static string UIFolder => $"{Application.dataPath}/_Project/UI";
+        public static string SpritesFolder => $"{Application.dataPath}/_Project/Common/Sprites";
+        public static string TexturesFolder => $"{Application.dataPath}/_Project/Common/Textures";
+        public static string UIFolder => $"{Application.dataPath}/_Project/Common/UI";
 
         public static bool create3dModelsFolder = false;
         public static bool createAudioFolder = false;
@@ -35,7 +36,8 @@ namespace UnityMVC.Editor
         public static bool createTexturesFolder = false;
         public static bool createUIFolder = false;
         public static bool createThirdPartyFolder = true;
-    
+        public static bool createShadersFolder = false;
+
         public static bool FolderStructureIsOk()
         {
             bool isOk;
@@ -149,6 +151,14 @@ namespace UnityMVC.Editor
                 }
             }
             
+            if (createShadersFolder)
+            {
+                if(!Directory.Exists(ShadersFolder))
+                {
+                    Directory.CreateDirectory(ShadersFolder);
+                }
+            }
+            
             if (createTexturesFolder)
             {
                 if(!Directory.Exists(TexturesFolder))
@@ -169,6 +179,7 @@ namespace UnityMVC.Editor
             {
                 Directory.CreateDirectory(MaterialsFolder);
             }
+            
 
             if (!MVCReflectionUtil.UsesAssemblyDefinition())
             {
