@@ -41,7 +41,7 @@ In special, there is no upgrade feture ow workflow for now, it is planed for the
 
 ![Installation screenshot](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/06.png)
 
-NOTE: If your project doesn't support assemby definitions or rely on code that doesn't use it, you may want to import the no-assembly-definition version available on the releases section of this repository. If you can work with assembly definitions, however, is strongly recommended that you use the package manager version insetad.
+NOTE: If your project doesn't support assemby definitions or rely on code that doesn't use it, you may want to import the no-assembly-definition version available on the releases section of this repository. If you can work with assembly definitions, however, it is strongly recommended that you use the package manager version instead.
 
 https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/releases/tag/no-assembly-definition
 
@@ -114,7 +114,7 @@ Their job is simple do the smaller piece of GameObject logic and can't access an
 ##### Assembly Definitions
 
 On top of the architecture structure, MVC+C makes use of Assembly Definitions.
-That means every module will linve inside of its own assembly. This is done by placing an AssemblyDefinition file inside the Module's Script folder, which will be done automatically for you.
+That means every module will live inside of its own assembly. This is done by placing an AssemblyDefinition file inside the Module's Script folder, which will be done automatically for you.
 
 ![Assembly Definition Screenshot](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/15.png)
 
@@ -122,7 +122,7 @@ If you want to use any class from outside your module, you will now have to expl
 
 ![Adding Assembly Definition reference](https://github.com/AlbertoVosgerau/UnityMVC-C_UnityProject/blob/main/Screenshots/16.png)
 
-Assembly Definitions are an amazing tool to prevend bad habits with code, making sure no reference is added to the module without explicit knowledge of the developer, it also won't allow you to create cyclic dependencies, meaning if two modules depend on each other, you probably want to create a third module that will interface their common behaviour, or passing data trough events, delegates or wathever your team agree on.
+Assembly Definitions are an amazing tool to prevent bad habits with code, making sure no reference is added to the module without explicit knowledge of the developer, it also won't allow you to create cyclic dependencies, meaning if two modules depend on each other, you probably want to create a third module that will interface their common behaviour, or passing data trough events, delegates or wathever your team agree upon.
 
 Also, Assembly Definitions allow us to implement unit tests and yes, we got you covered on that one too! MVC+C will automatically generate Tests folders with a basic setup for every feature and module.
 
@@ -265,7 +265,7 @@ This section is probably gonna become a separate window, it will just contain gu
 - [ ] Add more types of Unity Classes to the code generator if needed
 - [ ] Make a sample and template project to showcade use cases
 - [ ] Add settings window if needed
-- [ ] Create a version of the system that runs without AssemblyDefinition, since some projects might rely on code that is not ready for it
+- [X] Create a version of the system that runs without AssemblyDefinition, since some projects might rely on code that is not ready for it
 - [ ] Finish documentation
 - [ ] Create tutorials
 - [ ] Fill Wiki with infos and documentation
