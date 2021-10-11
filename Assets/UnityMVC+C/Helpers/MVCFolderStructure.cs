@@ -1,4 +1,6 @@
 ﻿#if UNITY_EDITOR
+using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -11,6 +13,9 @@ namespace UnityMVC.Editor
         public static string ScenesFolder => $"{ProjectFolder}/Scenes";
         public static string CommonFolder => $"{ProjectFolder}/Common";
         
+        public static string ModulesRealativeFolder => $"_Project/Modules";
+        public static string AssetModulesRelativeFolder => $"_Project/AssetModules";
+        
         public static string MaterialsFolder => $"{ProjectFolder}/Common/Materials";
         public static string CommonsModules => $"{ProjectFolder}/Modules";
         public static string CommonsPrefabsFolder => $"{ProjectFolder}/Common/Prefabs";
@@ -20,13 +25,15 @@ namespace UnityMVC.Editor
         public static string CommonsEditModeFolder => $"{ProjectFolder}/Common/Scripts/Tests/EditMode";
         public static string ApplicationFolder => $"{ProjectFolder}/Application/Scripts/Application";
         public static string ModulesFolder => $"{ProjectFolder}/Modules";
+        public static string AssetModulesFolder => $"{Application.dataPath}/_Project/AssetModules";
         
-        public static string Models3DFolder => $"{Application.dataPath}/_Project/3D Models";
-        public static string AudioFolder => $"{Application.dataPath}/_Project/Audio";
+        public static string Models3DFolder => $"{Application.dataPath}/_Project/Common/3D Models";
+        public static string ShadersFolder => $"{Application.dataPath}/_Project/Common/Shaders";
+        public static string AudioFolder => $"{Application.dataPath}/_Project/Common/Audio";
         public static string ResourcesFolder => $"{Application.dataPath}/_Project/Resources";
-        public static string SpritesFolder => $"{Application.dataPath}/_Project/Sprites";
-        public static string TexturesFolder => $"{Application.dataPath}/_Project/Textures";
-        public static string UIFolder => $"{Application.dataPath}/_Project/UI";
+        public static string SpritesFolder => $"{Application.dataPath}/_Project/Common/Sprites";
+        public static string TexturesFolder => $"{Application.dataPath}/_Project/Common/Textures";
+        public static string UIFolder => $"{Application.dataPath}/_Project/Common/UI";
 
         public static bool create3dModelsFolder = false;
         public static bool createAudioFolder = false;
@@ -35,7 +42,8 @@ namespace UnityMVC.Editor
         public static bool createTexturesFolder = false;
         public static bool createUIFolder = false;
         public static bool createThirdPartyFolder = true;
-    
+        public static bool createShadersFolder = false;
+
         public static bool FolderStructureIsOk()
         {
             bool isOk;
@@ -149,6 +157,14 @@ namespace UnityMVC.Editor
                 }
             }
             
+            if (createShadersFolder)
+            {
+                if(!Directory.Exists(ShadersFolder))
+                {
+                    Directory.CreateDirectory(ShadersFolder);
+                }
+            }
+            
             if (createTexturesFolder)
             {
                 if(!Directory.Exists(TexturesFolder))
@@ -169,6 +185,15 @@ namespace UnityMVC.Editor
             {
                 Directory.CreateDirectory(MaterialsFolder);
             }
+            
+            if (!Directory.Exists(AssetModulesFolder))
+            {
+                Directory.CreateDirectory(AssetModulesFolder);
+            }
+            
+            UnityMVCResources.SaveModulesPath(ModulesRealativeFolder);
+            UnityMVCResources.SaveAssetModulesPath(AssetModulesRelativeFolder);
+            UnityMVCResources.SaveAllData();
 
             if (!MVCReflectionUtil.UsesAssemblyDefinition())
             {
@@ -190,6 +215,17 @@ namespace UnityMVC.Editor
                 Directory.CreateDirectory(CommonsEditModeFolder);
             }
 
+        }
+
+        public static void CreateDirectories(List<string> paths)
+        {
+            foreach (string path in paths)
+            {
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+            }
         }
     }
 }

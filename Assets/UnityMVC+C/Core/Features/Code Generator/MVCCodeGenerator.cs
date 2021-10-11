@@ -373,6 +373,7 @@ namespace UnityMVC.CodeGenerator
             }
             
             Debug.Log($"Creating module at {absolutePath}");
+
             string scriptsFolder = $"{absolutePath}/Scripts";
             string testsFolder = $"{absolutePath}/Scripts/Tests";
             string playModeFolder = $"{absolutePath}/Scripts/Tests/PlayMode";
@@ -391,7 +392,7 @@ namespace UnityMVC.CodeGenerator
                 Directory.CreateDirectory(playModeFolder);
                 Directory.CreateDirectory(editModeFolder);
                 
-                CreateCoreAssemblyDefinition(scriptsFolder, newModuleName);
+                CreateCoreAssemblyDefinition(scriptsFolder, $"Modules.{newModuleName}");
                 CreatePlayModeAssemblyDefinition(playModeFolder, $"PlayMode{newModuleName}Test");
                 CreateEditorModeAssemblyDefinition(editModeFolder, $"EditMode{newModuleName}Test");
             }
@@ -403,6 +404,35 @@ namespace UnityMVC.CodeGenerator
             AssetDatabase.Refresh();
             
             return newModule;
+        }
+        
+        
+        public static void CreateAssetModule(string modulePath, string newModuleName)
+        {
+            string absolutePath = $"{Application.dataPath}/{modulePath}/{newModuleName}";
+            
+            if (Directory.Exists(modulePath))
+            {
+                return;
+            }
+            
+            Debug.Log($"Creating module at {absolutePath}");
+
+            List<string> paths = new List<string>();
+            
+            paths.Add($"{absolutePath}/3D Models");
+            paths.Add($"{absolutePath}/Audio");
+            paths.Add($"{absolutePath}/Materials");
+            paths.Add($"{absolutePath}/Shaders");
+            paths.Add($"{absolutePath}/Textures");
+            paths.Add($"{absolutePath}/UI");
+            paths.Add($"{absolutePath}/Sprites");
+            paths.Add($"{absolutePath}/Prefabs");
+            paths.Add($"{absolutePath}/Scenes");
+
+            MVCFolderStructure.CreateDirectories(paths);
+
+            AssetDatabase.Refresh();
         }
 
         private static void CreateCoreAssemblyDefinition(string path, string name)

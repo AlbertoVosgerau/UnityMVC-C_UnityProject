@@ -7,6 +7,7 @@ namespace UnityMVC.Editor
     [Serializable]
     public class UnityMVCDataModel
     {
+        public const string ASSET_MODULES_RELATIVE_PATH_VARIABLE = "MVC_AssetModulesRelativePath";
         public const string MODULES_RELATIVE_PATH_VARIABLE = "MVC_ModulesRelativePath";
         public const string REMOVECOMMENTS_VARIABLE = "MVC_RemoveComments";
 
@@ -14,6 +15,7 @@ namespace UnityMVC.Editor
         
         public UnityMVCModuleModel currentModule;
         
+        public string assetModulesRelativePath;
         public string modulesRelativePath;
         public bool removeComments;
     }
@@ -29,11 +31,16 @@ namespace UnityMVC.Editor
             {
                 PlayerPrefs.SetString(UnityMVCDataModel.MODULES_RELATIVE_PATH_VARIABLE, MVCFolderStructure.ModulesFolder);
             }
+            if (!PlayerPrefs.HasKey(UnityMVCDataModel.ASSET_MODULES_RELATIVE_PATH_VARIABLE))
+            {
+                PlayerPrefs.SetString(UnityMVCDataModel.ASSET_MODULES_RELATIVE_PATH_VARIABLE, MVCFolderStructure.AssetModulesFolder);
+            }
             if (!PlayerPrefs.HasKey(UnityMVCDataModel.REMOVECOMMENTS_VARIABLE))
             {
                 PlayerPrefs.SetInt(UnityMVCDataModel.REMOVECOMMENTS_VARIABLE, 0);
             }
             
+            _data.assetModulesRelativePath = PlayerPrefs.GetString(UnityMVCDataModel.ASSET_MODULES_RELATIVE_PATH_VARIABLE);
             _data.modulesRelativePath = PlayerPrefs.GetString(UnityMVCDataModel.MODULES_RELATIVE_PATH_VARIABLE);
             _data.removeComments = PlayerPrefs.GetInt(UnityMVCDataModel.REMOVECOMMENTS_VARIABLE) != 0;
         }
@@ -41,6 +48,7 @@ namespace UnityMVC.Editor
         public static void SaveAllData()
         {
             PlayerPrefs.SetString(UnityMVCDataModel.MODULES_RELATIVE_PATH_VARIABLE, _data.modulesRelativePath);
+            PlayerPrefs.SetString(UnityMVCDataModel.ASSET_MODULES_RELATIVE_PATH_VARIABLE, _data.assetModulesRelativePath);
             int removeComments = _data.removeComments ? 1 : 0;
             PlayerPrefs.SetInt(UnityMVCDataModel.REMOVECOMMENTS_VARIABLE, removeComments);
         }
@@ -49,6 +57,13 @@ namespace UnityMVC.Editor
         {
             _data.modulesRelativePath = path;
             PlayerPrefs.SetString(UnityMVCDataModel.MODULES_RELATIVE_PATH_VARIABLE, path);
+        }
+        
+        
+        public static void SaveAssetModulesPath(string path)
+        {
+            _data.assetModulesRelativePath = path;
+            PlayerPrefs.SetString(UnityMVCDataModel.ASSET_MODULES_RELATIVE_PATH_VARIABLE, path);
         }
         
         public static void SaveRemoveComments(bool removeComments)

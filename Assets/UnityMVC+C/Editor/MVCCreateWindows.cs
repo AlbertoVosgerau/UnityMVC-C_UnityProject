@@ -18,12 +18,14 @@ namespace UnityMVC.Editor
     public class MVCCreateWindows : EditorWindow
     {
         private int _mainTabIntex = 0;
-        private string[] _mainTabs = new[] {"Module Wizard", "Code Generator", "Inspector"};
+        private string[] _mainTabs = new[] {"Module Wizard", "Code Generator", "Inspector", "Assets"};
 
         private string _newModuleName;
         private string _newNamespace;
 
         private string _modulePath;
+        private string _assetModulespath;
+        private string _newAssetModule;
         
         private string _namespacePrefix = "";
         private string _namespace = "";
@@ -81,10 +83,16 @@ namespace UnityMVC.Editor
 
         private void OnEnable()
         {
+            Refresh();
+        }
+
+        private void Refresh()
+        {
             _hasApplication = HasApplication();
             //SolveDatapaths();
             UnityMVCResources.LoadData();
             _modulePath = UnityMVCResources.Data.modulesRelativePath;
+            _assetModulespath = UnityMVCResources.Data.assetModulesRelativePath;
             UnityMVCModuleData.UpdateModulesList();
             UpdateAllTypes();
             UpdateDependencies();
@@ -229,24 +237,25 @@ namespace UnityMVC.Editor
             GUILayout.BeginVertical();
 
             Checkbox(true, "_Project", 0);
-            Checkbox(ref MVCFolderStructure.create3dModelsFolder,"3D Models", 1);
             Checkbox(true,"Application", 1);
-            Checkbox(ref MVCFolderStructure.createAudioFolder,"Audio", 1);
+            Checkbox(true,"AssetModules", 1);
             Checkbox(true,"Common", 1);
+            Checkbox(ref MVCFolderStructure.create3dModelsFolder,"3D Models", 2);
+            Checkbox(ref MVCFolderStructure.createAudioFolder,"Audio", 2);
             Checkbox(true,"Materials", 2);
             Checkbox(true,"Prefabs", 2);
             Checkbox(true,"Scripts", 2);
             Checkbox(true,"Tests", 3);
             Checkbox(true,"EditMode", 4);
             Checkbox(true,"PlayMode", 4);
+            Checkbox(ref MVCFolderStructure.createShadersFolder,"Shaders", 2);
+            Checkbox(ref MVCFolderStructure.createSpritesFolder,"Sprites", 2);
+            Checkbox(ref MVCFolderStructure.createTexturesFolder,"Textures", 2);
+            Checkbox(ref MVCFolderStructure.createUIFolder,"UI", 2);
             Checkbox(true,"Modules", 1);
-            Checkbox(true,"Prefabs", 1);
-            Checkbox(true,"Scenes", 1);
             Checkbox(ref MVCFolderStructure.createResourcesFolder,"Resources", 1);
-            Checkbox(ref MVCFolderStructure.createSpritesFolder,"Sprites", 1);
-            Checkbox(ref MVCFolderStructure.createTexturesFolder,"Textures", 1);
-            Checkbox(ref MVCFolderStructure.createUIFolder,"UI", 1);
-            
+            Checkbox(true,"Scenes", 1);
+
             Checkbox(ref MVCFolderStructure.createThirdPartyFolder,"ThirdParty", 0);
 
             GUILayout.EndVertical();
@@ -303,9 +312,16 @@ namespace UnityMVC.Editor
                     InspectorArea();
                     break;
                 case 3:
-                    HelpArea();
+                    AssetsArea();
                     break;
             }
+        }
+
+        private void AssetsArea()
+        {
+            GUILayout.BeginVertical();
+            CreateAssetModuleArea();
+            GUILayout.EndVertical();
         }
 
         private void HelpArea()
@@ -363,6 +379,22 @@ namespace UnityMVC.Editor
 
         private void ModuleWizardArea()
         {
+            GUILayout.BeginVertical();
+            CreateCodeModuleWizardArea();
+            GUILayout.EndVertical();
+        }
+
+        private void CreateCodeModuleWizardArea()
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            var labelStyle = new GUIStyle("Label");
+            labelStyle.fontSize = 20;
+            GUILayout.Label(new GUIContent($"Create full code module"), labelStyle, GUILayout.Width(_btnWidth + 225));
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(15);
+            
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             EditorGUI.BeginChangeCheck();
@@ -458,6 +490,83 @@ namespace UnityMVC.Editor
                 OnCreatedFile();
                 OnChangedValue();
                 _mainTabIntex = 1;
+            }
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+        }
+        
+        private void CreateAssetModuleArea()
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            var labelStyle = new GUIStyle("Label");
+            labelStyle.fontSize = 20;
+            GUILayout.Label(new GUIContent($"Create asset module"), labelStyle, GUILayout.Width(_btnWidth + 225));
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(15);
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            EditorGUI.BeginChangeCheck();
+            GUILayout.Label(new GUIContent($"Asset Modules path: Assets/{_assetModulespath}", $"Assets/{_assetModulespath}"), GUILayout.Width(_btnWidth + 185));
+            if (EditorGUI.EndChangeCheck())
+            {
+                OnChangedValue();
+            }
+            if (GUILayout.Button("...", GUILayout.Width(35)))
+            {
+                string pathToOpen = Application.dataPath;
+                _assetModulespath = EditorUtility.OpenFolderPanel("Select folder", pathToOpen, $"{Application.dataPath}/{UnityMVCResources.Data.assetModulesRelativePath}");
+                
+                if (PathIsValid(_assetModulespath)) {
+                    _assetModulespath =  _assetModulespath.Substring(Application.dataPath.Length);
+                    if (_assetModulespath.Length > 0)
+                    {
+                        _assetModulespath = _assetModulespath.Remove(0, 1);
+                    }
+                    UnityMVCResources.SaveAssetModulesPath(_assetModulespath);
+                }
+                else
+                {
+                    if (!String.IsNullOrEmpty(_assetModulespath))
+                    {
+                        ShowInvalidPathDialog();
+                        return;
+                    }
+                }
+                OnChangedValue();
+            }
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            
+            GUILayout.Space(10);
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            
+            _newAssetModule = EditorGUILayout.TextField("Module name:", _newAssetModule, GUILayout.Width(_btnWidth * 2));
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(10);
+            
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button($"Create Asset Module", GUILayout.Width(_btnWidth * 2)))
+            {
+                if (String.IsNullOrEmpty(_newAssetModule))
+                {
+                    ShowNameEmptyDialog();
+                    return;
+                }
+
+                MVCCodeGenerator.CreateAssetModule(_assetModulespath, _newAssetModule);
+
+                _newAssetModule = String.Empty;
+
+                OnCreatedFile();
+                OnChangedValue();
             }
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
@@ -867,6 +976,7 @@ namespace UnityMVC.Editor
         {
             UnityMVCResources.SaveAllData();
             _modulePath = UnityMVCResources.Data.modulesRelativePath;
+            _assetModulespath = UnityMVCResources.Data.assetModulesRelativePath;
         }
 
         private void OnCreatedFile()
