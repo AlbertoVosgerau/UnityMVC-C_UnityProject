@@ -18,7 +18,7 @@ Unity MVC+C is built around a few core philosophies:
 
 - MonoBehaviour is to be used ONLY when it has to be a Monobehaviour. They can really mess up your project if overused.
 
-- Events are the proper way to trigger changes on your game most of the times, as they keep your dependencies clean.
+- Use events to invert dependencies. They are cool, clean and will keep your sanity.
 
 - Models are NOT MonoBehaviour.
 
