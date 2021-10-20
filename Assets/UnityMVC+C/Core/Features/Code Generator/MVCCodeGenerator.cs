@@ -316,7 +316,12 @@ namespace UnityMVC.CodeGenerator
                 templateStr = templateStr.Replace($"ProjectNamespace", $"{appData.applicationName}");
                 templateStr = templateStr.Replace($"MVCApplication", $"{appData.applicationName}Application");
 
-                filePath = $"{directoryPath}/{appData.applicationName}Application.cs";
+                string codePath = $"{directoryPath}/Scripts";
+                if (!Directory.Exists(codePath))
+                {
+                    Directory.CreateDirectory(codePath);
+                }
+                filePath = $"{codePath}/{appData.applicationName}Application.cs";
             }
 
             templateStr = templateStr.Replace($"ControllerTemplateEvents", $"{name}ControllerEvents");

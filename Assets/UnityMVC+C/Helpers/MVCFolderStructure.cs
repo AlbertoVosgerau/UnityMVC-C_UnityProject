@@ -23,7 +23,7 @@ namespace UnityMVC.Editor
         public static string CommonsTestsFolder => $"{ProjectFolder}/Common/Scripts/Tests";
         public static string CommonsPlayModeFolder => $"{ProjectFolder}/Common/Scripts/Tests/PlayMode";
         public static string CommonsEditModeFolder => $"{ProjectFolder}/Common/Scripts/Tests/EditMode";
-        public static string ApplicationFolder => $"{ProjectFolder}/Application/Scripts/Application";
+        public static string ApplicationFolder => $"{ProjectFolder}/Application";
         public static string ModulesFolder => $"{ProjectFolder}/Modules";
         public static string AssetModulesFolder => $"{Application.dataPath}/_Project/AssetModules";
         
