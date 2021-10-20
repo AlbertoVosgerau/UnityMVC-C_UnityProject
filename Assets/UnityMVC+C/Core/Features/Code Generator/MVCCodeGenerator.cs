@@ -515,7 +515,7 @@ namespace UnityMVC.CodeGenerator
         private static void CreateCoreAssemblyDefinition(string path, string name)
         {
             string assemblyDefinitionTemplate = GetModuleAssemblyDefinitionTemplate();
-            string GUID = MVCAssetDatabaseUtil.GetAssetGUID("MVC.C");
+            string GUID = MVCAssetDatabaseUtil.GetAssetGUID("AlbertoVosgerau.MVC");
             string assemblyDefinitionPath = $"{path}/{name}";
             List<string> guids = new List<string>() {GUID};
             
@@ -525,7 +525,7 @@ namespace UnityMVC.CodeGenerator
         private static void CreatePlayModeAssemblyDefinition(string path, string name)
         {
             string assemblyDefinitionTemplate = GetPlayModeAssemblyDefinitionTemplate();
-            string MvcGUID = MVCAssetDatabaseUtil.GetAssetGUID("MVC.C");
+            string MvcGUID = MVCAssetDatabaseUtil.GetAssetGUID("AlbertoVosgerau.MVC");
             string assemblyDefinitionPath = $"{path}/{name}";
             List<string> guids = new List<string>() {MvcGUID};
             
@@ -535,7 +535,7 @@ namespace UnityMVC.CodeGenerator
         private static void CreateEditorModeAssemblyDefinition(string path, string name)
         {
             string assemblyDefinitionTemplate = GetEditorTestAssemblyDefinitionTemplate();
-            string MvcGUID = MVCAssetDatabaseUtil.GetAssetGUID("MVC.C");
+            string MvcGUID = MVCAssetDatabaseUtil.GetAssetGUID("AlbertoVosgerau.MVC");
             string assemblyDefinitionPath = $"{path}/{name}";
             List<string> guids = new List<string>() {MvcGUID};
             
