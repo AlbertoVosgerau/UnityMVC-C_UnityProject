@@ -183,6 +183,9 @@ namespace UnityMVC.CodeGenerator
             templateStr = templateStr.Replace($"{typeStr}Template", $"{name}{typeStr}");
             templateStr = SolveBaseMethods(templateStr, inheritsFrom == null);
             
+            string directoryPath = path;
+            string filePath = isPartial? $"{directoryPath}/{name}{typeStr}Partial.cs" : $"{directoryPath}/{name}{typeStr}.cs";
+            
 
             if (nameSpace != null)
             {
@@ -299,6 +302,22 @@ namespace UnityMVC.CodeGenerator
             {
                 templateStr = templateStr.Replace($"EnumTemplate", $"{name}");
             }
+            
+            if (type == ScriptType.MVCApplication)
+            {
+                UnityMVCApplicationModel appData = GetAppData();
+                
+                if (MVCReflectionUtil.UsesAssemblyDefinition())
+                {
+                    string asmdefName = GetApplicationAssemlbyDefinitionName(appData.companyName, appData.applicationName,  false, true);
+                    CreateCoreAssemblyDefinition(MVCFolderStructure.ApplicationFolder, asmdefName);
+                }
+                
+                templateStr = templateStr.Replace($"ProjectNamespace", $"{appData.applicationName}");
+                templateStr = templateStr.Replace($"MVCApplication", $"{appData.applicationName}Application");
+
+                filePath = $"{directoryPath}/{appData.applicationName}Application.cs";
+            }
 
             templateStr = templateStr.Replace($"ControllerTemplateEvents", $"{name}ControllerEvents");
 
@@ -306,9 +325,6 @@ namespace UnityMVC.CodeGenerator
             {
                 templateStr = StringWithoutComments(templateStr);
             }
-            
-            string directoryPath = path;
-            string filePath = isPartial? $"{directoryPath}/{name}{typeStr}Partial.cs" : $"{directoryPath}/{name}{typeStr}.cs";
 
             if (!Directory.Exists(directoryPath))
             {
