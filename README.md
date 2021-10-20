@@ -57,7 +57,8 @@ The MVC+C architecture has the following components:
 
  #### Controller
  
- Controllers are not Monobehaviours. They are provided by MVCApplication and acessed by a locator trough MVCApplication.Controllers.Get<>();
+ Controllers are not Monobehaviours.
+ They are provided by MVCApplication and acessed by a locator trough MVCApplication.Controllers.Get<>();
 
  Controllers are responsible for business logic and hold the module's events. If something happens on the module, is the Controller that will inform other modules.
  If other Module's events are raised, it is the Controller that will inform the View, which will then raise internal events will be raised and cast to the module MVCComponents.
