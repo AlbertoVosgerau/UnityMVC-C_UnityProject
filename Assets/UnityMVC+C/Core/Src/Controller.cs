@@ -5,12 +5,14 @@ namespace UnityMVC.Controller
 {
     public abstract class Controller
     {
+        protected bool _isDontDestroyOnLoad = false;
         public abstract void SetView(View.View view);
         public abstract View.View GetView();
         public abstract bool IsActive();
         protected void DontDestroyOnLoad(View.View view)
         {
             view.transform.parent = null;
+            _isDontDestroyOnLoad = true;
             Object.DontDestroyOnLoad(view);
         }
 
