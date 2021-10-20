@@ -1,0 +1,16 @@
+{
+    "name": "AlbertoVosgerau.UnityMVC.Common.asmdef",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8496c774f3d9bc94d8979b79a039ffb2"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

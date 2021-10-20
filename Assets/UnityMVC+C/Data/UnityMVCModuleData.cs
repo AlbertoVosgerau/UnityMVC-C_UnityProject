@@ -4,23 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityMVC.Model;
 
 namespace UnityMVC.Editor
 {
-    [Serializable]
-    public class UnityMVCModuleModel
-    {
-        public string moduleName;
-        public string moduleNamespace;
-        public string relativePath;
 
-        public UnityMVCModuleModel(string moduleName, string moduleNamespace)
-        {
-            this.moduleName = moduleName;
-            this.moduleNamespace = moduleNamespace;
-        }
-    }
-    
     public class UnityMVCModuleData
     {
         public static string ModuleMetadataFileName => $"{_moduleMetadataFileName}.{_moduleMetadataExtension}";
