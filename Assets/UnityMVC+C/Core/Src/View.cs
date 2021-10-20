@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityMVC.Component;
 
 namespace UnityMVC.View
@@ -50,12 +51,16 @@ namespace UnityMVC.View
         }
         private void OnEnable()
         {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            
             ControllerOnEnable();
             InternalOnEnable();
             MVCOnEnable();
         }
         private void OnDisable()
         {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            
             ControllerOnDisable();
             InternalOnDisable();
             MVCOnDisable();
@@ -64,6 +69,11 @@ namespace UnityMVC.View
         {
             ControllerOnDestroy();
             MVCOnDestroy();
+        }
+        
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+           SolveComponents();
         }
 
         protected virtual void MVCAwake() {}

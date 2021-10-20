@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System;
 using UnityEngine;
+using UnityMVC.Model;
 
 namespace UnityMVC.Editor
 {

@@ -6,7 +6,9 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityMVC.Editor;
+using UnityMVC.Model;
 using UnityMVC.Utils;
+using UnityMVCModuleModel = UnityMVC.Model.UnityMVCModuleModel;
 
 namespace UnityMVC.CodeGenerator
 {
@@ -28,19 +30,71 @@ namespace UnityMVC.CodeGenerator
     
     public class MVCCodeGenerator
     {
-        public static void CreateApplication(string name)
+        public static void CreateApplication(string projectName, string companyName)
         {
+            
             MVCFolderStructure.SetupProjectFolder();
-            GenerateScript(null, name, GetTemplate(ScriptType.MVCApplication), MVCFolderStructure.ApplicationFolder, ScriptType.MVCApplication, true);
+            GenerateApplicationMetadata($"{MVCFolderStructure.ProjectFolder}/Project.mvc", projectName, companyName);
+            GenerateScript(null, projectName, GetTemplate(ScriptType.MVCApplication), MVCFolderStructure.ApplicationFolder, ScriptType.MVCApplication, true);
             if (MVCReflectionUtil.UsesAssemblyDefinition())
             {
-                CreateCoreAssemblyDefinition(MVCFolderStructure.ProjectFolder, name);
-
-                CreateCoreAssemblyDefinition(MVCFolderStructure.CommonFolder, $"{name}.Common");
-                CreatePlayModeAssemblyDefinition(MVCFolderStructure.CommonsPlayModeFolder, $"{name}.CommonPlayModeTest");
-                CreateEditorModeAssemblyDefinition(MVCFolderStructure.CommonsEditModeFolder, $"{name}.CommonEditModeTest");
+                string commonName = GetModuleAssemlbyDefinitionName(companyName, projectName, "Common", false, true);
+                CreateCoreAssemblyDefinition(MVCFolderStructure.CommonFolder, commonName);
+                
+                string commonRuntimeTests = GetModuleAssemlbyDefinitionName(companyName, projectName, "Common", true, true);
+                CreatePlayModeAssemblyDefinition(MVCFolderStructure.CommonsPlayModeFolder, commonRuntimeTests);
+                
+                string commonEditorTests = GetModuleAssemlbyDefinitionName(companyName, projectName, "Common", true, false);
+                CreateEditorModeAssemblyDefinition(MVCFolderStructure.CommonsEditModeFolder, commonEditorTests);
             }
             AssetDatabase.Refresh();
+        }
+        
+        private static UnityMVCApplicationModel GenerateApplicationMetadata(string path, string applicationName, string companyName)
+        {
+
+            if (File.Exists(path))
+            {
+                return ReadModuleDataFromFolder(path);
+            }
+
+            UnityMVCApplicationModel data = new UnityMVCApplicationModel(applicationName, companyName);
+            string str = JsonUtility.ToJson(data);
+            
+            MVCFileUtil.WriteFile(path, str);
+            return data;
+        }
+
+        private static UnityMVCApplicationModel GetAppData()
+        {
+            return ReadModuleDataFromFile($"{MVCFolderStructure.ProjectFolder}/Project.mvc");
+        }
+        
+        public static UnityMVCApplicationModel ReadModuleDataFromFolder(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            return ReadMetadata(path);
+        }
+        
+        public static UnityMVCApplicationModel ReadModuleDataFromFile(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            return ReadMetadata(path);
+        }
+        
+        private static UnityMVCApplicationModel ReadMetadata(string path)
+        {
+            string str = File.ReadAllText(path);
+            UnityMVCApplicationModel data = JsonUtility.FromJson<UnityMVCApplicationModel>(str);
+            return data;
         }
 
         public static void CreateView(string nameSpace, string name, bool removeComments, string inheritsFrom = null)
@@ -128,6 +182,9 @@ namespace UnityMVC.CodeGenerator
             string typeStr = type.ToString();
             templateStr = templateStr.Replace($"{typeStr}Template", $"{name}{typeStr}");
             templateStr = SolveBaseMethods(templateStr, inheritsFrom == null);
+            
+            string directoryPath = path;
+            string filePath = isPartial? $"{directoryPath}/{name}{typeStr}Partial.cs" : $"{directoryPath}/{name}{typeStr}.cs";
             
 
             if (nameSpace != null)
@@ -245,6 +302,22 @@ namespace UnityMVC.CodeGenerator
             {
                 templateStr = templateStr.Replace($"EnumTemplate", $"{name}");
             }
+            
+            if (type == ScriptType.MVCApplication)
+            {
+                UnityMVCApplicationModel appData = GetAppData();
+                
+                if (MVCReflectionUtil.UsesAssemblyDefinition())
+                {
+                    string asmdefName = GetApplicationAssemlbyDefinitionName(appData.companyName, appData.applicationName,  false, true);
+                    CreateCoreAssemblyDefinition(MVCFolderStructure.ApplicationFolder, asmdefName);
+                }
+                
+                templateStr = templateStr.Replace($"ProjectNamespace", $"{appData.applicationName}");
+                templateStr = templateStr.Replace($"MVCApplication", $"{appData.applicationName}Application");
+
+                filePath = $"{directoryPath}/{appData.applicationName}Application.cs";
+            }
 
             templateStr = templateStr.Replace($"ControllerTemplateEvents", $"{name}ControllerEvents");
 
@@ -252,9 +325,6 @@ namespace UnityMVC.CodeGenerator
             {
                 templateStr = StringWithoutComments(templateStr);
             }
-            
-            string directoryPath = path;
-            string filePath = isPartial? $"{directoryPath}/{name}{typeStr}Partial.cs" : $"{directoryPath}/{name}{typeStr}.cs";
 
             if (!Directory.Exists(directoryPath))
             {
@@ -391,10 +461,17 @@ namespace UnityMVC.CodeGenerator
                 Directory.CreateDirectory(testsFolder);
                 Directory.CreateDirectory(playModeFolder);
                 Directory.CreateDirectory(editModeFolder);
+
+                UnityMVCApplicationModel appData = GetAppData();
                 
-                CreateCoreAssemblyDefinition(scriptsFolder, $"Modules.{newModuleName}");
-                CreatePlayModeAssemblyDefinition(playModeFolder, $"PlayMode{newModuleName}Test");
-                CreateEditorModeAssemblyDefinition(editModeFolder, $"EditMode{newModuleName}Test");
+                string moduleName = GetModuleAssemlbyDefinitionName(appData.companyName, appData.applicationName, newModuleName, false, true);
+                CreateCoreAssemblyDefinition(scriptsFolder, moduleName);
+                
+                string moduleRuntime = GetModuleAssemlbyDefinitionName(appData.companyName, appData.applicationName, newModuleName, true, true);
+                CreatePlayModeAssemblyDefinition(playModeFolder, moduleRuntime);
+                
+                string moduleEditor = GetModuleAssemlbyDefinitionName(appData.companyName, appData.applicationName, newModuleName, true, false);
+                CreateEditorModeAssemblyDefinition(editModeFolder, moduleEditor);
             }
 
             UnityMVCModuleModel newModule =  UnityMVCModuleData.GenerateModuleMetadata(absolutePath, newModuleName, newNamespace);
@@ -438,8 +515,8 @@ namespace UnityMVC.CodeGenerator
         private static void CreateCoreAssemblyDefinition(string path, string name)
         {
             string assemblyDefinitionTemplate = GetModuleAssemblyDefinitionTemplate();
-            string GUID = MVCAssetDatabaseUtil.GetAssetGUID("MVC.C");
-            string assemblyDefinitionPath = $"{path}/{name}.asmdef";
+            string GUID = MVCAssetDatabaseUtil.GetAssetGUID("AlbertoVosgerau.MVC");
+            string assemblyDefinitionPath = $"{path}/{name}";
             List<string> guids = new List<string>() {GUID};
             
             CreateAssemblyDefinition(assemblyDefinitionPath, assemblyDefinitionTemplate, name, guids);
@@ -448,8 +525,8 @@ namespace UnityMVC.CodeGenerator
         private static void CreatePlayModeAssemblyDefinition(string path, string name)
         {
             string assemblyDefinitionTemplate = GetPlayModeAssemblyDefinitionTemplate();
-            string MvcGUID = MVCAssetDatabaseUtil.GetAssetGUID("MVC.C");
-            string assemblyDefinitionPath = $"{path}/{name}.asmdef";
+            string MvcGUID = MVCAssetDatabaseUtil.GetAssetGUID("AlbertoVosgerau.MVC");
+            string assemblyDefinitionPath = $"{path}/{name}";
             List<string> guids = new List<string>() {MvcGUID};
             
             CreateAssemblyDefinition(assemblyDefinitionPath, assemblyDefinitionTemplate, name, guids);
@@ -458,8 +535,8 @@ namespace UnityMVC.CodeGenerator
         private static void CreateEditorModeAssemblyDefinition(string path, string name)
         {
             string assemblyDefinitionTemplate = GetEditorTestAssemblyDefinitionTemplate();
-            string MvcGUID = MVCAssetDatabaseUtil.GetAssetGUID("MVC.C");
-            string assemblyDefinitionPath = $"{path}/{name}.asmdef";
+            string MvcGUID = MVCAssetDatabaseUtil.GetAssetGUID("AlbertoVosgerau.MVC");
+            string assemblyDefinitionPath = $"{path}/{name}";
             List<string> guids = new List<string>() {MvcGUID};
             
             CreateAssemblyDefinition(assemblyDefinitionPath, assemblyDefinitionTemplate, name, guids);
@@ -517,6 +594,26 @@ namespace UnityMVC.CodeGenerator
             string str = File.ReadAllText(path);
             
             return str;
+        }
+
+        private static string GetModuleAssemlbyDefinitionName(string company, string project, string moduleName, bool isTest, bool isRuntime)
+        {
+            string name = $"{company}.{project}.{moduleName}";
+            if (isTest)
+            {
+                name = isRuntime ? $"{name}.Runtime.Tests" : $"{name}.Editor.Tests";
+            }
+            return $"{name}.asmdef";
+        }
+        
+        private static string GetApplicationAssemlbyDefinitionName(string company, string featureName, bool isTest, bool isRuntime)
+        {
+            string name = $"{company}.{featureName}";
+            if (isTest)
+            {
+                name = isRuntime ? $"{name}.Runtime.Tests" : $"{name}.Editor.Tests";
+            }
+            return $"{name}.asmdef";
         }
     }
 }

@@ -31,6 +31,7 @@ namespace UnityMVC.Editor
         private string _namespace = "";
         private string _baseName = "";
         private string _projectName = "";
+        private string _companyName = "";
         private float _btnWidth = 220;
         private Vector2 _scrollPosition = new Vector2(0,0);
         private int _currentMVCTab = 0;
@@ -88,6 +89,8 @@ namespace UnityMVC.Editor
 
         private void Refresh()
         {
+            _projectName = Application.productName;
+            _companyName = Application.companyName;
             _hasApplication = HasApplication();
             //SolveDatapaths();
             UnityMVCResources.LoadData();
@@ -168,8 +171,16 @@ namespace UnityMVC.Editor
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             
-            _projectName = EditorGUILayout.TextField("Base File Name", _projectName, GUILayout.Width(_btnWidth * 2));     
+            _projectName = EditorGUILayout.TextField("Project name", _projectName, GUILayout.Width(_btnWidth * 2));
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
             
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            
+            _companyName = EditorGUILayout.TextField("Company name", _companyName, GUILayout.Width(_btnWidth * 2));
+
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             
@@ -180,6 +191,7 @@ namespace UnityMVC.Editor
             GUILayout.Label($"This will create the project structure and your {_projectName}MVCApplication.", GUILayout.Width(_btnWidth * 2));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+            
             
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
@@ -192,6 +204,7 @@ namespace UnityMVC.Editor
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             _projectName = _projectName.Replace(" ", "");
+            _companyName = _companyName.Replace(" ", "");
             
 
             if (GUILayout.Button($"Create MVCApplication", GUILayout.Width(_btnWidth * 2)))
@@ -201,8 +214,14 @@ namespace UnityMVC.Editor
                     ShowNameEmptyDialog();
                     return;
                 }
+
+                if (string.IsNullOrWhiteSpace(_companyName) || _companyName == "DefaultCompany")
+                {
+                    ShowCompanyNameEmptyDialog();
+                    return;
+                }
                 
-                MVCCodeGenerator.CreateApplication(_projectName);
+                MVCCodeGenerator.CreateApplication(_projectName, _companyName);
                 OnCreatedFile();
             }
             GUILayout.FlexibleSpace();
@@ -1397,6 +1416,12 @@ namespace UnityMVC.Editor
             EditorUtility.DisplayDialog("Invalid operation", "Please, add a name to your class or module.", "Ok!");
 
         }
+        
+        private void ShowCompanyNameEmptyDialog()
+        {
+            EditorUtility.DisplayDialog("Invalid operation", "Please, add a valid Company Name.", "Ok!");
+
+        }
 
         private void FileNameOrMenuNameNullDialog()
         {
@@ -1420,7 +1445,7 @@ namespace UnityMVC.Editor
 
         private bool HasApplication()
         {
-            List<string> assets = AssetDatabase.FindAssets("MVCApplication").ToList();
+            List<string> assets = AssetDatabase.FindAssets("Project").ToList();
 
             List<string> paths = new List<string>();
 
@@ -1429,7 +1454,7 @@ namespace UnityMVC.Editor
                 paths.Add(AssetDatabase.GUIDToAssetPath(assets[i]));
             }
             
-            string path = paths.FirstOrDefault(x => !x.Contains("/MVCApplication.cs") && !x.Contains("MVCApplicationTemplate.cs"));
+            string path = paths.FirstOrDefault(x => x.Contains("/Project.mvc"));
 
             if (paths == null || path == null || paths.Count == 0)
             {

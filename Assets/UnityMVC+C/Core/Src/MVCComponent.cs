@@ -114,6 +114,26 @@ namespace UnityMVC.Component
             }
             return component;
         }
+        
+        public T GetUnityComponentInChildrenFromMVC<T>(bool includeHidden = false, bool addToStoredComponentsList = false) where T : UnityEngine.Component
+        {
+            T component = _unityComponents.FirstOrDefault(x => x.GetType() == typeof(T)) as T;
+
+            if (component == null)
+            {
+                component = GetComponentInChildren<T>(includeHidden);
+            }
+            
+            if (addToStoredComponentsList && component != null)
+            {
+                if (!_unityComponents.Contains(component))
+                {
+                    _unityComponents.Add(component);
+                }
+            }
+            return component;
+        }
+        
         public List<T> GetUnityComponentsFromMVC<T>(bool addToStoredComponentsList = false) where T : UnityEngine.Component
         {
             List<T> components = _unityComponents.Where(x => x.GetType() == typeof(T)) as List<T>;
@@ -121,6 +141,28 @@ namespace UnityMVC.Component
             if (components.Count == 0)
             {
                 components = GetComponents<T>().ToList();
+            }
+
+            if (addToStoredComponentsList && components.Count > 0)
+            {
+                foreach (T component in components)
+                {
+                    if (!_unityComponents.Contains(component))
+                    {
+                        _unityComponents.Add(component);
+                    }
+                }
+            }
+            return components;
+        }
+        
+        public List<T> GetUnityComponentsInChildrenFromMVC<T>(bool includeHidden = false, bool addToStoredComponentsList = false) where T : UnityEngine.Component
+        {
+            List<T> components = _unityComponents.Where(x => x.GetType() == typeof(T)) as List<T>;
+
+            if (components.Count == 0)
+            {
+                components = GetComponentsInChildren<T>(includeHidden).ToList();
             }
 
             if (addToStoredComponentsList && components.Count > 0)
