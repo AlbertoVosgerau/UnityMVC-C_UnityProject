@@ -511,8 +511,27 @@ namespace UnityMVC.CodeGenerator
             paths.Add($"{absolutePath}/Sprites");
             paths.Add($"{absolutePath}/Prefabs");
             paths.Add($"{absolutePath}/Scenes");
+            
+            string scriptsFolder = $"{absolutePath}/Scripts";
+            string playModeFolder = $"{scriptsFolder}/PlayMode";
+            string editModeFolder = $"{scriptsFolder}/EditMode";
+            
+            paths.Add(scriptsFolder);
+            paths.Add(playModeFolder);
+            paths.Add(editModeFolder);
 
             MVCFolderStructure.CreateDirectories(paths);
+            
+            UnityMVCApplicationModel appData = GetAppData();
+            
+            string moduleName = GetModuleAssemlbyDefinitionName(appData.companyName, "Module", newModuleName, false, true);
+            CreateCoreAssemblyDefinition(scriptsFolder, moduleName);
+                
+            string moduleRuntime = GetModuleAssemlbyDefinitionName(appData.companyName, "Module", newModuleName, true, true);
+            CreatePlayModeAssemblyDefinition(playModeFolder, moduleRuntime);
+                
+            string moduleEditor = GetModuleAssemlbyDefinitionName(appData.companyName, "Module", newModuleName, true, false);
+            CreateEditorModeAssemblyDefinition(editModeFolder, moduleEditor);
 
             AssetDatabase.Refresh();
         }
